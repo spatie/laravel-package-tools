@@ -3,7 +3,6 @@
 
 namespace Spatie\LaravelPackageTools\Tests;
 
-use Exception;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 use Spatie\LaravelPackageTools\Tests\TestClasses\ServiceProvider;
 
@@ -16,5 +15,4 @@ class UnconfiguredPackageServiceProviderTest extends TestCase
 
         (new ServiceProvider(app()))->register();
     }
-
 }

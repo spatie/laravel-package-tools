@@ -15,7 +15,6 @@ abstract class PackageServiceProvider extends ServiceProvider
     public function boot()
     {
         if ($this->app->runningInConsole()) {
-
             if ($configFileName = $this->packageConfig->configFileName) {
                 $this->publishes([
                     __DIR__ . "/../config/{$configFileName}.php" => config_path("{$configFileName}.php"),
