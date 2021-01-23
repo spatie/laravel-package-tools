@@ -19,7 +19,6 @@ class PackageMigrationTest extends PackageServiceProviderTestCase
     /** @test */
     public function it_can_publish_the_migration()
     {
-
         $this
             ->artisan('vendor:publish --tag=laravel-package-tools-migrations')
             ->assertExitCode(0);
