@@ -2,10 +2,7 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
-use Illuminate\Support\Facades\Artisan;
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestCase;
-use Spatie\LaravelPackageTools\Tests\TestClasses\ServiceProvider;
 
 class PackageConfigTest extends PackageServiceProviderTestCase
 {
