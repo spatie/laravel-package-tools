@@ -10,7 +10,7 @@ class PackageNameTest extends PackageServiceProviderTestCase
 {
     public function configurePackage(Package $package)
     {
-        $package->name('skeleton');
+        $package->name('laravel-package-tools');
     }
 
     /** @test */

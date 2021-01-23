@@ -55,7 +55,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         }
 
         if ($configFileName = $this->packageConfig->configFileName) {
-            $this->mergeConfigFrom(__DIR__ . '/../config/skeleton.php', $configFileName);
+            $this->mergeConfigFrom(__DIR__ . "/../config/{$configFileName}.php", $configFileName);
         }
     }
 
