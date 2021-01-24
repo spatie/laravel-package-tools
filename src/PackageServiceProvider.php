@@ -75,6 +75,5 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     public function registered()
     {
-
     }
 }
