@@ -122,7 +122,7 @@ $package
 
 Should your package contain multiple migration files, you can just call `hasMigration` multiple times.
 
-Calling `hasViews` will also make migrations publishable. Users of your package will be able to publish the config file with this command:
+Calling `hasMigration` will also make migrations publishable. Users of your package will be able to publish the config file with this command:
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-migrations
