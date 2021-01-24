@@ -50,7 +50,7 @@ abstract class PackageServiceProvider extends ServiceProvider
             }
 
             foreach ($this->packageConfig->migrationFileNames as $migrationFileName) {
-                if (!$this->migrationFileExists($migrationFileName)) {
+                if (! $this->migrationFileExists($migrationFileName)) {
                     $this->publishes([
                         __DIR__ . "/../database/migrations/{$migrationFileName}.php.stub" => database_path('migrations/' . now()->format('Y_m_d_His') . '_' . $migrationFileName),
                     ], "{$this->packageConfig->name}-migrations");
