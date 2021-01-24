@@ -67,6 +67,8 @@ Passing the package name to `name` is mandatory.
 
 To register a config file, you should create a php file with your package name in the `config` directory of your package. In this example it should be at `<package root>/config/your-package-name.php`.
 
+If your package name starts with `laravel-`, we expect that your config file does not contain that prefix. So if your package name is `laravel-cool-package`, the config file should be named `cool-package.php`.
+
 To register that config file, call `hasConfigFile()` on `$package` in the `configurePackage` method.
 
 ```php
@@ -75,7 +77,7 @@ $package
     ->hasConfigFile();
 ```
 
-This will register your config file with Laravel. It will also make it publishable. Users of your package will be able to publish the config file with this command.
+The `hasConfigFile` method will also make the config file publishable. Users of your package will be able to publish the config file with this command.
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-config
