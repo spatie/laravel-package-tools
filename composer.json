@@ -17,6 +17,7 @@
     "require": {
         "php": "^7.4|^8.0",
         "illuminate/contracts": "^8.0",
+        "mockery/mockery": "^1.4",
         "spatie/backtrace": "^1.0"
     },
     "require-dev": {

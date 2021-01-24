@@ -16,7 +16,7 @@ class PackageConfigTest extends PackageServiceProviderTestCase
     /** @test */
     public function it_can_register_the_config_file()
     {
-        $this->assertEquals('value', config('laravel-package-tools.key'));
+        $this->assertEquals('value', config('package-tools.key'));
     }
 
     /** @test */
@@ -26,6 +26,6 @@ class PackageConfigTest extends PackageServiceProviderTestCase
             ->artisan('vendor:publish --tag=laravel-package-tools-config')
             ->assertExitCode(0);
 
-        $this->assertFileExists(config_path('laravel-package-tools.php'));
+        $this->assertFileExists(config_path('package-tools.php'));
     }
 }
