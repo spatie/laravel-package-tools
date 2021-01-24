@@ -4,8 +4,8 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/spatie/laravel-package-tools/run-tests?label=tests)](https://github.com/spatie/laravel-package-tools/actions?query=workflow%3ATests+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-package-tools.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-package-tools)
 
-This package contains a `PackageServiceProvider` that you can use in your packages to easy register config files,
-migration files, and more.
+This package contains a `PackageServiceProvider` that you can use in your packages to easily register config files,
+migrations, and more.
 
 Here's an example of how it can be used.
 
@@ -27,7 +27,7 @@ class YourPackageServiceProvider extends PackageServiceProvider
 }
 ```
 
-Under the hood it will do the necessary work to register the necessary things and make config files, migrations and views publishable.
+Under the hood it will do the necessary work to register the necessary things and make all sorts of files publishable.
 
 ## Support us
 
