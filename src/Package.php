@@ -2,6 +2,8 @@
 
 namespace Spatie\LaravelPackageTools;
 
+use Illuminate\Support\Str;
+
 class Package
 {
     public string $name;
@@ -25,7 +27,7 @@ class Package
 
     public function hasConfigFile(string $configFileName = null): self
     {
-        $this->configFileName = $configFileName ?? $this->name;
+        $this->configFileName = $configFileName ?? Str::after($this->name, 'laravel-');
 
         return $this;
     }
