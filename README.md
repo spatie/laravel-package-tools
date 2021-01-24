@@ -40,7 +40,6 @@ We highly appreciate you sending us a postcard from your hometown, mentioning wh
 You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards
 on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
-
 ## Getting started
 
 This package is opinionated on how you should structure your package. To get started easily, consider using [our package-skeleton repo](https://github.com/spatie/package-skeleton-laravel) to start your package. The skeleton is structured perfectly to work perfectly with the `PackageServiceProvider` in this package.
