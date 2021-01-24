@@ -107,7 +107,7 @@ php artisan vendor:publish --tag=your-package-name-views
 
 ### Working with migrations
 
-The  `PackageServiceProvider` assumes that any migrations are placed in this directory: `<package root>/database/migration`. Inside that directory you can put any migrations. Make sure they all have a `php.stub` extension. Using that extension will make sure that static analysers won't get confused with classes existing in multiple when your migration gets published.
+The `PackageServiceProvider` assumes that any migrations are placed in this directory: `<package root>/database/migration`. Inside that directory you can put any migrations. Make sure they all have a `php.stub` extension. Using that extension will make sure that static analysers won't get confused with classes existing in multiple when your migration gets published.
 
 To register your migration, you should pass its name without the extension to the `hasMigration` table. 
 
@@ -127,6 +127,28 @@ Calling `hasViews` will also make migrations publishable. Users of your package 
 php artisan vendor:publish --tag=your-package-name-migrations
 ```
 
+Like you might expect, published migration files will be prefixed with the current datetime.
+
+### Registering commands
+
+You can register any command you package provides with the `hasCommand` function.
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasCommand(YourCoolPackageCommand::class);
+````
+
+If your package provides multiple commands, you can either use `hasCommand` multiple times, or pass an array to `hasCommands`
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasCommands([
+        YourCoolPackageCommand::class,
+        YourOtherCoolPackageCommand::class,
+    ]);
+```
 
 ## Testing
 
