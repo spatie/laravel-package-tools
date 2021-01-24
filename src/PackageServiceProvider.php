@@ -5,7 +5,6 @@ namespace Spatie\LaravelPackageTools;
 
 use Illuminate\Support\ServiceProvider;
 use ReflectionClass;
-use Spatie\Backtrace\Backtrace;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
 abstract class PackageServiceProvider extends ServiceProvider

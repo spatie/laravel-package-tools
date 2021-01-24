@@ -2,8 +2,6 @@
 
 namespace Spatie\LaravelPackageTools;
 
-use Illuminate\Support\Str;
-
 class Package
 {
     public string $name;
