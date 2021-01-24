@@ -5,7 +5,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestCase;
-use Spatie\LaravelPackageTools\Tests\TestClasses\ServiceProvider;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\ServiceProvider;
 
 abstract class PackageServiceProviderTestCase extends TestCase
 {

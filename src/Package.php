@@ -2,6 +2,8 @@
 
 namespace Spatie\LaravelPackageTools;
 
+use Illuminate\Support\Str;
+
 class Package
 {
     public string $name;
@@ -13,6 +15,8 @@ class Package
     public array $migrationFileNames = [];
 
     public array $commands = [];
+
+    public string $basePath;
 
     public function name(string $name): self
     {
@@ -52,6 +56,22 @@ class Package
     public function hasCommands(array $commandClassNames): self
     {
         $this->commands = array_merge($this->commands, $commandClassNames);
+
+        return $this;
+    }
+
+    public function basePath(string $directory = null): string
+    {
+        if ($directory === null) {
+            return $this->basePath;
+        }
+
+        return $this->basePath . DIRECTORY_SEPARATOR . ltrim($directory, DIRECTORY_SEPARATOR);
+    }
+
+    public function setBasePath(string $path): self
+    {
+        $this->basePath = $path;
 
         return $this;
     }

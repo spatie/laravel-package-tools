@@ -1,9 +1,10 @@
 <?php
 
 
-namespace Spatie\LaravelPackageTools\Tests\TestClasses;
+namespace Spatie\LaravelPackageTools\Tests\TestPackage\Src;
 
 use Closure;
+use Spatie\Backtrace\Backtrace;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 

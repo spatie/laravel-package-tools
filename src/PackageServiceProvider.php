@@ -4,11 +4,13 @@
 namespace Spatie\LaravelPackageTools;
 
 use Illuminate\Support\ServiceProvider;
+use ReflectionClass;
+use Spatie\Backtrace\Backtrace;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
 abstract class PackageServiceProvider extends ServiceProvider
 {
-    protected Package $packageConfig;
+    protected Package $package;
 
     abstract public function configurePackage(Package $package): void;
 
@@ -16,17 +18,18 @@ abstract class PackageServiceProvider extends ServiceProvider
     {
         $this->registeringPackage();
 
-        $this->packageConfig = new Package();
+        $this->package = new Package();
 
-        $this->configurePackage($this->packageConfig);
+        $this->package->setBasePath($this->getPackageBaseDir());
 
+        $this->configurePackage($this->package);
 
-        if (empty($this->packageConfig->name)) {
+        if (empty($this->package->name)) {
             throw InvalidPackage::nameIsRequired();
         }
 
-        if ($configFileName = $this->packageConfig->configFileName) {
-            $this->mergeConfigFrom(__DIR__ . "/../config/{$configFileName}.php", $configFileName);
+        if ($configFileName = $this->package->configFileName) {
+            $this->mergeConfigFrom($this->package->basePath("/../config/{$configFileName}.php"), $configFileName);
         }
 
         $this->packageRegistered();
@@ -37,31 +40,31 @@ abstract class PackageServiceProvider extends ServiceProvider
         $this->bootingPackage();
 
         if ($this->app->runningInConsole()) {
-            if ($configFileName = $this->packageConfig->configFileName) {
+            if ($configFileName = $this->package->configFileName) {
                 $this->publishes([
-                    __DIR__ . "/../config/{$configFileName}.php" => config_path("{$configFileName}.php"),
-                ], "{$this->packageConfig->name}-config");
+                    $this->package->basePath("/../config/{$configFileName}.php") => config_path("{$configFileName}.php"),
+                ], "{$this->package->name}-config");
             }
 
-            if ($this->packageConfig->hasViews) {
+            if ($this->package->hasViews) {
                 $this->publishes([
-                    __DIR__ . '/../resources/views' => base_path("resources/views/vendor/{$this->packageConfig->name}"),
-                ], "{$this->packageConfig->name}-views");
+                    $this->package->basePath('/../resources/views') => base_path("resources/views/vendor/{$this->package->name}"),
+                ], "{$this->package->name}-views");
             }
 
-            foreach ($this->packageConfig->migrationFileNames as $migrationFileName) {
+            foreach ($this->package->migrationFileNames as $migrationFileName) {
                 if (! $this->migrationFileExists($migrationFileName)) {
                     $this->publishes([
-                        __DIR__ . "/../database/migrations/{$migrationFileName}.php.stub" => database_path('migrations/' . now()->format('Y_m_d_His') . '_' . $migrationFileName),
-                    ], "{$this->packageConfig->name}-migrations");
+                        $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => database_path('migrations/' . now()->format('Y_m_d_His') . '_' . $migrationFileName),
+                    ], "{$this->package->name}-migrations");
                 }
             }
 
-            $this->commands($this->packageConfig->commands);
+            $this->commands($this->package->commands);
         }
 
-        if ($this->packageConfig->hasViews) {
-            $this->loadViewsFrom(__DIR__ . '/../resources/views', $this->packageConfig->name);
+        if ($this->package->hasViews) {
+            $this->loadViewsFrom($this->package->basePath('/../resources/views'), $this->package->name);
         }
 
         $this->packageBooted();
@@ -94,5 +97,12 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     public function packageBooted()
     {
+    }
+
+    protected function getPackageBaseDir(): string
+    {
+        $reflector = new ReflectionClass(get_class($this));
+
+        return dirname($reflector->getFileName());
     }
 }
