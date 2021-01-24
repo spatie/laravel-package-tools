@@ -150,6 +150,15 @@ $package
     ]);
 ```
 
+### Using lifecycle hooks
+
+You can put any custom logic your package needs while starting up in one of these methods:
+
+- `registeringPackage`: will be called at the start of the `register` method of `PackageServiceProvider` 
+- `packageRegistered`: will be called at the end of the `register` method of `PackageServiceProvider`
+- `bootingPackage`: will be called at the start of the `boot` method of `PackageServiceProvider`
+- `packageBooted`: will be called at the end of the `boot` method of `PackageServiceProvider`
+
 ## Testing
 
 ```bash
