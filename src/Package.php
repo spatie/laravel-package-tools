@@ -48,4 +48,11 @@ class Package
 
         return $this;
     }
+
+    public function hasCommands(array $commandClassNames): self
+    {
+        $this->commands = array_merge($this->commands, $commandClassNames);
+
+        return $this;
+    }
 }
