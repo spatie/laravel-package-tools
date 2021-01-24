@@ -56,6 +56,8 @@ abstract class PackageServiceProvider extends ServiceProvider
         if ($configFileName = $this->packageConfig->configFileName) {
             $this->mergeConfigFrom(__DIR__ . "/../config/{$configFileName}.php", $configFileName);
         }
+
+        $this->registered();
     }
 
     public static function migrationFileExists(string $migrationFileName): bool
@@ -69,5 +71,10 @@ abstract class PackageServiceProvider extends ServiceProvider
         }
 
         return false;
+    }
+
+    public function registered()
+    {
+
     }
 }
