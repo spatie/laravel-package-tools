@@ -52,14 +52,27 @@ abstract class PackageServiceProvider extends ServiceProvider
             }
 
             foreach ($this->package->migrationFileNames as $migrationFileName) {
-                if (! $this->migrationFileExists($migrationFileName)) {
+                if (!$this->migrationFileExists($migrationFileName)) {
                     $this->publishes([
                         $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => database_path('migrations/' . now()->format('Y_m_d_His') . '_' . $migrationFileName),
                     ], "{$this->package->name}-migrations");
                 }
             }
 
+            if ($this->package->hasTranslations) {
+                $this->publishes([
+                    $this->package->basePath('/../resources/lang') => resource_path("lang/vendor/{$this->package->shortPackageName()}"),
+                ], "{$this->package->name}-translations");
+            }
+
             $this->commands($this->package->commands);
+        }
+
+        if ($this->package->hasTranslations) {
+            $this->loadTranslationsFrom(
+                $this->package->basePath('/../resources/lang/'),
+                $this->package->shortPackageName()
+            );
         }
 
         if ($this->package->hasViews) {

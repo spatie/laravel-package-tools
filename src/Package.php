@@ -12,6 +12,8 @@ class Package
 
     public bool $hasViews = false;
 
+    public bool $hasTranslations = false;
+
     public array $migrationFileNames = [];
 
     public array $commands = [];
@@ -27,7 +29,7 @@ class Package
 
     public function hasConfigFile(string $configFileName = null): self
     {
-        $this->configFileName = $configFileName ?? Str::after($this->name, 'laravel-');
+        $this->configFileName = $configFileName ?? $this->shortPackageName();
 
         return $this;
     }
@@ -35,6 +37,13 @@ class Package
     public function hasViews(): self
     {
         $this->hasViews = true;
+
+        return $this;
+    }
+
+    public function hasTranslations(): self
+    {
+        $this->hasTranslations = true;
 
         return $this;
     }
@@ -81,5 +90,10 @@ class Package
         $this->basePath = $path;
 
         return $this;
+    }
+
+    public function shortPackageName(): string
+    {
+        return Str::after($this->name, 'laravel-');
     }
 }

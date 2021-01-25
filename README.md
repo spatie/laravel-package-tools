@@ -21,6 +21,7 @@ class YourPackageServiceProvider extends PackageServiceProvider
             ->name('your-package-name')
             ->hasConfigFile()
             ->hasViews()
+            ->hasTranslations()
             ->hasMigration('create_package_tables')
             ->hasCommand(YourCoolPackageCommand::class);
     }
@@ -85,7 +86,7 @@ php artisan vendor:publish --tag=your-package-name-config
 
 ### Working with views
 
-Any views your package provides, should be place in the `<package root>/resources/views` directory.
+Any views your package provides, should be placed in the `<package root>/resources/views` directory.
 
 You can register these views with the `hasViews` command.
 
@@ -104,6 +105,45 @@ Calling `hasViews` will also make views publishable. Users of your package will 
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-views
+```
+
+### Working with translations
+
+Any translations your package provides, should be placed in the `<package root>/resources/lang/<language-code>` directory.
+
+You can register these translations with the `hasTranslations` command.
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasTranslations();
+```
+
+This will register the translations with Laravel.
+
+Assuming you save this translation file at `<package root>/resources/lang/en/translations.php`...
+
+```php
+<?php
+
+return [
+    'translatable' => 'translation',
+];
+```
+
+... your package and users will be able to retrieve the translation with:
+
+```php
+trans('your-package-name::translations.translatable'); // returns 'translation'
+```
+
+If your package name starts with `laravel-` then you should leave that off in the example above.
+
+
+Calling `hasTranslations` will also make translations publishable. Users of your package will be able to publish the config file with this command:
+
+```bash
+php artisan vendor:publish --tag=your-package-name-translations
 ```
 
 ### Working with migrations
