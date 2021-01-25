@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.0.2 - 2021-01-25
+
+- remove unneeded dependency
+
 ## 1.0.1 - 2021-01-25
 
 - add support for Laravel 7

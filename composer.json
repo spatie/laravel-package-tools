@@ -17,8 +17,7 @@
     "require": {
         "php": "^7.4|^8.0",
         "illuminate/contracts": "^7.0|^8.0",
-        "mockery/mockery": "^1.4",
-        "spatie/backtrace": "^1.0"
+        "mockery/mockery": "^1.4"
     },
     "require-dev": {
         "orchestra/testbench": "^5.0|^6.0",
