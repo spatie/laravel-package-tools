@@ -108,7 +108,7 @@ php artisan vendor:publish --tag=your-package-name-views
 
 ### Working with migrations
 
-The `PackageServiceProvider` assumes that any migrations are placed in this directory: `<package root>/database/migration`. Inside that directory you can put any migrations. Make sure they all have a `php.stub` extension. Using that extension will make sure that static analysers won't get confused with classes existing in multiple when your migration gets published.
+The `PackageServiceProvider` assumes that any migrations are placed in this directory: `<package root>/database/migrations`. Inside that directory you can put any migrations. Make sure they all have a `php.stub` extension. Using that extension will make sure that static analysers won't get confused with classes existing in multiple places when your migration gets published.
 
 To register your migration, you should pass its name without the extension to the `hasMigration` table. 
 
@@ -117,7 +117,7 @@ If your migration file is called `create_my_package_tables.php.stub` you can reg
 ```php
 $package
     ->name('your-package-name')
-    ->hasMigration('my_package_tables');
+    ->hasMigration('create_my_package_tables');
 ```
 
 Should your package contain multiple migration files, you can just call `hasMigration` multiple times or use `hasMigrations`.
@@ -128,7 +128,7 @@ $package
     ->hasMigrations(['my_package_tables', 'some_other_migration']);
 ```
 
-Calling `hasViews` will also make migrations publishable. Users of your package will be able to publish the config file with this command:
+Calling `hasMigration` will also make migrations publishable. Users of your package will be able to publish the config file with this command:
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-migrations
