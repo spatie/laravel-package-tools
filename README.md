@@ -120,7 +120,13 @@ $package
     ->hasMigration('my_package_tables');
 ```
 
-Should your package contain multiple migration files, you can just call `hasMigration` multiple times.
+Should your package contain multiple migration files, you can just call `hasMigration` multiple times or use `hasMigrations`.
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasMigrations(['my_package_tables', 'some_other_migration']);
+```
 
 Calling `hasViews` will also make migrations publishable. Users of your package will be able to publish the config file with this command:
 

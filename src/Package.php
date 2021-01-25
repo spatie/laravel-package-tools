@@ -46,6 +46,13 @@ class Package
         return $this;
     }
 
+    public function hasMigrations(array $migrationFileNames): self
+    {
+        $this->migrationFileNames[] = array_merge($this->migrationFileNames, $migrationFileNames);
+
+        return $this;
+    }
+
     public function hasCommand(string $commandClassName): self
     {
         $this->commands[] = $commandClassName;
