@@ -32,6 +32,8 @@ abstract class PackageServiceProvider extends ServiceProvider
         }
 
         $this->packageRegistered();
+
+        return $this;
     }
 
     public function boot()
@@ -87,6 +89,8 @@ abstract class PackageServiceProvider extends ServiceProvider
         }
 
         $this->packageBooted();
+
+        return $this;
     }
 
     public static function migrationFileExists(string $migrationFileName): bool

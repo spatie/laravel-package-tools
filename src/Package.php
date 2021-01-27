@@ -66,7 +66,7 @@ class Package
 
     public function hasMigrations(array $migrationFileNames): self
     {
-        $this->migrationFileNames[] = array_merge($this->migrationFileNames, $migrationFileNames);
+        $this->migrationFileNames = array_merge($this->migrationFileNames, $migrationFileNames);
 
         return $this;
     }
