@@ -22,6 +22,7 @@ class YourPackageServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasTranslations()
+            ->hasAssets()
             ->hasMigration('create_package_tables')
             ->hasCommand(YourCoolPackageCommand::class);
     }
