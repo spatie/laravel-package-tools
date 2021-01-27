@@ -4,6 +4,7 @@
 namespace Spatie\LaravelPackageTools;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use ReflectionClass;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
@@ -54,7 +55,7 @@ abstract class PackageServiceProvider extends ServiceProvider
             foreach ($this->package->migrationFileNames as $migrationFileName) {
                 if (! $this->migrationFileExists($migrationFileName)) {
                     $this->publishes([
-                        $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => database_path('migrations/' . now()->format('Y_m_d_His') . '_' . $migrationFileName),
+                        $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => database_path('migrations/' . now()->format('Y_m_d_His') . '_' . Str::finish($migrationFileName, '.php')),
                     ], "{$this->package->name}-migrations");
                 }
             }
