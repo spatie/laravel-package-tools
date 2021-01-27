@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.2.0 - 2021-01-25
+
+- add `hasAssets`
+
 ## 1.1.0 - 2021-01-25
 
 - add `hasTranslations`

@@ -14,6 +14,8 @@ class Package
 
     public bool $hasTranslations = false;
 
+    public bool $hasAssets = false;
+
     public array $migrationFileNames = [];
 
     public array $commands = [];
@@ -44,6 +46,13 @@ class Package
     public function hasTranslations(): self
     {
         $this->hasTranslations = true;
+
+        return $this;
+    }
+
+    public function hasAssets(): self
+    {
+        $this->hasAssets = true;
 
         return $this;
     }

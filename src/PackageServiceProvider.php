@@ -65,6 +65,12 @@ abstract class PackageServiceProvider extends ServiceProvider
                 ], "{$this->package->name}-translations");
             }
 
+            if ($this->package->hasAssets) {
+                $this->publishes([
+                    $this->package->basePath('/../resources/dist') => public_path("vendor/{$this->package->shortPackageName()}"),
+                ], "{$this->package->name}-assets");
+            }
+
             $this->commands($this->package->commands);
         }
 
@@ -74,6 +80,7 @@ abstract class PackageServiceProvider extends ServiceProvider
                 $this->package->shortPackageName()
             );
         }
+
 
         if ($this->package->hasViews) {
             $this->loadViewsFrom($this->package->basePath('/../resources/views'), $this->package->name);

@@ -146,6 +146,26 @@ Calling `hasTranslations` will also make translations publishable. Users of your
 php artisan vendor:publish --tag=your-package-name-translations
 ```
 
+### Working with assets
+
+Any assets your package provides, should be placed in the `<package root>/resources/dist/` directory.
+
+You can make these assets publishable the `hasAssets` method.
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasAssets();
+```
+
+Users of your package will be able to publish the config file with this command:
+
+```bash
+php artisan vendor:publish --tag=your-package-name-assets
+```
+
+This will copy over the assets to the `public/vendor/<your-package-name>` directory in the app where your package is installed in.
+
 ### Working with migrations
 
 The `PackageServiceProvider` assumes that any migrations are placed in this directory: `<package root>/database/migrations`. Inside that directory you can put any migrations. Make sure they all have a `php.stub` extension. Using that extension will make sure that static analysers won't get confused with classes existing in multiple places when your migration gets published.
