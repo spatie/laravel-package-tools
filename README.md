@@ -15,7 +15,7 @@ use Spatie\LaravelPackageTools\Package;
 
 class YourPackageServiceProvider extends PackageServiceProvider
 {
-    public function configurePackage(Package $package) : void
+    public function configurePackage(Package $package): void
     {
         $package
             ->name('your-package-name')
