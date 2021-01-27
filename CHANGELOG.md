@@ -2,6 +2,11 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.2.1 - 2021-01-27
+
+- fix `hasMigrations`
+- make `register` and `boot` chainable
+
 ## 1.2.0 - 2021-01-25
 
 - add `hasAssets`
