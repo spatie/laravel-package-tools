@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.2.3 - 2021-01-27
+
+- fix migration file extension when publishing from Package (#3)
+
 ## 1.2.2 - 2021-01-27
 
 - use short package name to register views
