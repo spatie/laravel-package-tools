@@ -31,7 +31,7 @@ class Package
 
     public function hasConfigFile(string $configFileName = null): self
     {
-        $this->configFileName = $configFileName ?? $this->shortPackageName();
+        $this->configFileName = $configFileName ?? $this->shortName();
 
         return $this;
     }
@@ -101,7 +101,7 @@ class Package
         return $this;
     }
 
-    public function shortPackageName(): string
+    public function shortName(): string
     {
         return Str::after($this->name, 'laravel-');
     }

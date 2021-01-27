@@ -16,7 +16,7 @@ class PackageViewsTest extends PackageServiceProviderTestCase
     /** @test */
     public function it_can_load_the_views()
     {
-        $content = view('laravel-package-tools::test')->render();
+        $content = view('package-tools::test')->render();
 
         $this->assertStringStartsWith('This is a blade view', $content);
     }

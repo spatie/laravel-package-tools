@@ -63,13 +63,13 @@ abstract class PackageServiceProvider extends ServiceProvider
 
             if ($this->package->hasTranslations) {
                 $this->publishes([
-                    $this->package->basePath('/../resources/lang') => resource_path("lang/vendor/{$this->package->shortPackageName()}"),
+                    $this->package->basePath('/../resources/lang') => resource_path("lang/vendor/{$this->package->shortName()}"),
                 ], "{$this->package->name}-translations");
             }
 
             if ($this->package->hasAssets) {
                 $this->publishes([
-                    $this->package->basePath('/../resources/dist') => public_path("vendor/{$this->package->shortPackageName()}"),
+                    $this->package->basePath('/../resources/dist') => public_path("vendor/{$this->package->shortName()}"),
                 ], "{$this->package->name}-assets");
             }
 
@@ -79,13 +79,13 @@ abstract class PackageServiceProvider extends ServiceProvider
         if ($this->package->hasTranslations) {
             $this->loadTranslationsFrom(
                 $this->package->basePath('/../resources/lang/'),
-                $this->package->shortPackageName()
+                $this->package->shortName()
             );
         }
 
 
         if ($this->package->hasViews) {
-            $this->loadViewsFrom($this->package->basePath('/../resources/views'), $this->package->name);
+            $this->loadViewsFrom($this->package->basePath('/../resources/views'), $this->package->shortName());
         }
 
         $this->packageBooted();
