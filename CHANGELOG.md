@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.2.2 - 2021-01-27
+
+- use short package name to register views
+
 ## 1.2.1 - 2021-01-27
 
 - fix `hasMigrations`
