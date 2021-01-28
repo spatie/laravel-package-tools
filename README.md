@@ -223,9 +223,9 @@ $package
 
 The `PackageServiceProvider` assumes that any route files are placed in this directory: `<package root>/routes`. Inside that directory you can put any route files.
 
-To register your route, you should pass its name without the extension to the `hasRoute` table. 
+To register your route, you should pass its name without the extension to the `hasRoute` method. 
 
-If your migration file is called `web.php` you can register them like this:
+If your route file is called `web.php` you can register them like this:
 
 ```php
 $package
