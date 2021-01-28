@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Spatie\LaravelPackageTools;
 
 use Illuminate\Support\ServiceProvider;
@@ -84,9 +83,12 @@ abstract class PackageServiceProvider extends ServiceProvider
             );
         }
 
-
         if ($this->package->hasViews) {
             $this->loadViewsFrom($this->package->basePath('/../resources/views'), $this->package->shortName());
+        }
+
+        foreach ($this->package->routeFileNames as $routeFileName) {
+            $this->loadRoutesFrom($this->package->basePath('/../routes/') . $routeFileName . '.php');
         }
 
         $this->packageBooted();

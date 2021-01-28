@@ -23,6 +23,7 @@ class YourPackageServiceProvider extends PackageServiceProvider
             ->hasViews()
             ->hasTranslations()
             ->hasAssets()
+            ->hasRoute('web')
             ->hasMigration('create_package_tables')
             ->hasCommand(YourCoolPackageCommand::class);
     }
