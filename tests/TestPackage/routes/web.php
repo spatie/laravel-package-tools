@@ -2,4 +2,4 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('larsklopstra', fn () => 'Hello Spatie!');
+Route::get('my-route', fn () => 'my response');

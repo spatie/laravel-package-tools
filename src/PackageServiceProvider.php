@@ -88,7 +88,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         }
 
         foreach ($this->package->routeFileNames as $routeFileName) {
-            $this->loadRoutesFrom($this->package->basePath('/../routes/') . $routeFileName . '.php');
+            $this->loadRoutesFrom("{$this->package->basePath('/../routes/')}{$routeFileName}.php");
         }
 
         $this->packageBooted();
