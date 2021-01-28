@@ -13,7 +13,7 @@ class PackageRouteTest extends PackageServiceProviderTestCase
 
         $package
             ->name('laravel-package-tools')
-            ->hasRoute('web');
+            ->hasRoutes(['web', 'admin']);
     }
 
     /** @test */
@@ -22,5 +22,13 @@ class PackageRouteTest extends PackageServiceProviderTestCase
         $response = $this->get('/larsklopstra');
 
         $response->assertSeeText('Hello Spatie!');
+    }
+
+    /** @test */
+    public function it_can_load_multiple_route()
+    {
+        $adminResponse = $this->get('/admin');
+
+        $adminResponse->assertSeeText('Admins only');
     }
 }
