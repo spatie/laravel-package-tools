@@ -23,6 +23,7 @@ class YourPackageServiceProvider extends PackageServiceProvider
             ->hasViews()
             ->hasTranslations()
             ->hasAssets()
+            ->hasRoute('web')
             ->hasMigration('create_package_tables')
             ->hasCommand(YourCoolPackageCommand::class);
     }
@@ -216,6 +217,28 @@ $package
         YourCoolPackageCommand::class,
         YourOtherCoolPackageCommand::class,
     ]);
+```
+
+### Working with routes
+
+The `PackageServiceProvider` assumes that any route files are placed in this directory: `<package root>/routes`. Inside that directory you can put any route files.
+
+To register your route, you should pass its name without the extension to the `hasRoute` method. 
+
+If your route file is called `web.php` you can register them like this:
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasRoute('web');
+```
+
+Should your package contain multiple route files, you can just call `hasRoute` multiple times or use `hasRoutes`.
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasRoutes(['web', 'admin']);
 ```
 
 ### Using lifecycle hooks

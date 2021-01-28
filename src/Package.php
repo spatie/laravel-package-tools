@@ -18,6 +18,8 @@ class Package
 
     public array $migrationFileNames = [];
 
+    public array $routeFileNames = [];
+
     public array $commands = [];
 
     public string $basePath;
@@ -81,6 +83,20 @@ class Package
     public function hasCommands(array $commandClassNames): self
     {
         $this->commands = array_merge($this->commands, $commandClassNames);
+
+        return $this;
+    }
+
+    public function hasRoute(string $routeFileName): self
+    {
+        $this->routeFileNames[] = $routeFileName;
+
+        return $this;
+    }
+
+    public function hasRoutes(array $routeFileNames): self
+    {
+        $this->routeFileNames = array_merge($this->routeFileNames, $routeFileNames);
 
         return $this;
     }
