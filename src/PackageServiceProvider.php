@@ -98,10 +98,10 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     public static function migrationFileExists(string $migrationFileName): bool
     {
-        $len = strlen($migrationFileName);
+        $len = strlen($migrationFileName) + 4;
 
         foreach (glob(database_path("migrations/*.php")) as $filename) {
-            if ((substr($filename, -$len) === $migrationFileName)) {
+            if ((substr($filename, -$len) === $migrationFileName . '.php')) {
                 return true;
             }
         }
