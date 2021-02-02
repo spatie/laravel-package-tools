@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.3.1 - 2021-02-02
+
+- fix `migrationFileExists` (#7)
+
 ## 1.3.0 - 2021-01-28
 
 - add `hasRoute`
