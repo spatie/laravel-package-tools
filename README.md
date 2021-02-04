@@ -103,7 +103,7 @@ This will register your views with Laravel.
 If you have a view `<package root>/resources/views/myView.blade.php`, you can use it like this: `view('your-package-name::myView')`. Of course, you can also use subdirectories to organise your views. A view located at `<package root>/resources/views/subdirectory/myOtherView.blade.php` can be used with `view('your-package-name::subdirectory.myOtherView')`.
 
 
-Calling `hasViews` will also make views publishable. Users of your package will be able to publish the config file with this command:
+Calling `hasViews` will also make views publishable. Users of your package will be able to publish the views with this command:
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-views
@@ -142,7 +142,7 @@ trans('your-package-name::translations.translatable'); // returns 'translation'
 If your package name starts with `laravel-` then you should leave that off in the example above.
 
 
-Calling `hasTranslations` will also make translations publishable. Users of your package will be able to publish the config file with this command:
+Calling `hasTranslations` will also make translations publishable. Users of your package will be able to publish the translations with this command:
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-translations
@@ -160,7 +160,7 @@ $package
     ->hasAssets();
 ```
 
-Users of your package will be able to publish the config file with this command:
+Users of your package will be able to publish the assets with this command:
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-assets
@@ -190,7 +190,7 @@ $package
     ->hasMigrations(['my_package_tables', 'some_other_migration']);
 ```
 
-Calling `hasMigration` will also make migrations publishable. Users of your package will be able to publish the config file with this command:
+Calling `hasMigration` will also make migrations publishable. Users of your package will be able to publish the migrations with this command:
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-migrations
