@@ -38,6 +38,11 @@ class Package
         return $this;
     }
 
+    public function shortName(): string
+    {
+        return Str::after($this->name, 'laravel-');
+    }
+
     public function hasViews(): self
     {
         $this->hasViews = true;
@@ -66,9 +71,12 @@ class Package
         return $this;
     }
 
-    public function hasMigrations(array $migrationFileNames): self
+    public function hasMigrations(...$migrationFileNames): self
     {
-        $this->migrationFileNames = array_merge($this->migrationFileNames, $migrationFileNames);
+        $this->migrationFileNames = array_merge(
+            $this->migrationFileNames,
+            collect($migrationFileNames)->flatten()->toArray()
+        );
 
         return $this;
     }
@@ -80,9 +88,9 @@ class Package
         return $this;
     }
 
-    public function hasCommands(array $commandClassNames): self
+    public function hasCommands(...$commandClassNames): self
     {
-        $this->commands = array_merge($this->commands, $commandClassNames);
+        $this->commands = array_merge($this->commands, collect($commandClassNames)->flatten()->toArray());
 
         return $this;
     }
@@ -94,9 +102,9 @@ class Package
         return $this;
     }
 
-    public function hasRoutes(array $routeFileNames): self
+    public function hasRoutes(...$routeFileNames): self
     {
-        $this->routeFileNames = array_merge($this->routeFileNames, $routeFileNames);
+        $this->routeFileNames = array_merge($this->routeFileNames, collect($routeFileNames)->flatten()->toArray());
 
         return $this;
     }
@@ -115,10 +123,5 @@ class Package
         $this->basePath = $path;
 
         return $this;
-    }
-
-    public function shortName(): string
-    {
-        return Str::after($this->name, 'laravel-');
     }
 }
