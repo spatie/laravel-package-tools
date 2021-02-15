@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.4.0 - 2021-02-15
+
+- allows parameters for setup methods to be passed in as a spread array (#11)
+
 ## 1.3.1 - 2021-02-02
 
 - fix `migrationFileExists` (#7)
