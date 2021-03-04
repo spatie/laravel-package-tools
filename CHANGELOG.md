@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.4.1 - 2021-03-04
+
+- ensure unique timestamp on migration publish (#14)
+
 ## 1.4.0 - 2021-02-15
 
 - allows parameters for setup methods to be passed in as a spread array (#11)
