@@ -53,10 +53,11 @@ abstract class PackageServiceProvider extends ServiceProvider
                 ], "{$this->package->name}-views");
             }
 
+            $now = now();
             foreach ($this->package->migrationFileNames as $migrationFileName) {
                 if (! $this->migrationFileExists($migrationFileName)) {
                     $this->publishes([
-                        $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => database_path('migrations/' . now()->format('Y_m_d_His') . '_' . Str::finish($migrationFileName, '.php')),
+                        $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => database_path('migrations/' . $now->addSecond()->format('Y_m_d_His') . '_' . Str::finish($migrationFileName, '.php')),
                     ], "{$this->package->name}-migrations");
                 }
             }
