@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.4.2 - 2021-03-05
+
+- fix publishing views (#15)
+
 ## 1.4.1 - 2021-03-04
 
 - ensure unique timestamp on migration publish (#14)
