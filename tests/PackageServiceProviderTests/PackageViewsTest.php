@@ -28,6 +28,6 @@ class PackageViewsTest extends PackageServiceProviderTestCase
             ->artisan('vendor:publish --tag=laravel-package-tools-views')
             ->assertExitCode(0);
 
-        $this->assertFileExists(base_path('resources/views/vendor/laravel-package-tools/test.blade.php'));
+        $this->assertFileExists(base_path('resources/views/vendor/package-tools/test.blade.php'));
     }
 }

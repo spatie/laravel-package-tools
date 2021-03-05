@@ -49,7 +49,7 @@ abstract class PackageServiceProvider extends ServiceProvider
 
             if ($this->package->hasViews) {
                 $this->publishes([
-                    $this->package->basePath('/../resources/views') => base_path("resources/views/vendor/{$this->package->name}"),
+                    $this->package->basePath('/../resources/views') => base_path("resources/views/vendor/{$this->package->shortName()}"),
                 ], "{$this->package->name}-views");
             }
 
