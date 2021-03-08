@@ -53,11 +53,11 @@ abstract class PackageServiceProvider extends ServiceProvider
                 ], "{$this->package->name}-views");
             }
 
-            $now = date("Y-m-d H:i:s");
+            $now = new DateTime('now');
             foreach ($this->package->migrationFileNames as $migrationFileName) {
                 if (! $this->migrationFileExists($migrationFileName)) {
                     $this->publishes([
-                        $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => database_path('migrations/' . $now->addSecond()->format('Y_m_d_His') . '_' . Str::finish($migrationFileName, '.php')),
+                        $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => database_path('migrations/' . $now->add(new DateInterval('PT1S'))->format('Y_m_d_His') . '_' . Str::finish($migrationFileName, '.php')),
                     ], "{$this->package->name}-migrations");
                 }
             }
