@@ -53,7 +53,7 @@ abstract class PackageServiceProvider extends ServiceProvider
                 ], "{$this->package->name}-views");
             }
 
-            $now = date();
+            $now = date("Y-m-d H:i:s");
             foreach ($this->package->migrationFileNames as $migrationFileName) {
                 if (! $this->migrationFileExists($migrationFileName)) {
                     $this->publishes([
