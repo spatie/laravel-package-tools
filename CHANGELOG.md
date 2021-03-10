@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.5.0 - 2021-03-10
+
+- add support for Blade view components
+
 ## 1.4.3 - 2021-03-10
 
 - use package shortname for publishing
