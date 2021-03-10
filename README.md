@@ -111,9 +111,9 @@ Calling `hasViews` will also make views publishable. Users of your package will 
 php artisan vendor:publish --tag=your-package-name-views
 ```
 
-### Working with view components
+### Working with Blade view components
 
-Any Views Components that your package provides should be placed in the `<package root>/Components` directory.
+Any Blade view components that your package provides should be placed in the `<package root>/Components` directory.
 
 You can register these views with the `hasViewComponents` command.
 
