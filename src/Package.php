@@ -61,7 +61,7 @@ class Package
 
     public function hasViewComponents(string $prefix,  ...$viewComponentNames): self
     {
-        foreach($viewComponentNames as $componentName) {
+        foreach ($viewComponentNames as $componentName) {
             $this->viewComponents[$componentName] = $prefix;
         }
 

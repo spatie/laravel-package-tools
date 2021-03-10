@@ -26,6 +26,6 @@ class TestComponent extends Component
      */
     public function render()
     {
-         return '<div>' . $this->message . '</div>';
+        return '<div>' . $this->message . '</div>';
     }
 }
