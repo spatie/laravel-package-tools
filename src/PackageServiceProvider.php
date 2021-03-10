@@ -44,33 +44,33 @@ abstract class PackageServiceProvider extends ServiceProvider
             if ($configFileName = $this->package->configFileName) {
                 $this->publishes([
                     $this->package->basePath("/../config/{$configFileName}.php") => config_path("{$configFileName}.php"),
-                ], "{$this->package->name}-config");
+                ], "{$this->package->shortName()}-config");
             }
 
             if ($this->package->hasViews) {
                 $this->publishes([
                     $this->package->basePath('/../resources/views') => base_path("resources/views/vendor/{$this->package->name}"),
-                ], "{$this->package->name}-views");
+                ], "{$this->package->shortName()}-views");
             }
 
             foreach ($this->package->migrationFileNames as $migrationFileName) {
                 if (! $this->migrationFileExists($migrationFileName)) {
                     $this->publishes([
                         $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => database_path('migrations/' . now()->format('Y_m_d_His') . '_' . Str::finish($migrationFileName, '.php')),
-                    ], "{$this->package->name}-migrations");
+                    ], "{$this->package->shortName()}-migrations");
                 }
             }
 
             if ($this->package->hasTranslations) {
                 $this->publishes([
                     $this->package->basePath('/../resources/lang') => resource_path("lang/vendor/{$this->package->shortName()}"),
-                ], "{$this->package->name}-translations");
+                ], "{$this->package->shortName()}-translations");
             }
 
             if ($this->package->hasAssets) {
                 $this->publishes([
                     $this->package->basePath('/../resources/dist') => public_path("vendor/{$this->package->shortName()}"),
-                ], "{$this->package->name}-assets");
+                ], "{$this->package->shortName()}-assets");
             }
 
             $this->commands($this->package->commands);
