@@ -23,7 +23,7 @@ class PackageConfigTest extends PackageServiceProviderTestCase
     public function it_can_publish_the_config_file()
     {
         $this
-            ->artisan('vendor:publish --tag=laravel-package-tools-config')
+            ->artisan('vendor:publish --tag=package-tools-config')
             ->assertExitCode(0);
 
         $this->assertFileExists(config_path('package-tools.php'));

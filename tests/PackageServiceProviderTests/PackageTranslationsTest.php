@@ -23,7 +23,7 @@ class PackageTranslationsTest extends PackageServiceProviderTestCase
     public function it_can_publish_the_translations()
     {
         $this
-            ->artisan('vendor:publish --tag=laravel-package-tools-translations')
+            ->artisan('vendor:publish --tag=package-tools-translations')
             ->assertExitCode(0);
 
         $this->assertFileExists(resource_path('lang/vendor/package-tools/en/translations.php'));
