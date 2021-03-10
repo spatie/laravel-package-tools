@@ -22,6 +22,8 @@ class Package
 
     public array $commands = [];
 
+    public array $viewComponents = [];
+
     public string $basePath;
 
     public function name(string $name): self
@@ -46,6 +48,22 @@ class Package
     public function hasViews(): self
     {
         $this->hasViews = true;
+
+        return $this;
+    }
+
+    public function hasViewComponent(string $prefix, string $viewComponentName): self
+    {
+        $this->viewComponents[$viewComponentName] = $prefix;
+
+        return $this;
+    }
+
+    public function hasViewComponents(string $prefix,  ...$viewComponentNames): self
+    {
+        foreach($viewComponentNames as $componentName) {
+            $this->viewComponents[$componentName] = $prefix;
+        }
 
         return $this;
     }
