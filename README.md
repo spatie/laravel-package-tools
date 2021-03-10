@@ -12,6 +12,7 @@ Here's an example of how it can be used.
 ```php
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\LaravelPackageTools\Package;
+use MyPackage\ViewComponents\Alert;
 
 class YourPackageServiceProvider extends PackageServiceProvider
 {
@@ -21,6 +22,7 @@ class YourPackageServiceProvider extends PackageServiceProvider
             ->name('your-package-name')
             ->hasConfigFile()
             ->hasViews()
+            ->hasViewComponent('spatie', Alert::class)
             ->hasTranslations()
             ->hasAssets()
             ->hasRoute('web')
@@ -107,6 +109,28 @@ Calling `hasViews` will also make views publishable. Users of your package will 
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-views
+```
+
+### Working with view components
+
+Any Views Components that your package provides should be placed in the `<package root>/Components` directory.
+
+You can register these views with the `hasViewComponents` command.
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasViewComponents('spatie', [Alert::class]);
+```
+
+This will register your view components with Laravel.  In the case of `Alert::class`, it can be referenced in views as `<x-spatie-alert />`, where `spatie` is the prefix you provided during registration.
+
+Calling `hasViewComponents` will also make view components publishable, and will be published to `app/Views/Components/vendor/<package name>`. 
+
+Users of your package will be able to publish the view components with this command:
+
+```bash
+php artisan vendor:publish --tag=your-package-name-components
 ```
 
 ### Working with translations
