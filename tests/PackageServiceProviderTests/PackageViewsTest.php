@@ -25,9 +25,9 @@ class PackageViewsTest extends PackageServiceProviderTestCase
     public function it_can_publish_the_views()
     {
         $this
-            ->artisan('vendor:publish --tag=laravel-package-tools-views')
+            ->artisan('vendor:publish --tag=package-tools-views')
             ->assertExitCode(0);
 
-        $this->assertFileExists(base_path('resources/views/vendor/laravel-package-tools/test.blade.php'));
+        $this->assertFileExists(base_path('resources/views/vendor/package-tools/test.blade.php'));
     }
 }
