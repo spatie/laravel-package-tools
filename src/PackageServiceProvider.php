@@ -2,6 +2,7 @@
 
 namespace Spatie\LaravelPackageTools;
 
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use ReflectionClass;
@@ -101,6 +102,14 @@ abstract class PackageServiceProvider extends ServiceProvider
 
         foreach ($this->package->routeFileNames as $routeFileName) {
             $this->loadRoutesFrom("{$this->package->basePath('/../routes/')}{$routeFileName}.php");
+        }
+
+        foreach($this->package->sharedViewData as $name => $value) {
+            View::share($name, $value);
+        }
+
+        foreach($this->package->viewComposers as $viewName => $viewComposer) {
+            View::composer($viewName, $viewComposer);
         }
 
         $this->packageBooted();
