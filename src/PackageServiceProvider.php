@@ -104,11 +104,11 @@ abstract class PackageServiceProvider extends ServiceProvider
             $this->loadRoutesFrom("{$this->package->basePath('/../routes/')}{$routeFileName}.php");
         }
 
-        foreach($this->package->sharedViewData as $name => $value) {
+        foreach ($this->package->sharedViewData as $name => $value) {
             View::share($name, $value);
         }
 
-        foreach($this->package->viewComposers as $viewName => $viewComposer) {
+        foreach ($this->package->viewComposers as $viewName => $viewComposer) {
             View::composer($viewName, $viewComposer);
         }
 

@@ -81,11 +81,11 @@ class Package
 
     public function hasViewComposer($view, $viewComposer): self
     {
-        if (!is_array($view)) {
+        if (! is_array($view)) {
             $view = [$view];
         }
 
-        foreach($view as $viewName) {
+        foreach ($view as $viewName) {
             $this->viewComposers[$viewName] = $viewComposer;
         }
 

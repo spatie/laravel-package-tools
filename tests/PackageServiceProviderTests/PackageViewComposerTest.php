@@ -11,7 +11,7 @@ class PackageViewComposerTest extends PackageServiceProviderTestCase
         $package
             ->name('laravel-package-tools')
             ->hasViews()
-            ->hasViewComposer('*', function($view) {
+            ->hasViewComposer('*', function ($view) {
                 $view->with('sharedItemTest', 'hello world');
             });
     }
