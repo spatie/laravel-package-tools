@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.6.0 - 2021-03-12
+
+- add support for view composers & shared view data (#22)
+
 ## 1.5.0 - 2021-03-10
 
 - add support for Blade view components
