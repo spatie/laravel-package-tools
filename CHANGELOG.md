@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.6.1 - 2021-03-16
+
+- execute command in context of the app (#23)
+
 ## 1.6.0 - 2021-03-12
 
 - add support for view composers & shared view data (#22)
