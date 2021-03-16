@@ -74,7 +74,9 @@ abstract class PackageServiceProvider extends ServiceProvider
                     $this->package->basePath('/../resources/dist') => public_path("vendor/{$this->package->shortName()}"),
                 ], "{$this->package->shortName()}-assets");
             }
+        }
 
+        if (!empty($this->package->commands)) {
             $this->commands($this->package->commands);
         }
 
