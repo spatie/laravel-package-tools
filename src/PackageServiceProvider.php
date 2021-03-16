@@ -76,7 +76,7 @@ abstract class PackageServiceProvider extends ServiceProvider
             }
         }
 
-        if (!empty($this->package->commands)) {
+        if (! empty($this->package->commands)) {
             $this->commands($this->package->commands);
         }
 
