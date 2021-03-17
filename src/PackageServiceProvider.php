@@ -2,6 +2,7 @@
 
 namespace Spatie\LaravelPackageTools;
 
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -112,6 +113,11 @@ abstract class PackageServiceProvider extends ServiceProvider
 
         foreach ($this->package->viewComposers as $viewName => $viewComposer) {
             View::composer($viewName, $viewComposer);
+        }
+
+        $router = $this->app->make(Router::class);
+        foreach($this->package->middlewares as $alias => $middleware) {
+            $router->aliasMiddleware("{$this->package->name}.{$alias}", $middleware);
         }
 
         $this->packageBooted();

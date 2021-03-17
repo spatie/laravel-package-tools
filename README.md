@@ -137,7 +137,7 @@ $package
 
 This will register your view components with Laravel.  In the case of `Alert::class`, it can be referenced in views as `<x-spatie-alert />`, where `spatie` is the prefix you provided during registration.
 
-Calling `hasViewComponents` will also make view components publishable, and will be published to `app/Views/Components/vendor/<package name>`. 
+Calling `hasViewComponents` will also make view components publishable, and will be published to `app/Views/Components/vendor/<package name>`.
 
 Users of your package will be able to publish the view components with this command:
 
@@ -155,8 +155,8 @@ To register a view composer with all views, use an asterisk as the view name `'*
 $package
     ->name('your-package-name')
     ->hasViewComposer('viewName', MyViewComposer::class)
-    ->hasViewComposer('*', function($view) { 
-        $view->with('sharedVariable', 123); 
+    ->hasViewComposer('*', function($view) {
+        $view->with('sharedVariable', 123);
     });
 ```
 
@@ -223,7 +223,7 @@ This will copy over the assets to the `public/vendor/<your-package-name>` direct
 
 The `PackageServiceProvider` assumes that any migrations are placed in this directory: `<package root>/database/migrations`. Inside that directory you can put any migrations. Make sure they all have a `php.stub` extension. Using that extension will make sure that static analysers won't get confused with classes existing in multiple places when your migration gets published.
 
-To register your migration, you should pass its name without the extension to the `hasMigration` table. 
+To register your migration, you should pass its name without the extension to the `hasMigration` table.
 
 If your migration file is called `create_my_package_tables.php.stub` you can register them like this:
 
@@ -274,7 +274,7 @@ $package
 
 The `PackageServiceProvider` assumes that any route files are placed in this directory: `<package root>/routes`. Inside that directory you can put any route files.
 
-To register your route, you should pass its name without the extension to the `hasRoute` method. 
+To register your route, you should pass its name without the extension to the `hasRoute` method.
 
 If your route file is called `web.php` you can register them like this:
 
@@ -292,11 +292,33 @@ $package
     ->hasRoutes(['web', 'admin']);
 ```
 
+
+### Working with middlewares
+
+You can put middleware anywhere in your package. But we recommend to put in this directory: `<package root>/src/Http/Middleware`.
+
+Then register it with `hasMiddlewares` method.
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasMiddlewares([
+        'gogogo' => PeopleWontStopMeButMiddlewareWill::class,
+    ]);
+```
+
+... your package and users will be able to use the middleware with:
+
+```php
+Route::middleware('your-package-name.gogogo'); //...
+Route::group(['middleware' => 'your-package-name.gogogo']); //...
+```
+
 ### Using lifecycle hooks
 
 You can put any custom logic your package needs while starting up in one of these methods:
 
-- `registeringPackage`: will be called at the start of the `register` method of `PackageServiceProvider` 
+- `registeringPackage`: will be called at the start of the `register` method of `PackageServiceProvider`
 - `packageRegistered`: will be called at the end of the `register` method of `PackageServiceProvider`
 - `bootingPackage`: will be called at the start of the `boot` method of `PackageServiceProvider`
 - `packageBooted`: will be called at the end of the `boot` method of `PackageServiceProvider`

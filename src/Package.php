@@ -28,6 +28,8 @@ class Package
 
     public array $viewComposers = [];
 
+    public array $middlewares = [];
+
     public string $basePath;
 
     public function name(string $name): self
@@ -147,6 +149,13 @@ class Package
     public function hasRoutes(...$routeFileNames): self
     {
         $this->routeFileNames = array_merge($this->routeFileNames, collect($routeFileNames)->flatten()->toArray());
+
+        return $this;
+    }
+
+    public function hasMiddlewares(array $middlewares): self
+    {
+        $this->middlewares = array_merge($this->middlewares, $middlewares);
 
         return $this;
     }
