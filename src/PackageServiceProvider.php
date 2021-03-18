@@ -28,8 +28,10 @@ abstract class PackageServiceProvider extends ServiceProvider
             throw InvalidPackage::nameIsRequired();
         }
 
-        if ($configFileName = $this->package->configFileName) {
-            $this->mergeConfigFrom($this->package->basePath("/../config/{$configFileName}.php"), $configFileName);
+        if ($configFileNames = $this->package->configFileName) {
+            foreach ($configFileNames as $configFileName) {
+                $this->mergeConfigFrom($this->package->basePath("/../config/{$configFileName}.php"), $configFileName);
+            }
         }
 
         $this->packageRegistered();
@@ -42,10 +44,12 @@ abstract class PackageServiceProvider extends ServiceProvider
         $this->bootingPackage();
 
         if ($this->app->runningInConsole()) {
-            if ($configFileName = $this->package->configFileName) {
-                $this->publishes([
-                    $this->package->basePath("/../config/{$configFileName}.php") => config_path("{$configFileName}.php"),
-                ], "{$this->package->shortName()}-config");
+            if ($configFileNames = $this->package->configFileName) {
+                foreach ($configFileNames as $configFileName) {
+                    $this->publishes([
+                        $this->package->basePath("/../config/{$configFileName}.php") => config_path("{$configFileName}.php"),
+                    ], "{$this->package->shortName()}-config");
+                }
             }
 
             if ($this->package->hasViews) {

@@ -2,13 +2,17 @@
 
 namespace Spatie\LaravelPackageTools;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class Package
 {
     public string $name;
 
-    public ?string $configFileName = null;
+    /**
+     * @var string[]|null
+     */
+    public ?array $configFileName = null;
 
     public bool $hasViews = false;
 
@@ -37,9 +41,9 @@ class Package
         return $this;
     }
 
-    public function hasConfigFile(string $configFileName = null): self
+    public function hasConfigFile($configFileName = null): self
     {
-        $this->configFileName = $configFileName ?? $this->shortName();
+        $this->configFileName = Arr::wrap($configFileName ?? $this->shortName());
 
         return $this;
     }
