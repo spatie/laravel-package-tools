@@ -21,6 +21,9 @@ class PackageConfigMultipleTest extends PackageServiceProviderTestCase
     {
         $this->assertEquals('value', config('package-tools.key'));
         $this->assertEquals('value_second', config('package-tools-second.key_second'));
+
+        $this->assertNotEquals('value_second', config('package-tools.key'));
+        $this->assertNotEquals('value', config('package-tools-second.key_second'));
     }
 
     /** @test */
