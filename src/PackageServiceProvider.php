@@ -45,11 +45,12 @@ abstract class PackageServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             if ($configFileNames = $this->package->configFileName) {
+                $toBePublish = [];
                 foreach ($configFileNames as $configFileName) {
-                    $this->publishes([
-                        $this->package->basePath("/../config/{$configFileName}.php") => config_path("{$configFileName}.php"),
-                    ], "{$this->package->shortName()}-config");
+                    $toBePublish[$this->package->basePath("/../config/{$configFileName}.php")] = config_path("{$configFileName}.php");
                 }
+                $this->publishes($toBePublish, "{$this->package->shortName()}-config");
+                unset($toBePublish);
             }
 
             if ($this->package->hasViews) {
