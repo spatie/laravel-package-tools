@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
+use Carbon\Carbon;
 
 abstract class PackageServiceProvider extends ServiceProvider
 {
@@ -54,7 +55,7 @@ abstract class PackageServiceProvider extends ServiceProvider
                 ], "{$this->package->shortName()}-views");
             }
 
-            $now = now();
+            $now = Carbon::now();
             foreach ($this->package->migrationFileNames as $migrationFileName) {
                 if (! $this->migrationFileExists($migrationFileName)) {
                     $this->publishes([
