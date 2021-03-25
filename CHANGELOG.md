@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.6.2 - 2021-03-25
+
+- use Carbon::now() for Lumen compatibility. (#26)
+
 ## 1.6.1 - 2021-03-16
 
 - execute command in context of the app (#23)
