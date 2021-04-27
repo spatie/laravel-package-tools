@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.6.3 - 2021-04-27
+
+- fix migration file names when copying them (#28)
+
 ## 1.6.2 - 2021-03-25
 
 - use Carbon::now() for Lumen compatibility. (#26)
