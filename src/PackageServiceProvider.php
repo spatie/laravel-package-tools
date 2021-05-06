@@ -59,7 +59,16 @@ abstract class PackageServiceProvider extends ServiceProvider
             foreach ($this->package->migrationFileNames as $migrationFileName) {
                 if (! $this->migrationFileExists($migrationFileName)) {
                     $this->publishes([
-                        $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => database_path('migrations/' . $now->addSecond()->format('Y_m_d_His') . '_' . Str::of($migrationFileName)->snake()->finish('.php')),
+                        $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => with($migrationFileName, function ($migrationFileName) use ($now) {
+                            $migrationPath = 'migrations/';
+
+                            if (Str::contains($migrationFileName, '/')) {
+                                $migrationPath .= Str::of($migrationFileName)->beforeLast('/')->finish('/');
+                                $migrationFileName = Str::of($migrationFileName)->afterLast('/');
+                            }
+
+                            return database_path($migrationPath . $now->addSecond()->format('Y_m_d_His') . '_' . Str::of($migrationFileName)->snake()->finish('.php'));
+                        }),
                     ], "{$this->package->shortName()}-migrations");
                 }
             }
@@ -122,9 +131,16 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     public static function migrationFileExists(string $migrationFileName): bool
     {
+        $migrationsPath = 'migrations/';
+
         $len = strlen($migrationFileName) + 4;
 
-        foreach (glob(database_path("migrations/*.php")) as $filename) {
+        if (Str::contains($migrationFileName, '/')) {
+            $migrationsPath .= Str::of($migrationFileName)->beforeLast('/')->finish('/');
+            $migrationFileName = Str::of($migrationFileName)->afterLast('/');
+        }
+
+        foreach (glob(database_path("${migrationsPath}*.php")) as $filename) {
             if ((substr($filename, -$len) === $migrationFileName . '.php')) {
                 return true;
             }
