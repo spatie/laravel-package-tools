@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.7.0 - 2021-05-06
+
+- add support to migrations in folders (#30)
+
 ## 1.6.3 - 2021-04-27
 
 - fix migration file names when copying them (#28)
