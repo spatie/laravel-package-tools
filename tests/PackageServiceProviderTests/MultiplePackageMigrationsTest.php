@@ -14,7 +14,8 @@ class MultiplePackageMigrationsTest extends PackageServiceProviderTestCase
         $package
             ->name('laravel-package-tools')
             ->hasMigrations(['create_laravel_package_tools_table'])
-            ->hasMigrations('create_other_laravel_package_tools_table', 'create_third_laravel_package_tools_table');
+            ->hasMigrations('create_other_laravel_package_tools_table', 'create_third_laravel_package_tools_table')
+            ->hasMigration('folder/create_laravel_package_tools_table_in_the_folder');
     }
 
     /** @test */
@@ -27,5 +28,6 @@ class MultiplePackageMigrationsTest extends PackageServiceProviderTestCase
         $this->assertFileExists(database_path('migrations/2020_01_01_000001_create_laravel_package_tools_table.php'));
         $this->assertFileExists(database_path('migrations/2020_01_01_000002_create_other_laravel_package_tools_table.php'));
         $this->assertFileExists(database_path('migrations/2020_01_01_000003_create_third_laravel_package_tools_table.php'));
+        $this->assertFileExists(database_path('migrations/folder/2020_01_01_000004_create_laravel_package_tools_table_in_the_folder.php'));
     }
 }
