@@ -95,6 +95,9 @@ abstract class PackageServiceProvider extends ServiceProvider
                 $this->package->basePath('/../resources/lang/'),
                 $this->package->shortName()
             );
+
+            $this->loadJsonTranslationsFrom($this->package->basePath('/../resources/lang/'));
+            $this->loadJsonTranslationsFrom(resource_path('lang/vendor/'. $this->package->name));
         }
 
         if ($this->package->hasViews) {
