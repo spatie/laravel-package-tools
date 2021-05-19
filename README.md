@@ -192,6 +192,23 @@ trans('your-package-name::translations.translatable'); // returns 'translation'
 
 If your package name starts with `laravel-` then you should leave that off in the example above.
 
+Coding with translation strings as keys, you should create JSON files in `<package root>/resources/lang/<language-code>.json`.
+
+For example, creating `<package root>/resources/lang/it.json` file like so:
+
+```json
+{
+    "Hello!": "Ciao!"
+}
+```
+
+...the output of...
+
+```php
+trans('Hello!');
+``` 
+
+...will be `Ciao!` if the application uses the Italian language.  
 
 Calling `hasTranslations` will also make translations publishable. Users of your package will be able to publish the translations with this command:
 
