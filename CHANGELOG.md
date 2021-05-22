@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.8.0 - 2021-05-22
+
+- add support for JSON translations (#31)
+
 ## 1.7.0 - 2021-05-06
 
 - add support to migrations in folders (#30)
