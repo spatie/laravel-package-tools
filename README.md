@@ -88,6 +88,15 @@ The `hasConfigFile` method will also make the config file publishable. Users of 
 php artisan vendor:publish --tag=your-package-name-config
 ```
 
+Should your package have multiple config files, you can pass their names as an array to `hasConfigFile`
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasConfigFile(['my-config-file', 'another-config-file']);
+```
+
+
 ### Working with views
 
 Any views your package provides, should be placed in the `<package root>/resources/views` directory.

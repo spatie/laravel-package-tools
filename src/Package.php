@@ -8,7 +8,7 @@ class Package
 {
     public string $name;
 
-    public ?string $configFileName = null;
+    public array $configFileNames = [];
 
     public bool $hasViews = false;
 
@@ -33,9 +33,15 @@ class Package
         return $this;
     }
 
-    public function hasConfigFile(string $configFileName = null): self
+    public function hasConfigFile($configFileName = null): self
     {
-        $this->configFileName = $configFileName ?? $this->shortName();
+        $configFileName =  $configFileName ?? $this->shortName();
+
+        if (! is_array($configFileName)) {
+            $configFileName = [$configFileName];
+        }
+
+        $this->configFileNames = $configFileName;
 
         return $this;
     }
