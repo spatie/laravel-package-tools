@@ -24,6 +24,10 @@ class Package
 
     public array $viewComponents = [];
 
+    public array $sharedViewData = [];
+
+    public array $viewComposers = [];
+
     public string $basePath;
 
     public function name(string $name): self
@@ -69,6 +73,26 @@ class Package
     {
         foreach ($viewComponentNames as $componentName) {
             $this->viewComponents[$componentName] = $prefix;
+        }
+
+        return $this;
+    }
+
+    public function sharesDataWithAllViews(string $name, $value): self
+    {
+        $this->sharedViewData[$name] = $value;
+
+        return $this;
+    }
+
+    public function hasViewComposer($view, $viewComposer): self
+    {
+        if (! is_array($view)) {
+            $view = [$view];
+        }
+
+        foreach ($view as $viewName) {
+            $this->viewComposers[$viewName] = $viewComposer;
         }
 
         return $this;

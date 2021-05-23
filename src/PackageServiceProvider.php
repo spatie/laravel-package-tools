@@ -2,6 +2,8 @@
 
 namespace Spatie\LaravelPackageTools;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use ReflectionClass;
@@ -53,11 +55,20 @@ abstract class PackageServiceProvider extends ServiceProvider
                 ], "{$this->package->shortName()}-views");
             }
 
-            $now = now();
+            $now = Carbon::now();
             foreach ($this->package->migrationFileNames as $migrationFileName) {
                 if (! $this->migrationFileExists($migrationFileName)) {
                     $this->publishes([
-                        $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => database_path('migrations/' . $now->addSecond()->format('Y_m_d_His') . '_' . Str::finish($migrationFileName, '.php')),
+                        $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => with($migrationFileName, function ($migrationFileName) use ($now) {
+                            $migrationPath = 'migrations/';
+
+                            if (Str::contains($migrationFileName, '/')) {
+                                $migrationPath .= Str::of($migrationFileName)->beforeLast('/')->finish('/');
+                                $migrationFileName = Str::of($migrationFileName)->afterLast('/');
+                            }
+
+                            return database_path($migrationPath . $now->addSecond()->format('Y_m_d_His') . '_' . Str::of($migrationFileName)->snake()->finish('.php'));
+                        }),
                     ], "{$this->package->shortName()}-migrations");
                 }
             }
@@ -73,7 +84,9 @@ abstract class PackageServiceProvider extends ServiceProvider
                     $this->package->basePath('/../resources/dist') => public_path("vendor/{$this->package->shortName()}"),
                 ], "{$this->package->shortName()}-assets");
             }
+        }
 
+        if (! empty($this->package->commands)) {
             $this->commands($this->package->commands);
         }
 
@@ -82,6 +95,9 @@ abstract class PackageServiceProvider extends ServiceProvider
                 $this->package->basePath('/../resources/lang/'),
                 $this->package->shortName()
             );
+
+            $this->loadJsonTranslationsFrom($this->package->basePath('/../resources/lang/'));
+            $this->loadJsonTranslationsFrom(resource_path('lang/vendor/'. $this->package->shortName()));
         }
 
         if ($this->package->hasViews) {
@@ -103,6 +119,14 @@ abstract class PackageServiceProvider extends ServiceProvider
             $this->loadRoutesFrom("{$this->package->basePath('/../routes/')}{$routeFileName}.php");
         }
 
+        foreach ($this->package->sharedViewData as $name => $value) {
+            View::share($name, $value);
+        }
+
+        foreach ($this->package->viewComposers as $viewName => $viewComposer) {
+            View::composer($viewName, $viewComposer);
+        }
+
         $this->packageBooted();
 
         return $this;
@@ -110,9 +134,16 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     public static function migrationFileExists(string $migrationFileName): bool
     {
+        $migrationsPath = 'migrations/';
+
         $len = strlen($migrationFileName) + 4;
 
-        foreach (glob(database_path("migrations/*.php")) as $filename) {
+        if (Str::contains($migrationFileName, '/')) {
+            $migrationsPath .= Str::of($migrationFileName)->beforeLast('/')->finish('/');
+            $migrationFileName = Str::of($migrationFileName)->afterLast('/');
+        }
+
+        foreach (glob(database_path("${migrationsPath}*.php")) as $filename) {
             if ((substr($filename, -$len) === $migrationFileName . '.php')) {
                 return true;
             }

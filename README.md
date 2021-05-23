@@ -23,6 +23,8 @@ class YourPackageServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasViewComponent('spatie', Alert::class)
+            ->hasViewComposer('*', MyViewComposer::class)
+            ->sharesDataWithAllViews('downloads', 3)
             ->hasTranslations()
             ->hasAssets()
             ->hasRoute('web')
@@ -120,6 +122,16 @@ Calling `hasViews` will also make views publishable. Users of your package will 
 php artisan vendor:publish --tag=your-package-name-views
 ```
 
+### Sharing global data with views
+
+You can share data with all views using the `sharesDataWithAllViews` method.  This will make the shared variable available to all views.
+
+```php
+$package
+    ->name('your-package-name')
+    ->sharesDataWithAllViews('companyName', 'Spatie');
+```
+
 ### Working with Blade view components
 
 Any Blade view components that your package provides should be placed in the `<package root>/Components` directory.
@@ -140,6 +152,21 @@ Users of your package will be able to publish the view components with this comm
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-components
+```
+
+### Working with view composers
+
+You can register any view composers that your project uses with the `hasViewComposers` method.  You may also register a callback that receives a `$view` argument instead of a classname.
+
+To register a view composer with all views, use an asterisk as the view name `'*'`.
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasViewComposer('viewName', MyViewComposer::class)
+    ->hasViewComposer('*', function($view) { 
+        $view->with('sharedVariable', 123); 
+    });
 ```
 
 ### Working with translations
@@ -174,6 +201,23 @@ trans('your-package-name::translations.translatable'); // returns 'translation'
 
 If your package name starts with `laravel-` then you should leave that off in the example above.
 
+Coding with translation strings as keys, you should create JSON files in `<package root>/resources/lang/<language-code>.json`.
+
+For example, creating `<package root>/resources/lang/it.json` file like so:
+
+```json
+{
+    "Hello!": "Ciao!"
+}
+```
+
+...the output of...
+
+```php
+trans('Hello!');
+``` 
+
+...will be `Ciao!` if the application uses the Italian language.  
 
 Calling `hasTranslations` will also make translations publishable. Users of your package will be able to publish the translations with this command:
 

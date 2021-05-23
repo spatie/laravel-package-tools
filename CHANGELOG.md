@@ -2,9 +2,33 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
-## 1.6.0 - 2021-05-23
+## 1.9.0 - 2021-05-23
 
 - add support for multiple config files
+
+## 1.8.0 - 2021-05-22
+
+- add support for JSON translations (#31)
+
+## 1.7.0 - 2021-05-06
+
+- add support to migrations in folders (#30)
+
+## 1.6.3 - 2021-04-27
+
+- fix migration file names when copying them (#28)
+
+## 1.6.2 - 2021-03-25
+
+- use Carbon::now() for Lumen compatibility. (#26)
+
+## 1.6.1 - 2021-03-16
+
+- execute command in context of the app (#23)
+
+## 1.6.0 - 2021-03-12
+
+- add support for view composers & shared view data (#22)
 
 ## 1.5.0 - 2021-03-10
 
