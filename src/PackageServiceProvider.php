@@ -55,20 +55,10 @@ abstract class PackageServiceProvider extends ServiceProvider
                 ], "{$this->package->shortName()}-views");
             }
 
-            $now = Carbon::now();
             foreach ($this->package->migrationFileNames as $migrationFileName) {
                 if (! $this->migrationFileExists($migrationFileName)) {
                     $this->publishes([
-                        $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => with($migrationFileName, function ($migrationFileName) use ($now) {
-                            $migrationPath = 'migrations/';
-
-                            if (Str::contains($migrationFileName, '/')) {
-                                $migrationPath .= Str::of($migrationFileName)->beforeLast('/')->finish('/');
-                                $migrationFileName = Str::of($migrationFileName)->afterLast('/');
-                            }
-
-                            return database_path($migrationPath . $now->addSecond()->format('Y_m_d_His') . '_' . Str::of($migrationFileName)->snake()->finish('.php'));
-                        }),
+                        $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => $this->generateMigrationName($migrationFileName),
                     ], "{$this->package->shortName()}-migrations");
                 }
             }
@@ -130,6 +120,19 @@ abstract class PackageServiceProvider extends ServiceProvider
         $this->packageBooted();
 
         return $this;
+    }
+
+    public function generateMigrationName(string $migrationFileName): string
+    {
+        $migrationPath = 'migrations/';
+        $now = Carbon::now();
+
+        if (Str::contains($migrationFileName, '/')) {
+            $migrationPath .= Str::of($migrationFileName)->beforeLast('/')->finish('/');
+            $migrationFileName = Str::of($migrationFileName)->afterLast('/');
+        }
+
+        return database_path($migrationPath . $now->addSecond()->format('Y_m_d_His') . '_' . Str::of($migrationFileName)->snake()->finish('.php'));
     }
 
     public static function migrationFileExists(string $migrationFileName): bool
