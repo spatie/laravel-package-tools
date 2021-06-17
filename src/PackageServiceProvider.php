@@ -56,11 +56,9 @@ abstract class PackageServiceProvider extends ServiceProvider
             }
 
             foreach ($this->package->migrationFileNames as $migrationFileName) {
-                if (! $this->migrationFileExists($migrationFileName)) {
-                    $this->publishes([
-                        $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => $this->generateMigrationName($migrationFileName),
-                    ], "{$this->package->shortName()}-migrations");
-                }
+                $this->publishes([
+                    $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => $this->generateMigrationName($migrationFileName),
+                ], "{$this->package->shortName()}-migrations");
             }
 
             if ($this->package->hasTranslations) {
@@ -124,6 +122,10 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     public function generateMigrationName(string $migrationFileName): string
     {
+        if($existing = $this->existingMigrationFileName($migrationFileName)) {
+            return $existing;
+        }
+
         $migrationPath = 'migrations/';
         $now = Carbon::now();
 
@@ -135,7 +137,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         return database_path($migrationPath . $now->addSecond()->format('Y_m_d_His') . '_' . Str::of($migrationFileName)->snake()->finish('.php'));
     }
 
-    public static function migrationFileExists(string $migrationFileName): bool
+    public static function existingMigrationFileName(string $migrationFileName): ?string
     {
         $migrationsPath = 'migrations/';
 
@@ -148,11 +150,11 @@ abstract class PackageServiceProvider extends ServiceProvider
 
         foreach (glob(database_path("${migrationsPath}*.php")) as $filename) {
             if ((substr($filename, -$len) === $migrationFileName . '.php')) {
-                return true;
+                return $filename;
             }
         }
 
-        return false;
+        return null;
     }
 
     public function registeringPackage()
