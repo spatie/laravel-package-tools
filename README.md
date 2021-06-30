@@ -12,7 +12,7 @@ Here's an example of how it can be used.
 ```php
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\LaravelPackageTools\Package;
-use MyPackage\ViewComponents\Alert;
+use MyPackage\Components\Alert;
 
 class YourPackageServiceProvider extends PackageServiceProvider
 {
