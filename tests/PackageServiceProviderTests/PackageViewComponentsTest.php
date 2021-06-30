@@ -3,7 +3,7 @@
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Components\TestComponent;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Components\TestComponent;
 
 class PackageViewComponentsTest extends PackageServiceProviderTestCase
 {
