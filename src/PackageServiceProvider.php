@@ -122,23 +122,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         return $this;
     }
 
-    public function generateMigrationName(string $migrationFileName, Carbon $now): string
-    {
-        if($existing = $this->existingMigrationFileName($migrationFileName)) {
-            return $existing;
-        }
-
-        $migrationPath = 'migrations/';
-
-        if (Str::contains($migrationFileName, '/')) {
-            $migrationPath .= Str::of($migrationFileName)->beforeLast('/')->finish('/');
-            $migrationFileName = Str::of($migrationFileName)->afterLast('/');
-        }
-
-        return database_path($migrationPath . $now->format('Y_m_d_His') . '_' . Str::of($migrationFileName)->snake()->finish('.php'));
-    }
-
-    public static function existingMigrationFileName(string $migrationFileName): ?string
+    public static function generateMigrationName(string $migrationFileName, Carbon $now): string
     {
         $migrationsPath = 'migrations/';
 
@@ -155,7 +139,7 @@ abstract class PackageServiceProvider extends ServiceProvider
             }
         }
 
-        return null;
+        return database_path($migrationsPath . $now->format('Y_m_d_His') . '_' . Str::of($migrationFileName)->snake()->finish('.php'));
     }
 
     public function registeringPackage()
