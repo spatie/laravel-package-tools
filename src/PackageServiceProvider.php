@@ -55,10 +55,12 @@ abstract class PackageServiceProvider extends ServiceProvider
                 ], "{$this->package->shortName()}-views");
             }
 
+            $now = Carbon::now();
             foreach ($this->package->migrationFileNames as $migrationFileName) {
                 $this->publishes([
-                    $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => $this->generateMigrationName($migrationFileName),
-                ], "{$this->package->shortName()}-migrations");
+                    $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => $this->generateMigrationName(
+                        $migrationFileName, $now->addSecond()
+                )], "{$this->package->shortName()}-migrations");
             }
 
             if ($this->package->hasTranslations) {
@@ -120,21 +122,20 @@ abstract class PackageServiceProvider extends ServiceProvider
         return $this;
     }
 
-    public function generateMigrationName(string $migrationFileName): string
+    public function generateMigrationName(string $migrationFileName, Carbon $now): string
     {
         if($existing = $this->existingMigrationFileName($migrationFileName)) {
             return $existing;
         }
 
         $migrationPath = 'migrations/';
-        $now = Carbon::now();
 
         if (Str::contains($migrationFileName, '/')) {
             $migrationPath .= Str::of($migrationFileName)->beforeLast('/')->finish('/');
             $migrationFileName = Str::of($migrationFileName)->afterLast('/');
         }
 
-        return database_path($migrationPath . $now->addSecond()->format('Y_m_d_His') . '_' . Str::of($migrationFileName)->snake()->finish('.php'));
+        return database_path($migrationPath . $now->format('Y_m_d_His') . '_' . Str::of($migrationFileName)->snake()->finish('.php'));
     }
 
     public static function existingMigrationFileName(string $migrationFileName): ?string
