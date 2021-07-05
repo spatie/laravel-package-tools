@@ -57,20 +57,11 @@ abstract class PackageServiceProvider extends ServiceProvider
 
             $now = Carbon::now();
             foreach ($this->package->migrationFileNames as $migrationFileName) {
-                if (! $this->migrationFileExists($migrationFileName)) {
-                    $this->publishes([
-                        $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => with($migrationFileName, function ($migrationFileName) use ($now) {
-                            $migrationPath = 'migrations/';
-
-                            if (Str::contains($migrationFileName, '/')) {
-                                $migrationPath .= Str::of($migrationFileName)->beforeLast('/')->finish('/');
-                                $migrationFileName = Str::of($migrationFileName)->afterLast('/');
-                            }
-
-                            return database_path($migrationPath . $now->addSecond()->format('Y_m_d_His') . '_' . Str::of($migrationFileName)->snake()->finish('.php'));
-                        }),
-                    ], "{$this->package->shortName()}-migrations");
-                }
+                $this->publishes([
+                    $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => $this->generateMigrationName(
+                        $migrationFileName,
+                        $now->addSecond()
+                    ), ], "{$this->package->shortName()}-migrations");
             }
 
             if ($this->package->hasTranslations) {
@@ -132,7 +123,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         return $this;
     }
 
-    public static function migrationFileExists(string $migrationFileName): bool
+    public static function generateMigrationName(string $migrationFileName, Carbon $now): string
     {
         $migrationsPath = 'migrations/';
 
@@ -145,11 +136,11 @@ abstract class PackageServiceProvider extends ServiceProvider
 
         foreach (glob(database_path("${migrationsPath}*.php")) as $filename) {
             if ((substr($filename, -$len) === $migrationFileName . '.php')) {
-                return true;
+                return $filename;
             }
         }
 
-        return false;
+        return database_path($migrationsPath . $now->format('Y_m_d_His') . '_' . Str::of($migrationFileName)->snake()->finish('.php'));
     }
 
     public function registeringPackage()
