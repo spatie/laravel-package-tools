@@ -59,8 +59,9 @@ abstract class PackageServiceProvider extends ServiceProvider
             foreach ($this->package->migrationFileNames as $migrationFileName) {
                 $this->publishes([
                     $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => $this->generateMigrationName(
-                        $migrationFileName, $now->addSecond()
-                )], "{$this->package->shortName()}-migrations");
+                        $migrationFileName,
+                        $now->addSecond()
+                    ), ], "{$this->package->shortName()}-migrations");
             }
 
             if ($this->package->hasTranslations) {
