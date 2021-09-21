@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.9.2 - 2021-09-021
+
+- don't install mockery by default
+
 ## 1.9.1 - 2021-09-20
 
 - allow to re-publish migrations via artisan --force (#37)
