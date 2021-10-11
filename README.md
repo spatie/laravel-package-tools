@@ -141,7 +141,7 @@ You can register these views with the `hasViewComponents` command.
 ```php
 $package
     ->name('your-package-name')
-    ->hasViewComponents('spatie', [Alert::class]);
+    ->hasViewComponents('spatie', Alert::class);
 ```
 
 This will register your view components with Laravel.  In the case of `Alert::class`, it can be referenced in views as `<x-spatie-alert />`, where `spatie` is the prefix you provided during registration.
