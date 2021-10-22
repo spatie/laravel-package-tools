@@ -29,6 +29,7 @@ class YourPackageServiceProvider extends PackageServiceProvider
             ->hasAssets()
             ->hasRoute('web')
             ->hasMigration('create_package_tables')
+            ->hasMiddleware(MyMiddleware::class, 'web')
             ->hasCommand(YourCoolPackageCommand::class);
     }
 }
@@ -294,6 +295,35 @@ $package
         YourCoolPackageCommand::class,
         YourOtherCoolPackageCommand::class,
     ]);
+```
+
+### Registering middlewares
+
+You can register any middleware your package provides with the `hasMiddleware` function.
+
+Add your middleware globally or only to a specific middleware group by adding the group parameter. (e.g. 'web', 'api')
+
+```php
+// Adds a global middleware.
+$package
+    ->name('your-package-name')
+    ->hasMiddleware(MyMiddleware::class)
+
+// Adds a middleware to the middleware group 'api' only.
+$package
+    ->name('your-package-name')
+    ->hasMiddleware(MyMiddleware::class, 'api')
+````
+
+If your package provides multiple middlewares, you can either use `hasMiddleware` multiple times, or pass an array to `hasMiddlewares`. You can apply a specific middleware group to both methods.
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasMiddlewares([
+        MyMiddleware::class,
+        AnotherMiddleware::class,
+    ], 'web');
 ```
 
 ### Working with routes

@@ -69,7 +69,7 @@ class Package
         return $this;
     }
 
-    public function hasViewComponents(string $prefix,  ...$viewComponentNames): self
+    public function hasViewComponents(string $prefix, ...$viewComponentNames): self
     {
         foreach ($viewComponentNames as $componentName) {
             $this->viewComponents[$componentName] = $prefix;
@@ -139,6 +139,28 @@ class Package
     public function hasCommands(...$commandClassNames): self
     {
         $this->commands = array_merge($this->commands, collect($commandClassNames)->flatten()->toArray());
+
+        return $this;
+    }
+
+    public function hasMiddleware(string $middleware, string $middlewareGroup = null): self
+    {
+        $kernel = app(\Illuminate\Contracts\Http\Kernel::class);
+
+        if ($middlewareGroup) {
+            $kernel->prependMiddlewareToGroup($middlewareGroup, $middleware);
+        } else {
+            $kernel->pushMiddleware($middleware);
+        }
+
+        return $this;
+    }
+
+    public function hasMiddlewares(array $middlewareClassNames, string $middlewareGroup = null): self
+    {
+        collect($middlewareClassNames)->each(
+            fn ($middlewareClassName) => $this->hasMiddleware($middlewareClassName, $middlewareGroup)
+        );
 
         return $this;
     }
