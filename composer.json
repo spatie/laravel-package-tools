@@ -26,8 +26,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\LaravelPackageTools\\": "src",
-            "Spatie\\LaravelPackageTools\\Database\\Factories\\": "database/factories"
+            "Spatie\\LaravelPackageTools\\": "src"
         }
     },
     "autoload-dev": {
