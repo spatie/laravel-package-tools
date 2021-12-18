@@ -115,6 +115,23 @@ This will register your views with Laravel.
 
 If you have a view `<package root>/resources/views/myView.blade.php`, you can use it like this: `view('your-package-name::myView')`. Of course, you can also use subdirectories to organise your views. A view located at `<package root>/resources/views/subdirectory/myOtherView.blade.php` can be used with `view('your-package-name::subdirectory.myOtherView')`.
 
+#### Using a custom view namespace
+
+You can pass a custom view namespace to the `hasViews` method.
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasViews('custom-view-namespace');
+```
+
+You can now use the views of the package like this:
+
+```php
+view('custom-view-namespace::myView');
+```
+
+#### Publishing the views
 
 Calling `hasViews` will also make views publishable. Users of your package will be able to publish the views with this command:
 
