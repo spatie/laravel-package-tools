@@ -32,7 +32,6 @@ class Package
 
     public string $basePath;
 
-
     public function name(string $name): self
     {
         $this->name = $name;
