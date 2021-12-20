@@ -45,7 +45,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             foreach ($this->package->configFileNames as $configFileName) {
                 $this->publishes([
-                    $this->package->basePath("/../config/{$configFileName}.php") => config_path("{$configFileName}.php"),
+                    $this->package->basePath("/../config/{$configFileName}.php") => $this->config_path("{$configFileName}.php"),
                 ], "{$this->package->shortName()}-config");
             }
 
@@ -164,5 +164,10 @@ abstract class PackageServiceProvider extends ServiceProvider
         $reflector = new ReflectionClass(get_class($this));
 
         return dirname($reflector->getFileName());
+    }
+
+    private function config_path($path = '')
+    {
+        return app()->basePath() . '/config' . ($path ? '/' . $path : $path);
     }
 }
