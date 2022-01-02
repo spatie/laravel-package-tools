@@ -151,7 +151,7 @@ $package
 
 ### Working with Blade view components
 
-Any Blade view components that your package provides should be placed in the `<package root>/Components` directory.
+Any Blade view components that your package provides should be placed in the `<package root>/src/Components` directory.
 
 You can register these views with the `hasViewComponents` command.
 
