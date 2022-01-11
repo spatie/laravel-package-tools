@@ -2,6 +2,21 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.11.0 - 2022-01-11
+
+## What's Changed
+
+- Correct Blade view components folder in documentation by @chillbram in https://github.com/spatie/laravel-package-tools/pull/47
+- Remove Database\Factories from psr-4 by @bastien-phi in https://github.com/spatie/laravel-package-tools/pull/43
+- Allow Laravel 9
+
+## New Contributors
+
+- @chillbram made their first contribution in https://github.com/spatie/laravel-package-tools/pull/47
+- @bastien-phi made their first contribution in https://github.com/spatie/laravel-package-tools/pull/43
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.10.0...1.11.0
+
 ## 1.10.0 - 2021-12-18
 
 ## What's Changed
