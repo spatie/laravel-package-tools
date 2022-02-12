@@ -65,8 +65,15 @@ abstract class PackageServiceProvider extends ServiceProvider
             }
 
             if ($this->package->hasTranslations) {
+                
+               // Set target path based on app version.
+                $targetFolder = "lang/vendor/{$this->package->shortName()}";
+                $targetPath = (version_compare(app()->version(), "9.0") >= 0)
+                    ? base_path($targetFolder)
+                    : resource_path($targetFolder);
+
                 $this->publishes([
-                    $this->package->basePath('/../resources/lang') => base_path("lang/vendor/{$this->package->shortName()}"),
+                    $this->package->basePath('/../resources/lang') => $targetPath,
                 ], "{$this->package->shortName()}-translations");
             }
 
