@@ -66,7 +66,7 @@ abstract class PackageServiceProvider extends ServiceProvider
 
             if ($this->package->hasTranslations) {
                 $this->publishes([
-                    $this->package->basePath('/../resources/lang') => resource_path("lang/vendor/{$this->package->shortName()}"),
+                    $this->package->basePath('/../resources/lang') => base_path("lang/vendor/{$this->package->shortName()}"),
                 ], "{$this->package->shortName()}-translations");
             }
 
