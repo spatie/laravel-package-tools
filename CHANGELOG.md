@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.11.1 - 2022-02-16
+
+## What's Changed
+
+- Support for non-stubbed migrations by @chillbram in https://github.com/spatie/laravel-package-tools/pull/50
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.11.0...1.11.1
+
 ## 1.11.0 - 2022-01-11
 
 ## What's Changed
