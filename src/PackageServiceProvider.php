@@ -57,8 +57,14 @@ abstract class PackageServiceProvider extends ServiceProvider
 
             $now = Carbon::now();
             foreach ($this->package->migrationFileNames as $migrationFileName) {
+                $filePath = $this->package->basePath("/../database/migrations/{$migrationFileName}.php");
+                if (! file_exists($filePath)) {
+                    // Support for the .stub file extension
+                    $filePath .= '.stub';
+                }
+
                 $this->publishes([
-                    $this->package->basePath("/../database/migrations/{$migrationFileName}.php.stub") => $this->generateMigrationName(
+                    $filePath => $this->generateMigrationName(
                         $migrationFileName,
                         $now->addSecond()
                     ), ], "{$this->package->shortName()}-migrations");

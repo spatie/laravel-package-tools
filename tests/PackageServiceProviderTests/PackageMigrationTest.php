@@ -13,7 +13,8 @@ class PackageMigrationTest extends PackageServiceProviderTestCase
 
         $package
             ->name('laravel-package-tools')
-            ->hasMigration('create_another_laravel_package_tools_table');
+            ->hasMigration('create_another_laravel_package_tools_table')
+            ->hasMigration('create_regular_laravel_package_tools_table');
     }
 
     /** @test */
@@ -24,6 +25,16 @@ class PackageMigrationTest extends PackageServiceProviderTestCase
             ->assertExitCode(0);
 
         $this->assertFileExists(database_path('migrations/2020_01_01_000001_create_another_laravel_package_tools_table.php'));
+    }
+
+    /** @test */
+    public function it_can_publish_the_migration_without_being_stubbed()
+    {
+        $this
+            ->artisan('vendor:publish --tag=package-tools-migrations')
+            ->assertExitCode(0);
+
+        $this->assertFileExists(database_path('migrations/2020_01_01_000002_create_regular_laravel_package_tools_table.php'));
     }
 
     /** @test */
