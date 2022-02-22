@@ -71,8 +71,13 @@ abstract class PackageServiceProvider extends ServiceProvider
             }
 
             if ($this->package->hasTranslations) {
+                // Laravel 8.64 and up uses lang_path().
+                $path = (version_compare(app()->version(), "8.64") >= 0)
+                    ? lang_path("vendor/{$this->package->shortName()}")
+                    : resource_path("lang/vendor/{$this->package->shortName()}");
+
                 $this->publishes([
-                    $this->package->basePath('/../resources/lang') => resource_path("lang/vendor/{$this->package->shortName()}"),
+                    $this->package->basePath('/../resources/lang') => $path,
                 ], "{$this->package->shortName()}-translations");
             }
 
