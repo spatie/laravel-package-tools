@@ -25,7 +25,12 @@ class PackageTranslationsTest extends PackageServiceProviderTestCase
         $this
             ->artisan('vendor:publish --tag=package-tools-translations')
             ->assertExitCode(0);
+
+        // Laravel 8.64 and up uses lang_path().
+        $path = (version_compare(app()->version(), "8.64") >= 0)
+            ? lang_path("vendor/package-tools/en/translations.php")
+            : resource_path("lang/vendor/package-tools/en/translations.php");
         
-        $this->assertFileExists(lang_path('vendor/package-tools/en/translations.php'));
+        $this->assertFileExists($path);
     }
 }
