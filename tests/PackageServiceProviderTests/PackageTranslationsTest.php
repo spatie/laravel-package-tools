@@ -26,6 +26,6 @@ class PackageTranslationsTest extends PackageServiceProviderTestCase
             ->artisan('vendor:publish --tag=package-tools-translations')
             ->assertExitCode(0);
         
-        $this->assertFileExists(lang_path('lang/vendor/package-tools/en/translations.php'));
+        $this->assertFileExists(lang_path('vendor/package-tools/en/translations.php'));
     }
 }
