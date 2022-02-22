@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.11.2 - 2022-02-22
+
+## What's Changed
+
+- Laravel 9 lang folder location by @voicecode-bv in https://github.com/spatie/laravel-package-tools/pull/48
+
+## New Contributors
+
+- @voicecode-bv made their first contribution in https://github.com/spatie/laravel-package-tools/pull/48
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.11.1...1.11.2
+
 ## 1.11.1 - 2022-02-16
 
 ## What's Changed
