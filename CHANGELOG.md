@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.11.3 - 2022-03-15
+
+## What's Changed
+
+- Use lang_path() when available by @zupolgec in https://github.com/spatie/laravel-package-tools/pull/52
+
+## New Contributors
+
+- @zupolgec made their first contribution in https://github.com/spatie/laravel-package-tools/pull/52
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.11.2...1.11.3
+
 ## 1.11.2 - 2022-02-22
 
 ## What's Changed
