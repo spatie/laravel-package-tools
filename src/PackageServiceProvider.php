@@ -42,6 +42,14 @@ abstract class PackageServiceProvider extends ServiceProvider
     {
         $this->bootingPackage();
 
+        if ($this->package->hasTranslations) {
+            $langPath = 'vendor/' . $this->package->shortName();
+
+            $langPath = (function_exists('lang_path'))
+                ? lang_path($langPath)
+                : resource_path('lang/' . $langPath);
+        }
+
         if ($this->app->runningInConsole()) {
             foreach ($this->package->configFileNames as $configFileName) {
                 $this->publishes([
@@ -71,13 +79,8 @@ abstract class PackageServiceProvider extends ServiceProvider
             }
 
             if ($this->package->hasTranslations) {
-                // Laravel 8.64 and up uses lang_path().
-                $path = (version_compare(app()->version(), "8.64") >= 0)
-                    ? lang_path("vendor/{$this->package->shortName()}")
-                    : resource_path("lang/vendor/{$this->package->shortName()}");
-
                 $this->publishes([
-                    $this->package->basePath('/../resources/lang') => $path,
+                    $this->package->basePath('/../resources/lang') => $langPath,
                 ], "{$this->package->shortName()}-translations");
             }
 
@@ -99,7 +102,8 @@ abstract class PackageServiceProvider extends ServiceProvider
             );
 
             $this->loadJsonTranslationsFrom($this->package->basePath('/../resources/lang/'));
-            $this->loadJsonTranslationsFrom(resource_path('lang/vendor/'. $this->package->shortName()));
+
+            $this->loadJsonTranslationsFrom($langPath);
         }
 
         if ($this->package->hasViews) {
