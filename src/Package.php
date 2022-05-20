@@ -32,6 +32,8 @@ class Package
 
     public string $basePath;
 
+    public string $viewComponentPath;
+
     public function name(string $name): self
     {
         $this->name = $name;
@@ -178,6 +180,22 @@ class Package
     public function setBasePath(string $path): self
     {
         $this->basePath = $path;
+
+        return $this;
+    }
+
+    public function viewComponentPath(?string $viewComponentName = null): string
+    {
+        if ($viewComponentName === null) {
+            return $this->viewComponentPath;
+        }
+
+        return $this->viewComponentPath . DIRECTORY_SEPARATOR . ltrim($viewComponentName, DIRECTORY_SEPARATOR);
+    }
+
+    public function setViewComponentPath(string $path): self
+    {
+        $this->viewComponentPath = $path;
 
         return $this;
     }

@@ -3,22 +3,23 @@
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Components\TestComponent;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Components\PathTestComponent;
 
-class PackageViewComponentsTest extends PackageServiceProviderTestCase
+class PackageCustomViewComponentPathTest extends PackageServiceProviderTestCase
 {
     public function configurePackage(Package $package)
     {
         $package
             ->name('laravel-package-tools')
             ->hasViews()
-            ->hasViewComponent('abc', TestComponent::class);
+            ->setViewComponentPath($package->basePath('../Components'))
+            ->hasViewComponent('abc', PathTestComponent::class);
     }
 
     /** @test */
     public function it_can_load_the_view_components()
     {
-        $content = view('package-tools::component-test')->render();
+        $content = view('package-tools::component-path-test')->render();
 
         $this->assertStringStartsWith('<div>hello world</div>', $content);
     }
@@ -30,6 +31,6 @@ class PackageViewComponentsTest extends PackageServiceProviderTestCase
             ->artisan('vendor:publish --tag=laravel-package-tools-components')
             ->assertExitCode(0);
 
-        $this->assertFileExists(base_path('app/View/Components/vendor/package-tools/TestComponent.php'));
+        $this->assertFileExists(base_path('app/View/Components/vendor/package-tools/PathTestComponent.php'));
     }
 }
