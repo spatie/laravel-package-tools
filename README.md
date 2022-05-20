@@ -154,7 +154,15 @@ $package
 
 ### Working with Blade view components
 
-Any Blade view components that your package provides should be placed in the `<package root>/src/Components` directory.
+Any Blade view components that your package provides should be placed in the `<package root>/src/Components` directory. 
+
+If you want change the view component path, can use ``setViewComponentPath`` method
+
+```php
+$package
+    ->name('your-package-name')
+    ->setViewComponentPath('../Components')
+```
 
 You can register these views with the `hasViewComponents` command.
 
