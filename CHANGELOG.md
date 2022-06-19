@@ -2,6 +2,22 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.12.0 - 2022-06-19
+
+### What's Changed
+
+- Update .gitattributes by @angeljqv in https://github.com/spatie/laravel-package-tools/pull/53
+- [PHP 8.2] Fix `${var}` string interpolation deprecation by @Ayesh in https://github.com/spatie/laravel-package-tools/pull/57
+- Allow running of migrations by @riasvdv in https://github.com/spatie/laravel-package-tools/pull/56
+
+### New Contributors
+
+- @angeljqv made their first contribution in https://github.com/spatie/laravel-package-tools/pull/53
+- @Ayesh made their first contribution in https://github.com/spatie/laravel-package-tools/pull/57
+- @riasvdv made their first contribution in https://github.com/spatie/laravel-package-tools/pull/56
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.11.3...1.12.0
+
 ## 1.11.3 - 2022-03-15
 
 ## What's Changed
