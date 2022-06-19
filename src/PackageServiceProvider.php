@@ -149,7 +149,7 @@ abstract class PackageServiceProvider extends ServiceProvider
             $migrationFileName = Str::of($migrationFileName)->afterLast('/');
         }
 
-        foreach (glob(database_path("${migrationsPath}*.php")) as $filename) {
+        foreach (glob(database_path("{$migrationsPath}*.php")) as $filename) {
             if ((substr($filename, -$len) === $migrationFileName . '.php')) {
                 return $filename;
             }
