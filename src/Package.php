@@ -18,6 +18,8 @@ class Package
 
     public bool $hasAssets = false;
 
+    public bool $runsMigrations = false;
+
     public array $migrationFileNames = [];
 
     public array $routeFileNames = [];
@@ -112,6 +114,13 @@ class Package
     public function hasAssets(): self
     {
         $this->hasAssets = true;
+
+        return $this;
+    }
+
+    public function runsMigrations(bool $runsMigrations = true): self
+    {
+        $this->runsMigrations = $runsMigrations;
 
         return $this;
     }

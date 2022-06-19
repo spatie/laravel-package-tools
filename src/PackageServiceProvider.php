@@ -76,6 +76,10 @@ abstract class PackageServiceProvider extends ServiceProvider
                         $migrationFileName,
                         $now->addSecond()
                     ), ], "{$this->package->shortName()}-migrations");
+
+                if ($this->package->runsMigrations) {
+                    $this->loadMigrationsFrom($filePath);
+                }
             }
 
             if ($this->package->hasTranslations) {
