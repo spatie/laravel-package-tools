@@ -19,7 +19,7 @@ abstract class PackageServiceProvider extends ServiceProvider
     {
         $this->registeringPackage();
 
-        $this->package = new Package();
+        $this->package = $this->getInitializedPackage();
 
         $this->package->setBasePath($this->getPackageBaseDir());
 
@@ -176,6 +176,11 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     public function packageBooted()
     {
+    }
+
+    protected function getInitializedPackage(): Package
+    {
+        return new Package();
     }
 
     protected function getPackageBaseDir(): string
