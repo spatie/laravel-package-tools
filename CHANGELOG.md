@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.12.1 - 2022-06-28
+
+- add `newPackage` method
+
 ## 1.12.0 - 2022-06-19
 
 ### What's Changed
