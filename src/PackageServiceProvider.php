@@ -3,6 +3,8 @@
 namespace Spatie\LaravelPackageTools;
 
 use Carbon\Carbon;
+use Database\Seeders\DatabaseSeeder;
+use File;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -98,6 +100,15 @@ abstract class PackageServiceProvider extends ServiceProvider
                     $this->package->basePath('/../resources/dist') => public_path("vendor/{$this->package->shortName()}"),
                 ], "{$this->package->shortName()}-assets");
             }
+
+            $this->callAfterResolving(DatabaseSeeder::class, function ($seeder) {
+                foreach ($this->package->seederFileNames as $seederFileName) {
+                    $filePath = $this->package->basePath("/../database/seeders/{$seederFileName}.php");
+                    $class    = "DatabaseSeeder\\".File::name($filePath);
+                    include $filePath;
+                    (new $class())->run();
+                }
+            });
         }
 
         if (! empty($this->package->commands)) {

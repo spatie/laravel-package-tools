@@ -32,6 +32,7 @@ class YourPackageServiceProvider extends PackageServiceProvider
             ->hasAssets()
             ->hasRoute('web')
             ->hasMigration('create_package_tables')
+            ->hasSeeder('MySeederData')
             ->hasCommand(YourCoolPackageCommand::class);
     }
 }
@@ -302,6 +303,46 @@ $package
     ->name('your-package-name')
     ->hasMigrations(['my_package_tables', 'some_other_migration'])
     ->runsMigrations();
+```
+
+### Working with seeders
+
+The `PackageServiceProvider` assumes that any seeders are placed in this directory: `<package root>/database/seeders` under `DatabaseSeeder` namespace. Inside that directory you can put any seeders.
+
+To register your seeder, you should pass its name without the extension to the `hasSeeder` table.
+
+If your seeder file is called `MySeederDataFile.php` you can register them like this:
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasSeeder('MySeederDataFile');
+```
+
+Should your package contain multiple migration files, you can just call `hasSeeder` multiple times or use `hasSeeders`.
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasSeeders(['MySeederDataFile', 'MyOtherSeederDataFile']);
+```
+
+Note: Seeder file name must match class name, example `MySeederData.php`:
+
+```php
+<?php
+
+namespace DatabaseSeeder;
+
+use Illuminate\Database\Seeder;
+
+class MySeederData extends Seeder
+{
+    public function run(): void
+    {
+    // some code here
+    }
+}
 ```
 
 ### Registering commands

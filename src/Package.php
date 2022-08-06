@@ -34,6 +34,8 @@ class Package
 
     public string $basePath;
 
+    public array $seederFileNames = [];
+
     public function name(string $name): self
     {
         $this->name = $name;
@@ -187,6 +189,23 @@ class Package
     public function setBasePath(string $path): self
     {
         $this->basePath = $path;
+
+        return $this;
+    }
+
+    public function hasSeeder(string $seederFileName): self
+    {
+        $this->seederFileNames[] = $seederFileName;
+
+        return $this;
+    }
+
+    public function hasSeeders(...$seederFileNames): self
+    {
+        $this->seederFileNames = array_merge(
+            $this->seederFileNames,
+            collect($seederFileNames)->flatten()->toArray()
+        );
 
         return $this;
     }
