@@ -3,6 +3,7 @@
 namespace Spatie\LaravelPackageTools;
 
 use Illuminate\Support\Str;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 
 class Package
 {
@@ -50,6 +51,17 @@ class Package
         }
 
         $this->configFileNames = $configFileName;
+
+        return $this;
+    }
+
+    public function hasInstallCommand($callable): self
+    {
+        $installCommand = new InstallCommand($this);
+
+        $callable($installCommand);
+
+        $this->commands[] = $installCommand;
 
         return $this;
     }
