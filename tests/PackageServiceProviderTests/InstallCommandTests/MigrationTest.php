@@ -17,8 +17,8 @@ class MigrationTest extends PackageServiceProviderTestCase
             ->name('laravel-package-tools')
             ->hasConfigFile()
             ->hasMigration('create_another_laravel_package_tools_table')
-            ->hasInstallCommand(function(InstallCommand $command) {
-               $command->publishMigrations();
+            ->hasInstallCommand(function (InstallCommand $command) {
+                $command->publishMigrations();
             });
     }
 

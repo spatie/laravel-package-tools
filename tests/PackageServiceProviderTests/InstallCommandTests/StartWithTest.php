@@ -18,10 +18,10 @@ class StartWithTest extends PackageServiceProviderTestCase
         $package
             ->name('laravel-package-tools')
             ->hasConfigFile()
-            ->hasInstallCommand(function(InstallCommand $command) {
-               $command->startWith(function(InstallCommand $installCommand) {
-                   $this->stringFromStart = "set by {$installCommand->getName()}";
-               });
+            ->hasInstallCommand(function (InstallCommand $command) {
+                $command->startWith(function (InstallCommand $installCommand) {
+                    $this->stringFromStart = "set by {$installCommand->getName()}";
+                });
             });
     }
 

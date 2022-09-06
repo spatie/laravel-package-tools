@@ -38,7 +38,7 @@ abstract class PackageServiceProviderTestCase extends TestCase
     public function assertMigrationPublished(string $fileName): self
     {
         $published = collect(File::allFiles(database_path('migrations')))
-            ->contains(function(SplFileInfo $file) use ($fileName) {
+            ->contains(function (SplFileInfo $file) use ($fileName) {
                 return Str::endsWith($file->getPathname(), $fileName);
             });
 
@@ -57,7 +57,7 @@ abstract class PackageServiceProviderTestCase extends TestCase
 
 
         collect(File::allFiles(database_path('migrations')))
-            ->each(function(SplFileInfo $file) {
+            ->each(function (SplFileInfo $file) {
                 unlink($file->getPathname());
             });
 
