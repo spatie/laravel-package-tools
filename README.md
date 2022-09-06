@@ -1,4 +1,3 @@
-
 [<img src="https://github-ads.s3.eu-central-1.amazonaws.com/support-ukraine.svg?t=1" />](https://supportukrainenow.org)
 
 # Tools for creating Laravel packages
@@ -16,6 +15,7 @@ Here's an example of how it can be used.
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\LaravelPackageTools\Package;
 use MyPackage\ViewComponents\Alert;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 
 class YourPackageServiceProvider extends PackageServiceProvider
 {
@@ -30,9 +30,17 @@ class YourPackageServiceProvider extends PackageServiceProvider
             ->sharesDataWithAllViews('downloads', 3)
             ->hasTranslations()
             ->hasAssets()
+            ->publishesServiceProvider('MyProviderName')
             ->hasRoute('web')
             ->hasMigration('create_package_tables')
-            ->hasCommand(YourCoolPackageCommand::class);
+            ->hasCommand(YourCoolPackageCommand::class)
+            ->hasInstallCommand(function(InstallCommand $command) {
+                $command
+                    ->publishConfigFile()
+                    ->publishMigrations()
+                    ->copyAndRegisterServiceProviderInApp()
+                    ->askToStarRepoOnGitHub()
+            });
     }
 }
 ```
@@ -52,7 +60,9 @@ on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
 ## Getting started
 
-This package is opinionated on how you should structure your package. To get started easily, consider using [our package-skeleton repo](https://github.com/spatie/package-skeleton-laravel) to start your package. The skeleton is structured perfectly to work perfectly with the `PackageServiceProvider` in this package.
+This package is opinionated on how you should structure your package. To get started easily, consider
+using [our package-skeleton repo](https://github.com/spatie/package-skeleton-laravel) to start your package. The
+skeleton is structured perfectly to work perfectly with the `PackageServiceProvider` in this package.
 
 ## Usage
 
@@ -75,9 +85,11 @@ Passing the package name to `name` is mandatory.
 
 ### Working with a config file
 
-To register a config file, you should create a php file with your package name in the `config` directory of your package. In this example it should be at `<package root>/config/your-package-name.php`.
+To register a config file, you should create a php file with your package name in the `config` directory of your
+package. In this example it should be at `<package root>/config/your-package-name.php`.
 
-If your package name starts with `laravel-`, we expect that your config file does not contain that prefix. So if your package name is `laravel-cool-package`, the config file should be named `cool-package.php`.
+If your package name starts with `laravel-`, we expect that your config file does not contain that prefix. So if your
+package name is `laravel-cool-package`, the config file should be named `cool-package.php`.
 
 To register that config file, call `hasConfigFile()` on `$package` in the `configurePackage` method.
 
@@ -87,7 +99,8 @@ $package
     ->hasConfigFile();
 ```
 
-The `hasConfigFile` method will also make the config file publishable. Users of your package will be able to publish the config file with this command.
+The `hasConfigFile` method will also make the config file publishable. Users of your package will be able to publish the
+config file with this command.
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-config
@@ -100,7 +113,6 @@ $package
     ->name('your-package-name')
     ->hasConfigFile(['my-config-file', 'another-config-file']);
 ```
-
 
 ### Working with views
 
@@ -116,7 +128,10 @@ $package
 
 This will register your views with Laravel.
 
-If you have a view `<package root>/resources/views/myView.blade.php`, you can use it like this: `view('your-package-name::myView')`. Of course, you can also use subdirectories to organise your views. A view located at `<package root>/resources/views/subdirectory/myOtherView.blade.php` can be used with `view('your-package-name::subdirectory.myOtherView')`.
+If you have a view `<package root>/resources/views/myView.blade.php`, you can use it like
+this: `view('your-package-name::myView')`. Of course, you can also use subdirectories to organise your views. A view
+located at `<package root>/resources/views/subdirectory/myOtherView.blade.php` can be used
+with `view('your-package-name::subdirectory.myOtherView')`.
 
 #### Using a custom view namespace
 
@@ -136,7 +151,8 @@ view('custom-view-namespace::myView');
 
 #### Publishing the views
 
-Calling `hasViews` will also make views publishable. Users of your package will be able to publish the views with this command:
+Calling `hasViews` will also make views publishable. Users of your package will be able to publish the views with this
+command:
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-views
@@ -144,7 +160,8 @@ php artisan vendor:publish --tag=your-package-name-views
 
 ### Sharing global data with views
 
-You can share data with all views using the `sharesDataWithAllViews` method.  This will make the shared variable available to all views.
+You can share data with all views using the `sharesDataWithAllViews` method. This will make the shared variable
+available to all views.
 
 ```php
 $package
@@ -164,9 +181,11 @@ $package
     ->hasViewComponents('spatie', Alert::class);
 ```
 
-This will register your view components with Laravel.  In the case of `Alert::class`, it can be referenced in views as `<x-spatie-alert />`, where `spatie` is the prefix you provided during registration.
+This will register your view components with Laravel. In the case of `Alert::class`, it can be referenced in views
+as `<x-spatie-alert />`, where `spatie` is the prefix you provided during registration.
 
-Calling `hasViewComponents` will also make view components publishable, and will be published to `app/Views/Components/vendor/<package name>`. 
+Calling `hasViewComponents` will also make view components publishable, and will be published
+to `app/Views/Components/vendor/<package name>`.
 
 Users of your package will be able to publish the view components with this command:
 
@@ -176,7 +195,8 @@ php artisan vendor:publish --tag=your-package-name-components
 
 ### Working with view composers
 
-You can register any view composers that your project uses with the `hasViewComposers` method.  You may also register a callback that receives a `$view` argument instead of a classname.
+You can register any view composers that your project uses with the `hasViewComposers` method. You may also register a
+callback that receives a `$view` argument instead of a classname.
 
 To register a view composer with all views, use an asterisk as the view name `'*'`.
 
@@ -191,7 +211,8 @@ $package
 
 ### Working with translations
 
-Any translations your package provides, should be placed in the `<package root>/resources/lang/<language-code>` directory.
+Any translations your package provides, should be placed in the `<package root>/resources/lang/<language-code>`
+directory.
 
 You can register these translations with the `hasTranslations` command.
 
@@ -206,8 +227,6 @@ This will register the translations with Laravel.
 Assuming you save this translation file at `<package root>/resources/lang/en/translations.php`...
 
 ```php
-<?php
-
 return [
     'translatable' => 'translation',
 ];
@@ -221,7 +240,8 @@ trans('your-package-name::translations.translatable'); // returns 'translation'
 
 If your package name starts with `laravel-` then you should leave that off in the example above.
 
-Coding with translation strings as keys, you should create JSON files in `<package root>/resources/lang/<language-code>.json`.
+Coding with translation strings as keys, you should create JSON files
+in `<package root>/resources/lang/<language-code>.json`.
 
 For example, creating `<package root>/resources/lang/it.json` file like so:
 
@@ -237,9 +257,10 @@ For example, creating `<package root>/resources/lang/it.json` file like so:
 trans('Hello!');
 ``` 
 
-...will be `Ciao!` if the application uses the Italian language.  
+...will be `Ciao!` if the application uses the Italian language.
 
-Calling `hasTranslations` will also make translations publishable. Users of your package will be able to publish the translations with this command:
+Calling `hasTranslations` will also make translations publishable. Users of your package will be able to publish the
+translations with this command:
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-translations
@@ -267,9 +288,10 @@ This will copy over the assets to the `public/vendor/<your-package-name>` direct
 
 ### Working with migrations
 
-The `PackageServiceProvider` assumes that any migrations are placed in this directory: `<package root>/database/migrations`. Inside that directory you can put any migrations.
+The `PackageServiceProvider` assumes that any migrations are placed in this
+directory: `<package root>/database/migrations`. Inside that directory you can put any migrations.
 
-To register your migration, you should pass its name without the extension to the `hasMigration` table. 
+To register your migration, you should pass its name without the extension to the `hasMigration` table.
 
 If your migration file is called `create_my_package_tables.php.stub` you can register them like this:
 
@@ -279,7 +301,8 @@ $package
     ->hasMigration('create_my_package_tables');
 ```
 
-Should your package contain multiple migration files, you can just call `hasMigration` multiple times or use `hasMigrations`.
+Should your package contain multiple migration files, you can just call `hasMigration` multiple times or
+use `hasMigrations`.
 
 ```php
 $package
@@ -287,7 +310,8 @@ $package
     ->hasMigrations(['my_package_tables', 'some_other_migration']);
 ```
 
-Calling `hasMigration` will also make migrations publishable. Users of your package will be able to publish the migrations with this command:
+Calling `hasMigration` will also make migrations publishable. Users of your package will be able to publish the
+migrations with this command:
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-migrations
@@ -304,6 +328,26 @@ $package
     ->runsMigrations();
 ```
 
+### Working with a publishable service provider
+
+Some packages need an example service provider to be copied into the `app\Providers` directory of the Laravel app. Think of for instance, the `laravel/horizon` package that copies an `HorizonServiceProvider` into your app with some sensible defaults.
+
+```php
+$package
+    ->name('your-package-name')
+    ->publishesServiceProvider($nameOfYourServiceProvider);
+```
+
+The file that will be copied to the app should be stored in your package in `/resources/stubs/{$nameOfYourServiceProvider}.php`.
+
+When your package is installed into an app, running this command...
+
+```bash
+php artisan vendor:publish --tag=your-package-name-provider
+```
+
+... will copy `/resources/stubs/{$nameOfYourServiceProvider}.php` in your package to `app/Providers/{$nameOfYourServiceProvider}.php` in the app of the user.
+
 ### Registering commands
 
 You can register any command you package provides with the `hasCommand` function.
@@ -314,7 +358,8 @@ $package
     ->hasCommand(YourCoolPackageCommand::class);
 ````
 
-If your package provides multiple commands, you can either use `hasCommand` multiple times, or pass an array to `hasCommands`
+If your package provides multiple commands, you can either use `hasCommand` multiple times, or pass an array
+to `hasCommands`
 
 ```php
 $package
@@ -325,11 +370,16 @@ $package
     ]);
 ```
 
+### Adding an installer command
+
+// .. TODO
+
 ### Working with routes
 
-The `PackageServiceProvider` assumes that any route files are placed in this directory: `<package root>/routes`. Inside that directory you can put any route files.
+The `PackageServiceProvider` assumes that any route files are placed in this directory: `<package root>/routes`. Inside
+that directory you can put any route files.
 
-To register your route, you should pass its name without the extension to the `hasRoute` method. 
+To register your route, you should pass its name without the extension to the `hasRoute` method.
 
 If your route file is called `web.php` you can register them like this:
 
@@ -351,7 +401,7 @@ $package
 
 You can put any custom logic your package needs while starting up in one of these methods:
 
-- `registeringPackage`: will be called at the start of the `register` method of `PackageServiceProvider` 
+- `registeringPackage`: will be called at the start of the `register` method of `PackageServiceProvider`
 - `packageRegistered`: will be called at the end of the `register` method of `PackageServiceProvider`
 - `bootingPackage`: will be called at the start of the `boot` method of `PackageServiceProvider`
 - `packageBooted`: will be called at the end of the `boot` method of `PackageServiceProvider`
