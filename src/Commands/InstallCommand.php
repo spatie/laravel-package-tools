@@ -74,11 +74,11 @@ class InstallCommand extends Command
             }
         }
 
+        $this->info("{$this->package->shortName()} has been installed!");
+
         if ($this->endWith) {
             ($this->endWith)($this);
         }
-
-        $this->info("{$this->package->shortName()} has been installed!");
     }
 
     public function publishConfigFile(): self
