@@ -18,10 +18,10 @@ class EndWithTest extends PackageServiceProviderTestCase
         $package
             ->name('laravel-package-tools')
             ->hasConfigFile()
-            ->hasInstallCommand(function(InstallCommand $command) {
-               $command->endWith(function(InstallCommand $installCommand) {
-                   $this->stringFromEnd = "set by {$installCommand->getName()}";
-               });
+            ->hasInstallCommand(function (InstallCommand $command) {
+                $command->endWith(function (InstallCommand $installCommand) {
+                    $this->stringFromEnd = "set by {$installCommand->getName()}";
+                });
             });
     }
 

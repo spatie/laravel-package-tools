@@ -16,8 +16,8 @@ class ConfigFileTest extends PackageServiceProviderTestCase
         $package
             ->name('laravel-package-tools')
             ->hasConfigFile()
-            ->hasInstallCommand(function(InstallCommand $command) {
-               $command->publishConfigFile();
+            ->hasInstallCommand(function (InstallCommand $command) {
+                $command->publishConfigFile();
             });
     }
 
@@ -31,6 +31,5 @@ class ConfigFileTest extends PackageServiceProviderTestCase
             ->assertSuccessful();
 
         $this->assertFileExists($configPath);
-
     }
 }
