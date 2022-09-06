@@ -284,7 +284,8 @@ Users of your package will be able to publish the assets with this command:
 php artisan vendor:publish --tag=your-package-name-assets
 ```
 
-This will copy over the assets to the `public/vendor/<your-package-name>` directory in the app where your package is installed in.
+This will copy over the assets to the `public/vendor/<your-package-name>` directory in the app where your package is
+installed in.
 
 ### Working with migrations
 
@@ -330,7 +331,9 @@ $package
 
 ### Working with a publishable service provider
 
-Some packages need an example service provider to be copied into the `app\Providers` directory of the Laravel app. Think of for instance, the `laravel/horizon` package that copies an `HorizonServiceProvider` into your app with some sensible defaults.
+Some packages need an example service provider to be copied into the `app\Providers` directory of the Laravel app. Think
+of for instance, the `laravel/horizon` package that copies an `HorizonServiceProvider` into your app with some sensible
+defaults.
 
 ```php
 $package
@@ -338,7 +341,8 @@ $package
     ->publishesServiceProvider($nameOfYourServiceProvider);
 ```
 
-The file that will be copied to the app should be stored in your package in `/resources/stubs/{$nameOfYourServiceProvider}.php`.
+The file that will be copied to the app should be stored in your package
+in `/resources/stubs/{$nameOfYourServiceProvider}.php`.
 
 When your package is installed into an app, running this command...
 
@@ -346,7 +350,8 @@ When your package is installed into an app, running this command...
 php artisan vendor:publish --tag=your-package-name-provider
 ```
 
-... will copy `/resources/stubs/{$nameOfYourServiceProvider}.php` in your package to `app/Providers/{$nameOfYourServiceProvider}.php` in the app of the user.
+... will copy `/resources/stubs/{$nameOfYourServiceProvider}.php` in your package
+to `app/Providers/{$nameOfYourServiceProvider}.php` in the app of the user.
 
 ### Registering commands
 
@@ -372,7 +377,78 @@ $package
 
 ### Adding an installer command
 
-// .. TODO
+Instead of letting your users manually publishing config files, migrations, and other files manually, you could opt to
+add an install command that does all this work in one go. Packages like Laravel Horizon and Livewire provide such
+commands.
+
+When using Laravel Package Tools, you don't have to write an `InstallCommand` yourself. Instead you can simply
+call, `hasInstallCommand` and configure it using a closure. Here's an example.
+
+```php
+use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
+
+class YourPackageServiceProvider extends PackageServiceProvider
+{
+    public function configurePackage(Package $package): void
+    {
+        $package
+            ->name('your-package-name')
+            ->hasConfigFile()
+            ->hasMigration('create_package_tables')
+            ->publishesServiceProvider('MyServiceProviderName')
+            ->hasInstallCommand(function(InstallCommand $command) {
+                $command
+                    ->publishConfigFile()
+                    ->publishMigrations()
+                    ->copyAndRegisterServiceProviderInApp()
+                    ->askToStarRepoOnGitHub('your-vendor/your-repo-name')
+            });
+    }
+}
+```
+
+With this in place, the package user can call this command:
+
+```bash
+php artisan your-package-name:install
+```
+
+Using the code above, that command will:
+
+- publish the config file
+- publish the migrations
+- copy the `MyProviderName.php` from your package to `app/Providers/MyServiceProviderName.php`, and also register that
+  provider in `config/app.php`
+- prompt the user to open up `https://github.com/'your-vendor/your-repo-name'` in the browser in order to star it
+
+You can also call `startWith` and `endWith` on the `InstallCommand`. They will respectively be executed at the start and
+end when running `php artisan your-package-name:install`. You can use this to perform extra work or display extra
+output.
+
+```php
+use use Spatie\LaravelPackageTools\Commands\InstallCommand;
+
+public function configurePackage(Package $package): void
+{
+    $package
+        // ... configure package
+        ->hasInstallCommand(function(InstallCommand $command) {
+            $command
+                ->startWith(function(InstallCommand $command) {
+                    $command->info('Hello, and welcome to my great new package!')
+                })
+                ->publishConfigFile()
+                ->publishMigrations()
+                ->copyAndRegisterServiceProviderInApp()
+                ->askToStarRepoOnGitHub('your-vendor/your-repo-name')
+                ->endWith(function(InstallCommand $command) {
+                    $command->info('Have a great day!');
+                })
+        });
+}
+```
 
 ### Working with routes
 
