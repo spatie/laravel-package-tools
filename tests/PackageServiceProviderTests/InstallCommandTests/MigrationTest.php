@@ -5,7 +5,6 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCo
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\PackageServiceProviderTestCase;
-use Spatie\TestTime\TestTime;
 
 class MigrationTest extends PackageServiceProviderTestCase
 {

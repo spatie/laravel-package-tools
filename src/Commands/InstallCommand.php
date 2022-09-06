@@ -127,7 +127,7 @@ class InstallCommand extends Command
     {
         $providerName = $this->package->publishableProviderName;
 
-        if (!$providerName) {
+        if (! $providerName) {
             return $this;
         }
 
