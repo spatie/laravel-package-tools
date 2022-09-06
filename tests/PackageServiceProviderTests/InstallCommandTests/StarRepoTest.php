@@ -16,8 +16,8 @@ class StarRepoTest extends PackageServiceProviderTestCase
         $package
             ->name('laravel-package-tools')
             ->hasConfigFile()
-            ->hasInstallCommand(function(InstallCommand $command) {
-               $command->askToStarRepoOnGitHub('spatie/spatie.be');
+            ->hasInstallCommand(function (InstallCommand $command) {
+                $command->askToStarRepoOnGitHub('spatie/spatie.be');
             });
     }
 
