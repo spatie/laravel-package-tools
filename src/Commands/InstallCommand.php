@@ -125,9 +125,11 @@ class InstallCommand extends Command
 
     protected function copyServiceProviderInApp(): self
     {
+        dump('copying');
         $providerName = $this->package->publishableProviderName;
 
         if (! $providerName) {
+            dump('no provider name');
             return $this;
         }
 
@@ -140,9 +142,11 @@ class InstallCommand extends Command
         $class = '\\Providers\\' . $providerName . '::class';
 
         if (Str::contains($appConfig, $namespace . $class)) {
+            dump('already contains');
             return $this;
         }
 
+        dump('updating');
         file_put_contents(config_path('app.php'), str_replace(
             "Illuminate\\View\ViewServiceProvider::class," . PHP_EOL,
             "Illuminate\\View\ViewServiceProvider::class," . PHP_EOL . "        {$namespace}\Providers\\" . $providerName . "::class," . PHP_EOL,
