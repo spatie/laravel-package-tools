@@ -22,7 +22,7 @@ class StarRepoTest extends PackageServiceProviderTestCase
     }
 
     /** @test */
-    public function it_can_install_the_config_file()
+    public function it_can_propose_to_star_the_repo()
     {
         $this
             ->artisan('package-tools:install')

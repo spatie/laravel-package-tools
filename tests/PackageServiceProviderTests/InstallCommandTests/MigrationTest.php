@@ -11,8 +11,6 @@ class MigrationTest extends PackageServiceProviderTestCase
 {
     public function configurePackage(Package $package)
     {
-        TestTime::freeze('Y-m-d H:i:s', '2020-01-01 00:00:00');
-
         $package
             ->name('laravel-package-tools')
             ->hasConfigFile()
@@ -23,7 +21,7 @@ class MigrationTest extends PackageServiceProviderTestCase
     }
 
     /** @test */
-    public function it_can_install_the_config_file()
+    public function it_can_install_the_migrations()
     {
         $this
             ->artisan('package-tools:install')

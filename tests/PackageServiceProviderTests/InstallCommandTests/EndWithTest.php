@@ -26,7 +26,7 @@ class EndWithTest extends PackageServiceProviderTestCase
     }
 
     /** @test */
-    public function it_can_execute_the_start_with()
+    public function it_can_execute_the_end_with()
     {
         $this
             ->artisan('package-tools:install')

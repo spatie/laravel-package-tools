@@ -5,6 +5,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use SebastianBergmann\CodeCoverage\Report\PHP;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestCase;
 use Spatie\LaravelPackageTools\Tests\TestPackage\Src\ServiceProvider;
@@ -61,6 +62,10 @@ abstract class PackageServiceProviderTestCase extends TestCase
                 unlink($file->getPathname());
             });
 
+        collect(File::allFiles(app_path('Providers')))
+            ->each(function (SplFileInfo $file) {
+                unlink($file->getPathname());
+            });
 
         return $this;
     }

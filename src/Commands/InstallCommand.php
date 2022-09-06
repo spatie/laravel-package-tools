@@ -4,6 +4,7 @@ namespace Spatie\LaravelPackageTools\Commands;
 
 use Closure;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use Spatie\LaravelPackageTools\Package;
 
 class InstallCommand extends Command
@@ -16,7 +17,7 @@ class InstallCommand extends Command
 
     protected bool $shouldPublishMigrations = false;
 
-    protected ?string $copyServiceProviderInApp = null;
+    protected bool $copyServiceProviderInApp = false;
 
     protected ?string $starRepo = null;
 
@@ -51,6 +52,10 @@ class InstallCommand extends Command
             $this->callSilently("vendor:publish", [
                 '--tag' => "{$this->package->shortName()}-migrations",
             ]);
+        }
+
+        if ($this->copyServiceProviderInApp) {
+            $this->copyServiceProviderInApp();
         }
 
         if ($this->starRepo) {
@@ -90,9 +95,9 @@ class InstallCommand extends Command
         return $this;
     }
 
-    public function copyAndRegisterServiceProviderInApp(string $serviceProviderName): self
+    public function copyAndRegisterServiceProviderInApp(): self
     {
-        $this->copyServiceProviderInApp = $serviceProviderName;
+        $this->copyServiceProviderInApp = true;
 
         return $this;
     }
@@ -114,6 +119,41 @@ class InstallCommand extends Command
     public function endWith($callable): self
     {
         $this->endWith = $callable;
+
+        return $this;
+    }
+
+    protected function copyServiceProviderInApp(): self
+    {
+        $providerName = $this->package->publishableProviderName;
+
+        if (!$providerName) {
+            return $this;
+        }
+
+        $this->callSilent('vendor:publish', ['--tag' => $this->package->shortName() . '-provider']);
+
+        $namespace = Str::replaceLast('\\', '', $this->laravel->getNamespace());
+
+        $appConfig = file_get_contents(config_path('app.php'));
+
+        $class = '\\Providers\\' . $providerName . '::class';
+
+        if (Str::contains($appConfig, $namespace . $class)) {
+            return $this;
+        }
+
+        file_put_contents(config_path('app.php'), str_replace(
+            "Illuminate\\View\ViewServiceProvider::class," . PHP_EOL,
+            "Illuminate\\View\ViewServiceProvider::class," . PHP_EOL . "        {$namespace}\Providers\\" . $providerName . "::class," . PHP_EOL,
+            $appConfig
+        ));
+
+        file_put_contents(app_path('Providers/' . $providerName . '.php'), str_replace(
+            "namespace App\Providers;",
+            "namespace {$namespace}\Providers;",
+            file_get_contents(app_path('Providers/' . $providerName . '.php'))
+        ));
 
         return $this;
     }

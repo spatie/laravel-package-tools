@@ -35,6 +35,8 @@ class Package
 
     public string $basePath;
 
+    public ?string $publishableProviderName = null;
+
     public function name(string $name): self
     {
         $this->name = $name;
@@ -51,6 +53,13 @@ class Package
         }
 
         $this->configFileNames = $configFileName;
+
+        return $this;
+    }
+
+    public function publishesServiceProvider(string $providerName): self
+    {
+        $this->publishableProviderName = $providerName;
 
         return $this;
     }
