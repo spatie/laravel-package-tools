@@ -3,7 +3,6 @@
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestClasses\TestCommand;
 
 class PackagePublishableProviderTest extends PackageServiceProviderTestCase
 {
@@ -26,6 +25,5 @@ class PackagePublishableProviderTest extends PackageServiceProviderTestCase
             ->assertSuccessful();
 
         $this->assertFileExists($providerPath);
-
     }
 }

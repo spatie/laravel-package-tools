@@ -5,7 +5,6 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use SebastianBergmann\CodeCoverage\Report\PHP;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestCase;
 use Spatie\LaravelPackageTools\Tests\TestPackage\Src\ServiceProvider;
