@@ -2,12 +2,15 @@
 
 namespace Spatie\LaravelPackageTools\Commands;
 
+use Closure;
 use Illuminate\Console\Command;
 use Spatie\LaravelPackageTools\Package;
 
 class InstallCommand extends Command
 {
     protected Package $package;
+
+    public ?Closure $startWith = null;
 
     protected bool $shouldPublishConfigFile = false;
 
@@ -16,6 +19,8 @@ class InstallCommand extends Command
     protected ?string $copyServiceProviderInApp = null;
 
     protected ?string $starRepo = null;
+
+    public ?Closure $endWith = null;
 
     public function __construct(Package $package)
     {
@@ -28,6 +33,10 @@ class InstallCommand extends Command
 
     public function handle()
     {
+        if ($this->startWith) {
+            ($this->startWith)($this);
+        }
+
         if ($this->shouldPublishConfigFile) {
             $this->info('Publishing config file...');
 
@@ -60,6 +69,10 @@ class InstallCommand extends Command
             }
         }
 
+        if ($this->endWith) {
+            ($this->endWith)($this);
+        }
+
         $this->info("{$this->package->shortName()} has been installed!");
     }
 
@@ -87,6 +100,20 @@ class InstallCommand extends Command
     public function askToStarRepoOnGitHub($vendorSlashRepoName): self
     {
         $this->starRepo = $vendorSlashRepoName;
+
+        return $this;
+    }
+
+    public function startWith($callable): self
+    {
+        $this->startWith = $callable;
+
+        return $this;
+    }
+
+    public function endWith($callable): self
+    {
+        $this->endWith = $callable;
 
         return $this;
     }
