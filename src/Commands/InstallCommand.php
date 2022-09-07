@@ -9,6 +9,8 @@ use Spatie\LaravelPackageTools\Package;
 
 class InstallCommand extends Command
 {
+    protected $hidden = true;
+
     protected Package $package;
 
     public ?Closure $startWith = null;
