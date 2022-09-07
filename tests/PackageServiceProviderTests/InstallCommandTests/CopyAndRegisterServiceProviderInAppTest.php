@@ -41,7 +41,7 @@ class CopyAndRegisterServiceProviderInAppTest extends PackageServiceProviderTest
     protected function restoreAppConfigFile(): void
     {
         $newContent = str_replace(
-            'App\Providers\MyPackageServiceProvider::class,' . PHP_EOL,
+            'App\Providers\MyPackageServiceProvider::class,',
             '',
             file_get_contents(base_path('config/app.php'))
         );
