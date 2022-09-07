@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.13.5 - 2022-09-07
+
+- improve colours of install command
+
 ## 1.13.4 - 2022-09-07
 
 - remove dump statement
