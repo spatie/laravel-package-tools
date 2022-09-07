@@ -342,7 +342,7 @@ $package
 ```
 
 The file that will be copied to the app should be stored in your package
-in `/resources/stubs/{$nameOfYourServiceProvider}.php`.
+in `/resources/stubs/{$nameOfYourServiceProvider}.php.stub`.
 
 When your package is installed into an app, running this command...
 
@@ -381,7 +381,7 @@ Instead of letting your users manually publishing config files, migrations, and 
 add an install command that does all this work in one go. Packages like Laravel Horizon and Livewire provide such
 commands.
 
-When using Laravel Package Tools, you don't have to write an `InstallCommand` yourself. Instead you can simply
+When using Laravel Package Tools, you don't have to write an `InstallCommand` yourself. Instead, you can simply
 call, `hasInstallCommand` and configure it using a closure. Here's an example.
 
 ```php
@@ -420,7 +420,7 @@ Using the code above, that command will:
 
 - publish the config file
 - publish the migrations
-- copy the `MyProviderName.php` from your package to `app/Providers/MyServiceProviderName.php`, and also register that
+- copy the `/resources/stubs/MyProviderName.php.stub` from your package to `app/Providers/MyServiceProviderName.php`, and also register that
   provider in `config/app.php`
 - ask if migrations should be run now
 - prompt the user to open up `https://github.com/'your-vendor/your-repo-name'` in the browser in order to star it
