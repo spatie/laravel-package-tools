@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.13.3 - 2022-09-07
+
+- hide install command
+
 ## 1.13.2 - 2022-09-07
 
 - improvements to install command
