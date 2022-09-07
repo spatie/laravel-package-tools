@@ -161,8 +161,6 @@ class InstallCommand extends Command
         $class = '\\Providers\\' . $providerName . '::class';
 
         if (Str::contains($appConfig, $namespace . $class)) {
-            dump('already contains');
-
             return $this;
         }
 
