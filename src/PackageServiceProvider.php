@@ -131,7 +131,7 @@ abstract class PackageServiceProvider extends ServiceProvider
 
         if ($this->package->publishableProviderName) {
             $this->publishes([
-                $this->package->basePath("/../resources/stubs/{$this->package->publishableProviderName}.php") => base_path("app/Providers/{$this->package->publishableProviderName}.php"),
+                $this->package->basePath("/../resources/stubs/{$this->package->publishableProviderName}.php.stub") => base_path("app/Providers/{$this->package->publishableProviderName}.php"),
             ], "{$this->package->shortName()}-provider");
         }
 

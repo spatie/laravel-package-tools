@@ -17,6 +17,8 @@ class InstallCommand extends Command
 
     protected bool $shouldPublishMigrations = false;
 
+    protected bool $askToRunMigrations = false;
+
     protected bool $copyServiceProviderInApp = false;
 
     protected ?string $starRepo = null;
@@ -52,6 +54,14 @@ class InstallCommand extends Command
             $this->callSilently("vendor:publish", [
                 '--tag' => "{$this->package->shortName()}-migrations",
             ]);
+        }
+
+        if ($this->askToRunMigrations) {
+            if ($this->confirm('Would you like to run the migrations now?')) {
+                $this->info('Running migrations...');
+
+                $this->call('migrate');
+            }
         }
 
         if ($this->copyServiceProviderInApp) {
@@ -91,6 +101,13 @@ class InstallCommand extends Command
     public function publishMigrations(): self
     {
         $this->shouldPublishMigrations = true;
+
+        return $this;
+    }
+
+    public function askToRunMigrations(): self
+    {
+        $this->askToRunMigrations = true;
 
         return $this;
     }
