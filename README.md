@@ -402,6 +402,7 @@ class YourPackageServiceProvider extends PackageServiceProvider
                 $command
                     ->publishConfigFile()
                     ->publishMigrations()
+                     ->askToRunMigrations()
                     ->copyAndRegisterServiceProviderInApp()
                     ->askToStarRepoOnGitHub('your-vendor/your-repo-name')
             });
@@ -421,6 +422,7 @@ Using the code above, that command will:
 - publish the migrations
 - copy the `MyProviderName.php` from your package to `app/Providers/MyServiceProviderName.php`, and also register that
   provider in `config/app.php`
+- ask if migrations should be run now
 - prompt the user to open up `https://github.com/'your-vendor/your-repo-name'` in the browser in order to star it
 
 You can also call `startWith` and `endWith` on the `InstallCommand`. They will respectively be executed at the start and
@@ -441,6 +443,7 @@ public function configurePackage(Package $package): void
                 })
                 ->publishConfigFile()
                 ->publishMigrations()
+               ->askToRunMigrations()
                 ->copyAndRegisterServiceProviderInApp()
                 ->askToStarRepoOnGitHub('your-vendor/your-repo-name')
                 ->endWith(function(InstallCommand $command) {
