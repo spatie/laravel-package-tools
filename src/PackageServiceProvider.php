@@ -129,6 +129,12 @@ abstract class PackageServiceProvider extends ServiceProvider
             ], "{$this->package->name}-components");
         }
 
+        if ($this->package->publishableProviderName) {
+            $this->publishes([
+                $this->package->basePath("/../resources/stubs/{$this->package->publishableProviderName}.php") => base_path("app/Providers/{$this->package->publishableProviderName}.php"),
+            ], "{$this->package->shortName()}-provider");
+        }
+
 
         foreach ($this->package->routeFileNames as $routeFileName) {
             $this->loadRoutesFrom("{$this->package->basePath('/../routes/')}{$routeFileName}.php");
