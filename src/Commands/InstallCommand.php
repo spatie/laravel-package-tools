@@ -158,6 +158,7 @@ class InstallCommand extends Command
 
         if (Str::contains($appConfig, $namespace . $class)) {
             dump('already contains');
+
             return $this;
         }
 
