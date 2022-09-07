@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.13.1 - 2022-09-07
+
+- add `askToRunMigrations`
+
 ## 1.13.0 - 2022-09-07
 
 ### What's Changed
