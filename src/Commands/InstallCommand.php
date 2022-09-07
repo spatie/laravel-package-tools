@@ -45,7 +45,7 @@ class InstallCommand extends Command
         }
 
         if ($this->shouldPublishConfigFile) {
-            $this->info('Publishing config file...');
+            $this->comment('Publishing config file...');
 
             $this->callSilently("vendor:publish", [
                 '--tag' => "{$this->package->shortName()}-config",
@@ -53,7 +53,7 @@ class InstallCommand extends Command
         }
 
         if ($this->shouldPublishMigrations) {
-            $this->info('Publishing migration...');
+            $this->comment('Publishing migration...');
 
             $this->callSilently("vendor:publish", [
                 '--tag' => "{$this->package->shortName()}-migrations",
@@ -62,7 +62,7 @@ class InstallCommand extends Command
 
         if ($this->askToRunMigrations) {
             if ($this->confirm('Would you like to run the migrations now?')) {
-                $this->info('Running migrations...');
+                $this->comment('Running migrations...');
 
                 $this->call('migrate');
             }
