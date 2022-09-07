@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.13.0 - 2022-09-07
+
+### What's Changed
+
+- Add install command by @freekmurze in https://github.com/spatie/laravel-package-tools/pull/64
+- Drop support for PHP 7, anything below Laravel 8
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.12.1...1.13.0
+
 ## 1.12.1 - 2022-06-28
 
 - add `newPackage` method
