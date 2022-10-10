@@ -158,6 +158,14 @@ command:
 php artisan vendor:publish --tag=your-package-name-views
 ```
 
+> **Note:**
+> 
+> If you use custom view namespace then you should change your publish command like this:
+```bash
+php artisan vendor:publish --tag=custom-view-namespace-views
+```
+
+
 ### Sharing global data with views
 
 You can share data with all views using the `sharesDataWithAllViews` method. This will make the shared variable
