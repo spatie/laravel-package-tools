@@ -63,9 +63,16 @@ abstract class PackageServiceProvider extends ServiceProvider
             }
 
             if ($this->package->hasViews) {
-                $this->publishes([
-                    $this->package->basePath('/../resources/views') => base_path("resources/views/vendor/{$this->package->shortName()}"),
-                ], "{$this->package->shortName()}-views");
+                if ($this->package->viewNamespace) {
+                    $this->publishes([
+                        $this->package->basePath('/../resources/views') => base_path("resources/views/vendor/{$this->package->viewNamespace}"),
+                    ], "{$this->package->viewNamespace}-views");
+                } else {
+                    $this->publishes([
+                        $this->package->basePath('/../resources/views') => base_path("resources/views/vendor/{$this->package->shortName()}"),
+                    ], "{$this->package->shortName()}-views");
+                }
+
             }
 
             $now = Carbon::now();
