@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.13.6 - 2022-10-11
+
+### What's Changed
+
+- Fix for publishing view files that has its custom namespace by @askdkc in https://github.com/spatie/laravel-package-tools/pull/69
+
+### New Contributors
+
+- @askdkc made their first contribution in https://github.com/spatie/laravel-package-tools/pull/69
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.13.5...1.13.6
+
 ## 1.13.5 - 2022-09-07
 
 - improve colours of install command
