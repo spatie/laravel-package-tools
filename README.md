@@ -39,7 +39,7 @@ class YourPackageServiceProvider extends PackageServiceProvider
                     ->publishConfigFile()
                     ->publishMigrations()
                     ->copyAndRegisterServiceProviderInApp()
-                    ->askToStarRepoOnGitHub()
+                    ->askToStarRepoOnGitHub();
             });
     }
 }
