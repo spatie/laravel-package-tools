@@ -1,15 +1,11 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCommandTests;
-
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\PackageServiceProviderTestCase;
-use Spatie\TestTime\TestTime;
 use function PHPUnit\Framework\assertFileExists;
 use function Spatie\PestPluginTestTime\testTime;
 
-trait ConfigurePackage {
+trait ConfigureConfigFileTest {
     public function configurePackage(Package $package)
     {
         testTime()->freeze();
@@ -23,7 +19,7 @@ trait ConfigurePackage {
     }
 }
 
-uses(ConfigurePackage::class);
+uses(ConfigureConfigFileTest::class);
 
 test('it can install the config file', function () {
     $configPath = config_path('package-tools.php');

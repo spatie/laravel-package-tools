@@ -4,7 +4,7 @@ use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use function Spatie\PestPluginTestTime\testTime;
 
-trait ConfigurePackage {
+trait ConfigureAskToRunMigrationsTest {
     public function configurePackage(Package $package)
     {
         testTime()->freeze('2020-01-01 00:00:00');
@@ -18,7 +18,7 @@ trait ConfigurePackage {
     }
 }
 
-uses(ConfigurePackage::class);
+uses(ConfigureAskToRunMigrationsTest::class);
 
 test('it can ask to run the migrations', function () {
     $this
