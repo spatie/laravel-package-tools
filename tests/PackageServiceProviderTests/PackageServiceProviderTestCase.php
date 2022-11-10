@@ -13,7 +13,7 @@ use Symfony\Component\Finder\SplFileInfo;
 
 abstract class PackageServiceProviderTestCase extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         ServiceProvider::$configurePackageUsing = function (Package $package) {
             $this->configurePackage($package);
