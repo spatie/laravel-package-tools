@@ -1,7 +1,5 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
-
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestClasses\TestCommand;
 

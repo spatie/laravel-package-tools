@@ -1,7 +1,5 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
-
 use Spatie\LaravelPackageTools\Package;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFileExists;
