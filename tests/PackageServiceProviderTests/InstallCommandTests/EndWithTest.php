@@ -1,7 +1,5 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCommandTests;
-
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use function PHPUnit\Framework\assertEquals;
