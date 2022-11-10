@@ -1,7 +1,6 @@
 <?php
 
 use Spatie\LaravelPackageTools\Package;
-use Spatie\TestTime\TestTime;
 use function Spatie\PestPluginTestTime\testTime;
 
 trait ConfigurePackageMigrationTest {

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
 use Illuminate\Support\Facades\File;
