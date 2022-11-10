@@ -3,9 +3,9 @@
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
 use Spatie\LaravelPackageTools\Package;
+use function PHPUnit\Framework\assertStringStartsWith;
 
-class PackageViewComposerTest extends PackageServiceProviderTestCase
-{
+trait ConfigurePackageViewComposerTest {
     public function configurePackage(Package $package)
     {
         $package
@@ -15,12 +15,12 @@ class PackageViewComposerTest extends PackageServiceProviderTestCase
                 $view->with('sharedItemTest', 'hello world');
             });
     }
-
-    /** @test */
-    public function it_can_load_the_view_composer_and_render_shared_data()
-    {
-        $content = view('package-tools::shared-data')->render();
-
-        $this->assertStringStartsWith('hello world', $content);
-    }
 }
+
+uses(ConfigurePackageViewComposerTest::class);
+
+test('it can load the view composer and render shared data', function () {
+    $content = view('package-tools::shared-data')->render();
+
+    assertStringStartsWith('hello world', $content);
+});
