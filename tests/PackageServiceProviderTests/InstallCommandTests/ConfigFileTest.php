@@ -8,7 +8,7 @@ use function Spatie\PestPluginTestTime\testTime;
 trait ConfigureConfigFileTest {
     public function configurePackage(Package $package)
     {
-        testTime()->freeze();
+        testTime()->freeze('2020-01-01 00:00:00');
 
         $package
             ->name('laravel-package-tools')
