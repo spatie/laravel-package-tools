@@ -4,16 +4,13 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCo
 
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\PackageServiceProviderTestCase;
-use Spatie\TestTime\TestTime;
+use function PHPUnit\Framework\assertEquals;
+use function Spatie\PestPluginTestTime\testTime;
 
-class StartWithTest extends PackageServiceProviderTestCase
-{
-    protected string $stringFromStart = '';
-
+trait ConfigureStartWithTest {
     public function configurePackage(Package $package)
     {
-        TestTime::freeze('Y-m-d H:i:s', '2020-01-01 00:00:00');
+        testTime()->freeze('2020-01-01 00:00:00');
 
         $package
             ->name('laravel-package-tools')
@@ -24,14 +21,18 @@ class StartWithTest extends PackageServiceProviderTestCase
                 });
             });
     }
-
-    /** @test */
-    public function it_can_execute_the_start_with()
-    {
-        $this
-            ->artisan('package-tools:install')
-            ->assertSuccessful();
-
-        $this->assertEquals('set by package-tools:install', $this->stringFromStart);
-    }
 }
+
+uses(ConfigureStartWithTest::class);
+
+beforeEach(function () {
+    $this->stringFromStart = '';
+});
+
+test('it can execute the start with', function () {
+    $this
+        ->artisan('package-tools:install')
+        ->assertSuccessful();
+
+    assertEquals('set by package-tools:install', $this->stringFromStart);
+});
