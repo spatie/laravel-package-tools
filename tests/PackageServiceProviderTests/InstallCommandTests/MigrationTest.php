@@ -26,5 +26,5 @@ test('it can install the migrations', function () {
         ->artisan('package-tools:install')
         ->assertSuccessful();
 
-    $this->assertMigrationPublished('create_another_laravel_package_tools_table.php');
+    assertMigrationPublished('create_another_laravel_package_tools_table.php');
 });
