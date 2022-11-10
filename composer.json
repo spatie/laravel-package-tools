@@ -37,7 +37,7 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/pest --colors=always",
+        "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage-html coverage"
     },
     "config": {
