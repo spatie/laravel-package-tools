@@ -28,7 +28,7 @@ trait ConfigureEndWithTest {
 
 uses(ConfigureEndWithTest::class);
 
-test('it can execute the end with', function () {
+it('can execute the end with', function () {
     $this
         ->artisan('package-tools:install')
         ->assertSuccessful();

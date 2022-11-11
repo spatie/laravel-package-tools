@@ -19,7 +19,7 @@ trait ConfigurePackageCommandsTest {
 
 uses(ConfigurePackageCommandsTest::class);
 
-test('it can execute a registered commands', function () {
+it('can execute a registered commands', function () {
     $this
         ->artisan('test-command')
         ->assertExitCode(0);

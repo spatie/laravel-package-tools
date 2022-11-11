@@ -34,7 +34,7 @@ function restoreAppConfigFile(): void
 
 uses(ConfigureCopyAndRegisterServiceProviderInAppTest::class);
 
-test('it can copy and register the service provider in the app', function () {
+it('can copy and register the service provider in the app', function () {
     $this
         ->artisan('package-tools:install')
         ->assertSuccessful();

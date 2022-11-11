@@ -17,7 +17,7 @@ trait ConfigurePackageViewComposerTest {
 
 uses(ConfigurePackageViewComposerTest::class);
 
-test('it can load the view composer and render shared data', function () {
+it('can load the view composer and render shared data', function () {
     $content = view('package-tools::shared-data')->render();
 
     assertStringStartsWith('hello world', $content);

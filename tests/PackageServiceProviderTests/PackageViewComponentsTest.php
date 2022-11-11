@@ -17,13 +17,13 @@ trait ConfigurePackageViewComponentsTest {
 
 uses(ConfigurePackageViewComponentsTest::class);
 
-test('it can load the view components', function () {
+it('can load the view components', function () {
     $content = view('package-tools::component-test')->render();
 
     assertStringStartsWith('<div>hello world</div>', $content);
 });
 
-test('it can publish the view components', function () {
+it('can publish the view components', function () {
     $this
         ->artisan('vendor:publish --tag=laravel-package-tools-components')
         ->assertExitCode(0);

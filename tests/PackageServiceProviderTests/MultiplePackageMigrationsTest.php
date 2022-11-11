@@ -19,7 +19,7 @@ trait ConfigureMultiplePackageMigrationsTest {
 
 uses(ConfigureMultiplePackageMigrationsTest::class);
 
-test('it can publish multiple migrations', function () {
+it('can publish multiple migrations', function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertExitCode(0);

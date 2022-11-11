@@ -15,7 +15,7 @@ trait ConfigurePackagePublishableProviderTest {
 
 uses(ConfigurePackagePublishableProviderTest::class);
 
-test('it can publish a service provider', function () {
+it('can publish a service provider', function () {
     $providerPath = app_path('Providers/MyPackageServiceProvider.php');
 
     assertFileDoesNotExist($providerPath);

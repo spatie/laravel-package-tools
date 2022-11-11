@@ -18,7 +18,7 @@ trait ConfigurePackageMigrationTest {
 
 uses(ConfigurePackageMigrationTest::class);
 
-test('it can publish the migration', function () {
+it('can publish the migration', function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->doesntExpectOutput('hey')
@@ -27,7 +27,7 @@ test('it can publish the migration', function () {
     assertMigrationPublished('create_another_laravel_package_tools_table.php');
 });
 
-test('it can publish the migration without being stubbed', function () {
+it('can publish the migration without being stubbed', function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertExitCode(0);
@@ -35,7 +35,7 @@ test('it can publish the migration without being stubbed', function () {
     assertMigrationPublished('create_regular_laravel_package_tools_table.php');
 });
 
-test('it does not overwrite the existing migration', function () {
+it('does not overwrite the existing migration', function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertExitCode(0);
@@ -54,7 +54,7 @@ test('it does not overwrite the existing migration', function () {
     $this->assertStringEqualsFile($filePath, 'modified');
 });
 
-test('it does overwrite the existing migration with force', function () {
+it('does overwrite the existing migration with force', function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertExitCode(0);
@@ -75,7 +75,7 @@ test('it does overwrite the existing migration with force', function () {
     );
 });
 
-test('it can run migrations which registers them', function () {
+it('can run migrations which registers them', function () {
     /** @var \Illuminate\Database\Migrations\Migrator $migrator */
     $migrator = app('migrator');
 

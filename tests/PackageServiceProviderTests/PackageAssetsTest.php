@@ -14,7 +14,7 @@ trait ConfigurePackageAssetsTest {
 
 uses(ConfigurePackageAssetsTest::class);
 
-test('it can publish the assets', function () {
+it('can publish the assets', function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-assets')
         ->assertExitCode(0);

@@ -21,7 +21,7 @@ trait ConfigureConfigFileTest {
 
 uses(ConfigureConfigFileTest::class);
 
-test('it can install the config file', function () {
+it('can install the config file', function () {
     $configPath = config_path('package-tools.php');
 
     $this

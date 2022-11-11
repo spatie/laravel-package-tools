@@ -14,7 +14,7 @@ trait ConfigurePackageMultipleConfigTest {
 
 uses(ConfigurePackageMultipleConfigTest::class);
 
-test('it can register multiple config files', function () {
+it('can register multiple config files', function () {
     assertEquals('value', config('package-tools.key'));
 
     assertEquals('alternative_value', config('alternative-config.alternative_key'));

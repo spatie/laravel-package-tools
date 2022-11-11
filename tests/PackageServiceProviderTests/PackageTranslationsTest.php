@@ -15,11 +15,11 @@ trait ConfigurePackageTranslationsTest {
 
 uses(ConfigurePackageTranslationsTest::class);
 
-test('it can load the translations', function () {
+it('can load the translations', function () {
     assertEquals('translation', trans('package-tools::translations.translatable'));
 });
 
-test('it can publish the translations', function () {
+it('can publish the translations', function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-translations')
         ->assertExitCode(0);

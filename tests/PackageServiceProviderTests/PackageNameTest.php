@@ -12,6 +12,6 @@ trait ConfigurePackageNameTest {
 
 uses(ConfigurePackageNameTest::class);
 
-test('it will not blow up when a name is set', function () {
+it('will not blow up when a name is set', function () {
     assertTrue(true);
 });

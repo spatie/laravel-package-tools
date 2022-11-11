@@ -15,11 +15,11 @@ trait ConfigurePackageConfigTest {
 
 uses(ConfigurePackageConfigTest::class);
 
-test('it can register the config file', function () {
+it('can register the config file', function () {
     assertEquals('value', config('package-tools.key'));
 });
 
-test('it can publish the config file', function () {
+it('can publish the config file', function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-config')
         ->assertExitCode(0);
