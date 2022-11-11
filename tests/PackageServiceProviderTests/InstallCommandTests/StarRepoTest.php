@@ -4,29 +4,30 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCo
 
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\PackageServiceProviderConcreteTestCase;
 use Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\PackageServiceProviderTestCase;
 use Spatie\TestTime\TestTime;
 
-class StarRepoTest extends PackageServiceProviderTestCase
+beforeAll(function () {
+
+    TestTime::freeze('Y-m-d H:i:s', '2020-01-01 00:00:00');
+
+    $package = new Package();
+
+    $package
+        ->name('laravel-package-tools')
+        ->hasConfigFile()
+        ->hasInstallCommand(function (InstallCommand $command) {
+            $command->askToStarRepoOnGitHub('spatie/spatie.be');
+        });
+
+    PackageServiceProviderConcreteTestCase::package($package);
+});
+
+it('can_propose_to_star_the_repo',function()
 {
-    public function configurePackage(Package $package)
-    {
-        TestTime::freeze('Y-m-d H:i:s', '2020-01-01 00:00:00');
-
-        $package
-            ->name('laravel-package-tools')
-            ->hasConfigFile()
-            ->hasInstallCommand(function (InstallCommand $command) {
-                $command->askToStarRepoOnGitHub('spatie/spatie.be');
-            });
-    }
-
-    /** @test */
-    public function it_can_propose_to_star_the_repo()
-    {
-        $this
-            ->artisan('package-tools:install')
-            ->assertSuccessful()
-            ->expectsConfirmation('Would you like to star our repo on GitHub?');
-    }
-}
+    $this
+        ->artisan('package-tools:install')
+        ->assertSuccessful()
+        ->expectsConfirmation('Would you like to star our repo on GitHub?');
+});

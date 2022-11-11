@@ -4,32 +4,32 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCo
 
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\PackageServiceProviderConcreteTestCase;
 use Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\PackageServiceProviderTestCase;
 use Spatie\TestTime\TestTime;
 
-class ConfigFileTest extends PackageServiceProviderTestCase
-{
-    public function configurePackage(Package $package)
-    {
-        TestTime::freeze('Y-m-d H:i:s', '2020-01-01 00:00:00');
+beforeAll(function () {
 
-        $package
-            ->name('laravel-package-tools')
-            ->hasConfigFile()
-            ->hasInstallCommand(function (InstallCommand $command) {
-                $command->publishConfigFile();
-            });
-    }
+    TestTime::freeze('Y-m-d H:i:s', '2020-01-01 00:00:00');
 
-    /** @test */
-    public function it_can_install_the_config_file()
-    {
-        $configPath = config_path('package-tools.php');
+    $package = new Package();
 
-        $this
-            ->artisan('package-tools:install')
-            ->assertSuccessful();
+    $package
+        ->name('laravel-package-tools')
+        ->hasConfigFile()
+        ->hasInstallCommand(function (InstallCommand $command) {
+            $command->publishConfigFile();
+        });
 
-        $this->assertFileExists($configPath);
-    }
-}
+    PackageServiceProviderConcreteTestCase::package($package);
+});
+
+it('can_install_the_config_file',function(){
+    $configPath = config_path('package-tools.php');
+
+    $this
+        ->artisan('package-tools:install')
+        ->assertSuccessful();
+
+    $this->assertFileExists($configPath);
+});

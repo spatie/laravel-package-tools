@@ -9,6 +9,7 @@ class PackageServiceProviderConcreteTestCase extends PackageServiceProviderTestC
 
     private static ?PackageServiceProviderConcreteTestCase $instance = null;
     public Package $instancePackage;
+    private string $utilityField;
 
     public static function getInstance(): PackageServiceProviderConcreteTestCase{
         if (!static::$instance) {
@@ -29,6 +30,16 @@ class PackageServiceProviderConcreteTestCase extends PackageServiceProviderTestC
         static::getInstance()->setUpPackage($package);
     }
 
+    public static function setUtilityField(string $value): void
+    {
+        static::getInstance()->utilityField = $value;
+    }
+
+    public static function getUtilityField(): string
+    {
+        return static::getInstance()->utilityField;
+    }
+
     public function configurePackage(Package $package): void
     {
         $instancePackageProps = get_object_vars(static::getInstance()->instancePackage);
@@ -38,6 +49,20 @@ class PackageServiceProviderConcreteTestCase extends PackageServiceProviderTestC
 
     }
 
+    /*
+    * If we leave the published config file in,
+    * all subsequent tests will fail
+    */
+    public function restoreAppConfigFile(): void
+    {
+        $newContent = str_replace(
+            'App\Providers\MyPackageServiceProvider::class,',
+            '',
+            file_get_contents(base_path('config/app.php'))
+        );
+
+        file_put_contents(base_path('config/app.php'), $newContent);
+    }
 
 
 }

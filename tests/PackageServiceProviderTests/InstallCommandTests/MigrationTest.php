@@ -4,28 +4,28 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCo
 
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\PackageServiceProviderConcreteTestCase;
 use Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\PackageServiceProviderTestCase;
 
-class MigrationTest extends PackageServiceProviderTestCase
-{
-    public function configurePackage(Package $package)
-    {
-        $package
-            ->name('laravel-package-tools')
-            ->hasConfigFile()
-            ->hasMigration('create_another_laravel_package_tools_table')
-            ->hasInstallCommand(function (InstallCommand $command) {
-                $command->publishMigrations();
-            });
-    }
+beforeAll(function () {
 
-    /** @test */
-    public function it_can_install_the_migrations()
-    {
-        $this
-            ->artisan('package-tools:install')
-            ->assertSuccessful();
+    $package = new Package();
 
-        $this->assertMigrationPublished('create_another_laravel_package_tools_table.php');
-    }
-}
+    $package
+        ->name('laravel-package-tools')
+        ->hasConfigFile()
+        ->hasMigration('create_another_laravel_package_tools_table')
+        ->hasInstallCommand(function (InstallCommand $command) {
+            $command->publishMigrations();
+        });
+
+    PackageServiceProviderConcreteTestCase::package($package);
+});
+
+it('can_install_the_migrations',function(){
+    $this
+        ->artisan('package-tools:install')
+        ->assertSuccessful();
+
+    $this->assertMigrationPublished('create_another_laravel_package_tools_table.php');
+});
