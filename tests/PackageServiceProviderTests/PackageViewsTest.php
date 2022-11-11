@@ -4,30 +4,28 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
 use Spatie\LaravelPackageTools\Package;
 
-class PackageViewsTest extends PackageServiceProviderTestCase
-{
-    public function configurePackage(Package $package)
-    {
-        $package
-            ->name('laravel-package-tools')
-            ->hasViews();
-    }
+beforeAll(function () {
 
-    /** @test */
-    public function it_can_load_the_views()
-    {
-        $content = view('package-tools::test')->render();
+    $package = new Package();
+    $package
+        ->name('laravel-package-tools')
+        ->hasViews();
 
-        $this->assertStringStartsWith('This is a blade view', $content);
-    }
+    PackageServiceProviderConcreteTestCase::package($package);
+});
 
-    /** @test */
-    public function it_can_publish_the_views()
-    {
-        $this
-            ->artisan('vendor:publish --tag=package-tools-views')
-            ->assertExitCode(0);
+it('can load the views', function () {
 
-        $this->assertFileExists(base_path('resources/views/vendor/package-tools/test.blade.php'));
-    }
-}
+    $content = view('package-tools::test')->render();
+
+    expect($content)->toStartWith('This is a blade view');
+});
+
+it('can publish the views', function () {
+
+    $this
+        ->artisan('vendor:publish --tag=package-tools-views')
+        ->assertExitCode(0);
+
+    $this->assertFileExists(base_path('resources/views/vendor/package-tools/test.blade.php'));
+});

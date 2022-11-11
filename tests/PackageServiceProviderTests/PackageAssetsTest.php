@@ -4,22 +4,22 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
 use Spatie\LaravelPackageTools\Package;
 
-class PackageAssetsTest extends PackageServiceProviderTestCase
-{
-    public function configurePackage(Package $package)
-    {
-        $package
-            ->name('laravel-package-tools')
-            ->hasAssets();
-    }
+beforeAll(function () {
 
-    /** @test */
-    public function it_can_publish_the_assets()
-    {
-        $this
-            ->artisan('vendor:publish --tag=package-tools-assets')
-            ->assertExitCode(0);
+    $package = new Package();
+    $package
+        ->name('laravel-package-tools')
+        ->hasAssets();
 
-        $this->assertFileExists(public_path('vendor/package-tools/dummy.js'));
-    }
-}
+    PackageServiceProviderConcreteTestCase::package($package);
+});
+
+
+it('can_publish_the_assets',function(){
+
+    $this
+        ->artisan('vendor:publish --tag=package-tools-assets')
+        ->assertExitCode(0);
+
+    $this->assertFileExists(public_path('vendor/package-tools/dummy.js'));
+});

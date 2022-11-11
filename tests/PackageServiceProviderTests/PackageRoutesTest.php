@@ -5,30 +5,28 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\TestTime\TestTime;
 
-class PackageRoutesTest extends PackageServiceProviderTestCase
-{
-    public function configurePackage(Package $package)
-    {
-        TestTime::freeze('Y-m-d H:i:s', '2020-01-01 00:00:00');
 
-        $package
-            ->name('laravel-package-tools')
-            ->hasRoutes('web', 'other');
-    }
+beforeAll(function () {
 
-    /** @test */
-    public function it_can_load_the_route()
-    {
-        $response = $this->get('my-route');
+    TestTime::freeze('Y-m-d H:i:s', '2020-01-01 00:00:00');
 
-        $response->assertSeeText('my response');
-    }
+    $package = new Package();
+    $package
+        ->name('laravel-package-tools')
+        ->hasRoutes('web', 'other');
 
-    /** @test */
-    public function it_can_load_multiple_route()
-    {
-        $adminResponse = $this->get('other-route');
+    PackageServiceProviderConcreteTestCase::package($package);
+});
 
-        $adminResponse->assertSeeText('other response');
-    }
-}
+
+it('can_load_the_route',function(){
+    $response = $this->get('my-route');
+
+    $response->assertSeeText('my response');
+});
+
+it('can_load_multiple_route', function () {
+    $adminResponse = $this->get('other-route');
+
+    $adminResponse->assertSeeText('other response');
+});
