@@ -1,31 +1,28 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
-
 use Spatie\LaravelPackageTools\Package;
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertFileExists;
 
-class PackageConfigTest extends PackageServiceProviderTestCase
-{
+trait ConfigurePackageConfigTest {
     public function configurePackage(Package $package)
     {
         $package
             ->name('laravel-package-tools')
             ->hasConfigFile();
     }
-
-    /** @test */
-    public function it_can_register_the_config_file()
-    {
-        $this->assertEquals('value', config('package-tools.key'));
-    }
-
-    /** @test */
-    public function it_can_publish_the_config_file()
-    {
-        $this
-            ->artisan('vendor:publish --tag=package-tools-config')
-            ->assertExitCode(0);
-
-        $this->assertFileExists(config_path('package-tools.php'));
-    }
 }
+
+uses(ConfigurePackageConfigTest::class);
+
+it('can register the config file', function () {
+    assertEquals('value', config('package-tools.key'));
+});
+
+it('can publish the config file', function () {
+    $this
+        ->artisan('vendor:publish --tag=package-tools-config')
+        ->assertExitCode(0);
+
+    assertFileExists(config_path('package-tools.php'));
+});

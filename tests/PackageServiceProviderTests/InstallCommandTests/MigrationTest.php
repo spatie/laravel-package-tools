@@ -1,13 +1,9 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCommandTests;
-
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\PackageServiceProviderTestCase;
 
-class MigrationTest extends PackageServiceProviderTestCase
-{
+trait ConfigureMigrationTest {
     public function configurePackage(Package $package)
     {
         $package
@@ -19,13 +15,14 @@ class MigrationTest extends PackageServiceProviderTestCase
             });
     }
 
-    /** @test */
-    public function it_can_install_the_migrations()
-    {
-        $this
-            ->artisan('package-tools:install')
-            ->assertSuccessful();
-
-        $this->assertMigrationPublished('create_another_laravel_package_tools_table.php');
-    }
 }
+
+uses(ConfigureMigrationTest::class);
+
+it('can install the migrations', function () {
+    $this
+        ->artisan('package-tools:install')
+        ->assertSuccessful();
+
+    assertMigrationPublished('create_another_laravel_package_tools_table.php');
+});

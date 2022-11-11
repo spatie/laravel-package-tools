@@ -1,23 +1,21 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
-
 use Spatie\LaravelPackageTools\Package;
+use function PHPUnit\Framework\assertEquals;
 
-class PackageMultipleConfigTest extends PackageServiceProviderTestCase
-{
+trait ConfigurePackageMultipleConfigTest {
     public function configurePackage(Package $package)
     {
         $package
             ->name('laravel-package-tools')
             ->hasConfigFile(['package-tools', 'alternative-config']);
     }
-
-    /** @test */
-    public function it_can_register_multiple_config_files()
-    {
-        $this->assertEquals('value', config('package-tools.key'));
-
-        $this->assertEquals('alternative_value', config('alternative-config.alternative_key'));
-    }
 }
+
+uses(ConfigurePackageMultipleConfigTest::class);
+
+it('can register multiple config files', function () {
+    assertEquals('value', config('package-tools.key'));
+
+    assertEquals('alternative_value', config('alternative-config.alternative_key'));
+});

@@ -1,11 +1,9 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
-
 use Spatie\LaravelPackageTools\Package;
+use function PHPUnit\Framework\assertStringStartsWith;
 
-class PackageSharedDataTest extends PackageServiceProviderTestCase
-{
+trait ConfigurePackageSharedDataTest {
     public function configurePackage(Package $package)
     {
         $package
@@ -13,14 +11,14 @@ class PackageSharedDataTest extends PackageServiceProviderTestCase
             ->hasViews()
             ->sharesDataWithAllViews('sharedItemTest', 'hello_world');
     }
-
-    /** @test */
-    public function it_can_share_data_with_all_views()
-    {
-        $content1 = view('package-tools::shared-data')->render();
-        $content2 = view('package-tools::shared-data-2')->render();
-
-        $this->assertStringStartsWith('hello_world', $content1);
-        $this->assertStringStartsWith('hello_world', $content2);
-    }
 }
+
+uses(ConfigurePackageSharedDataTest::class);
+
+it('can share data with all views', function () {
+    $content1 = view('package-tools::shared-data')->render();
+    $content2 = view('package-tools::shared-data-2')->render();
+
+    assertStringStartsWith('hello_world', $content1);
+    assertStringStartsWith('hello_world', $content2);
+});

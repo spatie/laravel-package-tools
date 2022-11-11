@@ -1,12 +1,11 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
-
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestPackage\Components\TestComponent;
+use function PHPUnit\Framework\assertFileExists;
+use function PHPUnit\Framework\assertStringStartsWith;
 
-class PackageViewComponentsTest extends PackageServiceProviderTestCase
-{
+trait ConfigurePackageViewComponentsTest {
     public function configurePackage(Package $package)
     {
         $package
@@ -14,22 +13,20 @@ class PackageViewComponentsTest extends PackageServiceProviderTestCase
             ->hasViews()
             ->hasViewComponent('abc', TestComponent::class);
     }
-
-    /** @test */
-    public function it_can_load_the_view_components()
-    {
-        $content = view('package-tools::component-test')->render();
-
-        $this->assertStringStartsWith('<div>hello world</div>', $content);
-    }
-
-    /** @test */
-    public function it_can_publish_the_view_components()
-    {
-        $this
-            ->artisan('vendor:publish --tag=laravel-package-tools-components')
-            ->assertExitCode(0);
-
-        $this->assertFileExists(base_path('app/View/Components/vendor/package-tools/TestComponent.php'));
-    }
 }
+
+uses(ConfigurePackageViewComponentsTest::class);
+
+it('can load the view components', function () {
+    $content = view('package-tools::component-test')->render();
+
+    assertStringStartsWith('<div>hello world</div>', $content);
+});
+
+it('can publish the view components', function () {
+    $this
+        ->artisan('vendor:publish --tag=laravel-package-tools-components')
+        ->assertExitCode(0);
+
+    assertFileExists(base_path('app/View/Components/vendor/package-tools/TestComponent.php'));
+});
