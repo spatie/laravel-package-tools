@@ -4,7 +4,8 @@ use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use function Spatie\PestPluginTestTime\testTime;
 
-trait ConfigureStarRepoTest {
+trait ConfigureStarRepoTest
+{
     public function configurePackage(Package $package)
     {
         testTime()->freeze('2020-01-01 00:00:00');

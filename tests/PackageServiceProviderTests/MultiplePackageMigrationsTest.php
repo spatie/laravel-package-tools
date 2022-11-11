@@ -1,10 +1,11 @@
 <?php
 
-use Spatie\LaravelPackageTools\Package;
 use function PHPUnit\Framework\assertFileExists;
+use Spatie\LaravelPackageTools\Package;
 use function Spatie\PestPluginTestTime\testTime;
 
-trait ConfigureMultiplePackageMigrationsTest {
+trait ConfigureMultiplePackageMigrationsTest
+{
     public function configurePackage(Package $package)
     {
         testTime()->freeze('2020-01-01 00:00:00');

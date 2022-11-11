@@ -1,11 +1,12 @@
 <?php
 
+use function PHPUnit\Framework\assertFileExists;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
-use function PHPUnit\Framework\assertFileExists;
 use function Spatie\PestPluginTestTime\testTime;
 
-trait ConfigureConfigFileTest {
+trait ConfigureConfigFileTest
+{
     public function configurePackage(Package $package)
     {
         testTime()->freeze('2020-01-01 00:00:00');

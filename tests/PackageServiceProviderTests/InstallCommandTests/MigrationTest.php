@@ -3,7 +3,8 @@
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 
-trait ConfigureMigrationTest {
+trait ConfigureMigrationTest
+{
     public function configurePackage(Package $package)
     {
         $package
@@ -14,7 +15,6 @@ trait ConfigureMigrationTest {
                 $command->publishMigrations();
             });
     }
-
 }
 
 uses(ConfigureMigrationTest::class);

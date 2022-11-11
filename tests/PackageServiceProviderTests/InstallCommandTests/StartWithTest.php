@@ -1,11 +1,12 @@
 <?php
 
+use function PHPUnit\Framework\assertEquals;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
-use function PHPUnit\Framework\assertEquals;
 use function Spatie\PestPluginTestTime\testTime;
 
-trait ConfigureStartWithTest {
+trait ConfigureStartWithTest
+{
     public function configurePackage(Package $package)
     {
         testTime()->freeze('2020-01-01 00:00:00');

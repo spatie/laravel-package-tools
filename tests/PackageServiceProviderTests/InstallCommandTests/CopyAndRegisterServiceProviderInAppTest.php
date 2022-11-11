@@ -1,10 +1,11 @@
 <?php
 
+use function PHPUnit\Framework\assertStringContainsString;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
-use function PHPUnit\Framework\assertStringContainsString;
 
-trait ConfigureCopyAndRegisterServiceProviderInAppTest {
+trait ConfigureCopyAndRegisterServiceProviderInAppTest
+{
     public function configurePackage(Package $package)
     {
         $package

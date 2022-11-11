@@ -1,9 +1,10 @@
 <?php
 
-use Spatie\LaravelPackageTools\Package;
 use function PHPUnit\Framework\assertEquals;
+use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackageMultipleConfigTest {
+trait ConfigurePackageMultipleConfigTest
+{
     public function configurePackage(Package $package)
     {
         $package

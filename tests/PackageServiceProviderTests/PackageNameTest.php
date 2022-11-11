@@ -1,9 +1,10 @@
 <?php
 
-use Spatie\LaravelPackageTools\Package;
 use function PHPUnit\Framework\assertTrue;
+use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackageNameTest {
+trait ConfigurePackageNameTest
+{
     public function configurePackage(Package $package)
     {
         $package->name('laravel-package-tools');

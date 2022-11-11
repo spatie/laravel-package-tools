@@ -1,11 +1,12 @@
 <?php
 
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Components\TestComponent;
 use function PHPUnit\Framework\assertFileExists;
 use function PHPUnit\Framework\assertStringStartsWith;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Components\TestComponent;
 
-trait ConfigurePackageViewComponentsTest {
+trait ConfigurePackageViewComponentsTest
+{
     public function configurePackage(Package $package)
     {
         $package

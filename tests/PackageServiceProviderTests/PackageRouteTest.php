@@ -3,7 +3,8 @@
 use Spatie\LaravelPackageTools\Package;
 use function Spatie\PestPluginTestTime\testTime;
 
-trait ConfigurePackageRouteTest {
+trait ConfigurePackageRouteTest
+{
     public function configurePackage(Package $package)
     {
         testTime()->freeze('2020-01-01 00:00:00');

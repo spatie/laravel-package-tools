@@ -1,10 +1,11 @@
 <?php
 
-use Spatie\LaravelPackageTools\Package;
 use function PHPUnit\Framework\assertFileExists;
 use function PHPUnit\Framework\assertStringStartsWith;
+use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackageViewsWithCustomNamespaceTest {
+trait ConfigurePackageViewsWithCustomNamespaceTest
+{
     public function configurePackage(Package $package)
     {
         $package

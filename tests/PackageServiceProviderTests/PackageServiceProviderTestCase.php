@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\File;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestCase;
 use Spatie\LaravelPackageTools\Tests\TestPackage\Src\ServiceProvider;
-use Symfony\Component\Finder\SplFileInfo;
 use function Spatie\PestPluginTestTime\testTime;
+use Symfony\Component\Finder\SplFileInfo;
 
 abstract class PackageServiceProviderTestCase extends TestCase
 {

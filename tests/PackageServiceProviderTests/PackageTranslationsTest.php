@@ -1,10 +1,11 @@
 <?php
 
-use Spatie\LaravelPackageTools\Package;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertFileExists;
+use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackageTranslationsTest {
+trait ConfigurePackageTranslationsTest
+{
     public function configurePackage(Package $package)
     {
         $package

@@ -1,10 +1,11 @@
 <?php
 
-use Spatie\LaravelPackageTools\Package;
 use function PHPUnit\Framework\assertFileDoesNotExist;
 use function PHPUnit\Framework\assertFileExists;
+use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackagePublishableProviderTest {
+trait ConfigurePackagePublishableProviderTest
+{
     public function configurePackage(Package $package)
     {
         $package

@@ -1,9 +1,10 @@
 <?php
 
-use Spatie\LaravelPackageTools\Package;
 use function PHPUnit\Framework\assertStringStartsWith;
+use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackageViewComposerTest {
+trait ConfigurePackageViewComposerTest
+{
     public function configurePackage(Package $package)
     {
         $package

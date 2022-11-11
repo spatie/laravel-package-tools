@@ -9,9 +9,9 @@
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use function PHPUnit\Framework\assertTrue;
 use Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\PackageServiceProviderTestCase;
 use Symfony\Component\Finder\SplFileInfo;
-use function PHPUnit\Framework\assertTrue;
 
 uses(PackageServiceProviderTestCase::class)->in('PackageServiceProviderTests');
 

@@ -1,15 +1,16 @@
 <?php
 
+use function PHPUnit\Framework\assertEquals;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
-use function PHPUnit\Framework\assertEquals;
 use function Spatie\PestPluginTestTime\testTime;
 
 beforeEach(function () {
     $this->stringFromEnd = '';
 });
 
-trait ConfigureEndWithTest {
+trait ConfigureEndWithTest
+{
     public function configurePackage(Package $package)
     {
         testTime()->freeze('2020-01-01 00:00:00');
@@ -23,7 +24,6 @@ trait ConfigureEndWithTest {
                 });
             });
     }
-
 }
 
 uses(ConfigureEndWithTest::class);
@@ -35,4 +35,3 @@ it('can execute the end with', function () {
 
     assertEquals('set by package-tools:install', $this->stringFromEnd);
 });
-

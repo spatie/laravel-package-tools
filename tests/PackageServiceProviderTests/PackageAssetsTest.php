@@ -1,9 +1,10 @@
 <?php
 
-use Spatie\LaravelPackageTools\Package;
 use function PHPUnit\Framework\assertFileExists;
+use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackageAssetsTest {
+trait ConfigurePackageAssetsTest
+{
     public function configurePackage(Package $package)
     {
         $package

@@ -3,7 +3,8 @@
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestClasses\TestCommand;
 
-trait ConfigurePackageCommandWithinAppTest {
+trait ConfigurePackageCommandWithinAppTest
+{
     public function configurePackage(Package $package)
     {
         $package

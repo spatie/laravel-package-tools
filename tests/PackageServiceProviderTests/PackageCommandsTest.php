@@ -6,7 +6,8 @@ use Spatie\LaravelPackageTools\Tests\TestClasses\OtherTestCommand;
 use Spatie\LaravelPackageTools\Tests\TestClasses\TestCommand;
 use Spatie\LaravelPackageTools\Tests\TestClasses\ThirdTestCommand;
 
-trait ConfigurePackageCommandsTest {
+trait ConfigurePackageCommandsTest
+{
     public function configurePackage(Package $package)
     {
         $package
