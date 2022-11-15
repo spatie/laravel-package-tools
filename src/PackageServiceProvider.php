@@ -125,7 +125,7 @@ abstract class PackageServiceProvider extends ServiceProvider
 
         if (count($this->package->viewComponents)) {
             $this->publishes([
-                $this->package->basePath('/../Components') => base_path("app/View/Components/vendor/{$this->package->shortName()}"),
+                $this->package->basePath('/Components') => base_path("app/View/Components/vendor/{$this->package->shortName()}"),
             ], "{$this->package->name}-components");
         }
 
