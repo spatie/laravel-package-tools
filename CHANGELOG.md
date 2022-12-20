@@ -2,6 +2,28 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.13.8 - 2022-12-20
+
+### What's Changed
+
+- Fix for publishing view files that has its custom namespace by @askdkc in https://github.com/spatie/laravel-package-tools/pull/69
+- PHP 8.2 Build by @erikn69 in https://github.com/spatie/laravel-package-tools/pull/70
+- Fix missing semicolon in readme by @howdu in https://github.com/spatie/laravel-package-tools/pull/71
+- Refactor tests to pest by @AyoobMH in https://github.com/spatie/laravel-package-tools/pull/73
+- View Components publish has a bug by @mrlinnth in https://github.com/spatie/laravel-package-tools/pull/72
+- Add Dependabot Automation by @patinthehat in https://github.com/spatie/laravel-package-tools/pull/75
+- Add PHP 8.2 Support by @patinthehat in https://github.com/spatie/laravel-package-tools/pull/77
+- Update Dependabot Automation by @patinthehat in https://github.com/spatie/laravel-package-tools/pull/78
+
+### New Contributors
+
+- @askdkc made their first contribution in https://github.com/spatie/laravel-package-tools/pull/69
+- @howdu made their first contribution in https://github.com/spatie/laravel-package-tools/pull/71
+- @AyoobMH made their first contribution in https://github.com/spatie/laravel-package-tools/pull/73
+- @mrlinnth made their first contribution in https://github.com/spatie/laravel-package-tools/pull/72
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.13.5...1.13.8
+
 ## 1.13.7 - 2022-11-15
 
 ### What's Changed
