@@ -1,10 +1,9 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
-
+use function PHPUnit\Framework\assertFileExists;
 use Spatie\LaravelPackageTools\Package;
 
-class PackageAssetsTest extends PackageServiceProviderTestCase
+trait ConfigurePackageAssetsTest
 {
     public function configurePackage(Package $package)
     {
@@ -12,14 +11,14 @@ class PackageAssetsTest extends PackageServiceProviderTestCase
             ->name('laravel-package-tools')
             ->hasAssets();
     }
-
-    /** @test */
-    public function it_can_publish_the_assets()
-    {
-        $this
-            ->artisan('vendor:publish --tag=package-tools-assets')
-            ->assertExitCode(0);
-
-        $this->assertFileExists(public_path('vendor/package-tools/dummy.js'));
-    }
 }
+
+uses(ConfigurePackageAssetsTest::class);
+
+it('can publish the assets', function () {
+    $this
+        ->artisan('vendor:publish --tag=package-tools-assets')
+        ->assertExitCode(0);
+
+    assertFileExists(public_path('vendor/package-tools/dummy.js'));
+});

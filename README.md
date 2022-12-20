@@ -1,5 +1,3 @@
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/support-ukraine.svg?t=1" />](https://supportukrainenow.org)
-
 # Tools for creating Laravel packages
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-package-tools.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-package-tools)
@@ -39,7 +37,7 @@ class YourPackageServiceProvider extends PackageServiceProvider
                     ->publishConfigFile()
                     ->publishMigrations()
                     ->copyAndRegisterServiceProviderInApp()
-                    ->askToStarRepoOnGitHub()
+                    ->askToStarRepoOnGitHub();
             });
     }
 }
@@ -157,6 +155,14 @@ command:
 ```bash
 php artisan vendor:publish --tag=your-package-name-views
 ```
+
+> **Note:**
+> 
+> If you use custom view namespace then you should change your publish command like this:
+```bash
+php artisan vendor:publish --tag=custom-view-namespace-views
+```
+
 
 ### Sharing global data with views
 

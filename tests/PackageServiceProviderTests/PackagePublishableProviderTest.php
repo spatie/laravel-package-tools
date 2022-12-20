@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
-
+use function PHPUnit\Framework\assertFileDoesNotExist;
+use function PHPUnit\Framework\assertFileExists;
 use Spatie\LaravelPackageTools\Package;
 
-class PackagePublishableProviderTest extends PackageServiceProviderTestCase
+trait ConfigurePackagePublishableProviderTest
 {
     public function configurePackage(Package $package)
     {
@@ -12,18 +12,18 @@ class PackagePublishableProviderTest extends PackageServiceProviderTestCase
             ->name('laravel-package-tools')
             ->publishesServiceProvider('MyPackageServiceProvider');
     }
-
-    /** @test */
-    public function it_can_publish_a_service_provider()
-    {
-        $providerPath = app_path('Providers/MyPackageServiceProvider.php');
-
-        $this->assertFileDoesNotExist($providerPath);
-
-        $this
-            ->artisan('vendor:publish --tag=package-tools-provider')
-            ->assertSuccessful();
-
-        $this->assertFileExists($providerPath);
-    }
 }
+
+uses(ConfigurePackagePublishableProviderTest::class);
+
+it('can publish a service provider', function () {
+    $providerPath = app_path('Providers/MyPackageServiceProvider.php');
+
+    assertFileDoesNotExist($providerPath);
+
+    $this
+        ->artisan('vendor:publish --tag=package-tools-provider')
+        ->assertSuccessful();
+
+    assertFileExists($providerPath);
+});

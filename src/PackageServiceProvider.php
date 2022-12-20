@@ -64,8 +64,8 @@ abstract class PackageServiceProvider extends ServiceProvider
 
             if ($this->package->hasViews) {
                 $this->publishes([
-                    $this->package->basePath('/../resources/views') => base_path("resources/views/vendor/{$this->package->shortName()}"),
-                ], "{$this->package->shortName()}-views");
+                    $this->package->basePath('/../resources/views') => base_path("resources/views/vendor/{$this->packageView($this->package->viewNamespace)}"),
+                ], "{$this->packageView($this->package->viewNamespace)}-views");
             }
 
             $now = Carbon::now();
@@ -125,7 +125,7 @@ abstract class PackageServiceProvider extends ServiceProvider
 
         if (count($this->package->viewComponents)) {
             $this->publishes([
-                $this->package->basePath('/../Components') => base_path("app/View/Components/vendor/{$this->package->shortName()}"),
+                $this->package->basePath('/Components') => base_path("app/View/Components/vendor/{$this->package->shortName()}"),
             ], "{$this->package->name}-components");
         }
 
@@ -194,5 +194,10 @@ abstract class PackageServiceProvider extends ServiceProvider
         $reflector = new ReflectionClass(get_class($this));
 
         return dirname($reflector->getFileName());
+    }
+
+    public function packageView(?string $namespace)
+    {
+        return is_null($namespace) ? $this->package->shortName() : $this->package->viewNamespace;
     }
 }
