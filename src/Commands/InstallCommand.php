@@ -69,6 +69,8 @@ class InstallCommand extends Command
         }
 
         if ($this->copyServiceProviderInApp) {
+            $this->comment('Publishing service provider...');
+
             $this->copyServiceProviderInApp();
         }
 
