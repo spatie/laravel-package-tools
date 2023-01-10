@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.1.39 - 2023-01-10
+
+- added support for L10
+
 ## 1.13.8 - 2022-12-20
 
 ### What's Changed
