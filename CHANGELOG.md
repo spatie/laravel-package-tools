@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.14.0 - 2023-01-10
+
+### What's Changed
+
+- Laravel 10 ✨  by @Nielsvanpach in https://github.com/spatie/laravel-package-tools/pull/81
+
+### New Contributors
+
+- @Nielsvanpach made their first contribution in https://github.com/spatie/laravel-package-tools/pull/81
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.13.9...1.14.0
+
 ## 1.1.39 - 2023-01-10
 
 - added support for L10
