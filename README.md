@@ -408,7 +408,7 @@ class YourPackageServiceProvider extends PackageServiceProvider
                 $command
                     ->publishConfigFile()
                     ->publishMigrations()
-                     ->askToRunMigrations()
+                    ->askToRunMigrations()
                     ->copyAndRegisterServiceProviderInApp()
                     ->askToStarRepoOnGitHub('your-vendor/your-repo-name')
             });
