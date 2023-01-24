@@ -21,6 +21,8 @@ class Package
 
     public bool $runsMigrations = false;
 
+    public bool $guessesMigrations = false;
+
     public array $migrationFileNames = [];
 
     public array $routeFileNames = [];
@@ -148,6 +150,7 @@ class Package
 
     public function hasMigration(string $migrationFileName): static
     {
+        $this->guessesMigrations = false;
         $this->migrationFileNames[] = $migrationFileName;
 
         return $this;
@@ -155,6 +158,7 @@ class Package
 
     public function hasMigrations(...$migrationFileNames): static
     {
+        $this->guessesMigrations = empty($migrationFileNames);
         $this->migrationFileNames = array_merge(
             $this->migrationFileNames,
             collect($migrationFileNames)->flatten()->toArray()

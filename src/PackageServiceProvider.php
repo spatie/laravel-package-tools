@@ -87,6 +87,16 @@ abstract class PackageServiceProvider extends ServiceProvider
                 }
             }
 
+            if ($this->package->guessesMigrations) {
+                $path = $this->package->basePath('/../database/migrations');
+
+                $this->publishes([$path => database_path('migrations')], "{$this->package->shortName()}-migrations");
+
+                if ($this->package->runsMigrations) {
+                    $this->loadMigrationsFrom($path);
+                }
+            }
+
             if ($this->package->hasTranslations) {
                 $this->publishes([
                     $this->package->basePath('/../resources/lang') => $langPath,
