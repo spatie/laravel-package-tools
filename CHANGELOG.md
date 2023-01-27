@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.14.1 - 2023-01-27
+
+### What's Changed
+
+- Refactor Package methods, changing return type to `static`, in order to allow Package extension per project by @GeoSot in https://github.com/spatie/laravel-package-tools/pull/82
+
+### New Contributors
+
+- @GeoSot made their first contribution in https://github.com/spatie/laravel-package-tools/pull/82
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.14.0...1.14.1
+
 ## 1.14.0 - 2023-01-10
 
 ### What's Changed
