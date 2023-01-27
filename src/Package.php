@@ -37,14 +37,14 @@ class Package
 
     public ?string $publishableProviderName = null;
 
-    public function name(string $name): self
+    public function name(string $name): static
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function hasConfigFile($configFileName = null): self
+    public function hasConfigFile($configFileName = null): static
     {
         $configFileName = $configFileName ?? $this->shortName();
 
@@ -57,14 +57,14 @@ class Package
         return $this;
     }
 
-    public function publishesServiceProvider(string $providerName): self
+    public function publishesServiceProvider(string $providerName): static
     {
         $this->publishableProviderName = $providerName;
 
         return $this;
     }
 
-    public function hasInstallCommand($callable): self
+    public function hasInstallCommand($callable): static
     {
         $installCommand = new InstallCommand($this);
 
@@ -80,7 +80,7 @@ class Package
         return Str::after($this->name, 'laravel-');
     }
 
-    public function hasViews(string $namespace = null): self
+    public function hasViews(string $namespace = null): static
     {
         $this->hasViews = true;
 
@@ -89,14 +89,14 @@ class Package
         return $this;
     }
 
-    public function hasViewComponent(string $prefix, string $viewComponentName): self
+    public function hasViewComponent(string $prefix, string $viewComponentName): static
     {
         $this->viewComponents[$viewComponentName] = $prefix;
 
         return $this;
     }
 
-    public function hasViewComponents(string $prefix,  ...$viewComponentNames): self
+    public function hasViewComponents(string $prefix,  ...$viewComponentNames): static
     {
         foreach ($viewComponentNames as $componentName) {
             $this->viewComponents[$componentName] = $prefix;
@@ -105,14 +105,14 @@ class Package
         return $this;
     }
 
-    public function sharesDataWithAllViews(string $name, $value): self
+    public function sharesDataWithAllViews(string $name, $value): static
     {
         $this->sharedViewData[$name] = $value;
 
         return $this;
     }
 
-    public function hasViewComposer($view, $viewComposer): self
+    public function hasViewComposer($view, $viewComposer): static
     {
         if (! is_array($view)) {
             $view = [$view];
@@ -125,35 +125,35 @@ class Package
         return $this;
     }
 
-    public function hasTranslations(): self
+    public function hasTranslations(): static
     {
         $this->hasTranslations = true;
 
         return $this;
     }
 
-    public function hasAssets(): self
+    public function hasAssets(): static
     {
         $this->hasAssets = true;
 
         return $this;
     }
 
-    public function runsMigrations(bool $runsMigrations = true): self
+    public function runsMigrations(bool $runsMigrations = true): static
     {
         $this->runsMigrations = $runsMigrations;
 
         return $this;
     }
 
-    public function hasMigration(string $migrationFileName): self
+    public function hasMigration(string $migrationFileName): static
     {
         $this->migrationFileNames[] = $migrationFileName;
 
         return $this;
     }
 
-    public function hasMigrations(...$migrationFileNames): self
+    public function hasMigrations(...$migrationFileNames): static
     {
         $this->migrationFileNames = array_merge(
             $this->migrationFileNames,
@@ -163,28 +163,28 @@ class Package
         return $this;
     }
 
-    public function hasCommand(string $commandClassName): self
+    public function hasCommand(string $commandClassName): static
     {
         $this->commands[] = $commandClassName;
 
         return $this;
     }
 
-    public function hasCommands(...$commandClassNames): self
+    public function hasCommands(...$commandClassNames): static
     {
         $this->commands = array_merge($this->commands, collect($commandClassNames)->flatten()->toArray());
 
         return $this;
     }
 
-    public function hasRoute(string $routeFileName): self
+    public function hasRoute(string $routeFileName): static
     {
         $this->routeFileNames[] = $routeFileName;
 
         return $this;
     }
 
-    public function hasRoutes(...$routeFileNames): self
+    public function hasRoutes(...$routeFileNames): static
     {
         $this->routeFileNames = array_merge($this->routeFileNames, collect($routeFileNames)->flatten()->toArray());
 
@@ -205,7 +205,7 @@ class Package
         return $this->viewNamespace ?? $this->shortName();
     }
 
-    public function setBasePath(string $path): self
+    public function setBasePath(string $path): static
     {
         $this->basePath = $path;
 
