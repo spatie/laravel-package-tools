@@ -356,7 +356,7 @@ When your package is installed into an app, running this command...
 php artisan vendor:publish --tag=your-package-name-provider
 ```
 
-... will copy `/resources/stubs/{$nameOfYourServiceProvider}.php` in your package
+... will copy `/resources/stubs/{$nameOfYourServiceProvider}.php.stub` in your package
 to `app/Providers/{$nameOfYourServiceProvider}.php` in the app of the user.
 
 ### Registering commands
