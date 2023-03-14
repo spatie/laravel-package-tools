@@ -2,6 +2,21 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.14.2 - 2023-03-14
+
+### What's Changed
+
+- Removal of publishable service provider typo by @peterfox in https://github.com/spatie/laravel-package-tools/pull/83
+- Bump dependabot/fetch-metadata from 1.3.5 to 1.3.6 by @dependabot in https://github.com/spatie/laravel-package-tools/pull/84
+- Enable publishing assets from the install command. by @DanielDarrenJones in https://github.com/spatie/laravel-package-tools/pull/86
+
+### New Contributors
+
+- @peterfox made their first contribution in https://github.com/spatie/laravel-package-tools/pull/83
+- @DanielDarrenJones made their first contribution in https://github.com/spatie/laravel-package-tools/pull/86
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.14.1...1.14.2
+
 ## 1.14.1 - 2023-01-27
 
 ### What's Changed
