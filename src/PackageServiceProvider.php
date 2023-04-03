@@ -55,7 +55,7 @@ abstract class PackageServiceProvider extends ServiceProvider
                 : resource_path('lang/' . $langPath);
         }
 
-        if ($this->app->runningInConsole()) {
+        if ($this->app->runningInConsole() && method_exists('config_path')) {
             foreach ($this->package->configFileNames as $configFileName) {
                 $this->publishes([
                     $this->package->basePath("/../config/{$configFileName}.php") => config_path("{$configFileName}.php"),
