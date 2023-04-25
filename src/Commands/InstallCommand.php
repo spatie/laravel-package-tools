@@ -184,8 +184,8 @@ class InstallCommand extends Command
         }
 
         file_put_contents(config_path('app.php'), str_replace(
-            "Illuminate\\View\ViewServiceProvider::class,",
-            "Illuminate\\View\ViewServiceProvider::class," . PHP_EOL . "        {$namespace}\Providers\\" . $providerName . "::class,",
+            "{$namespace}\\Providers\\BroadcastServiceProvider::class,",
+            "{$namespace}\\Providers\\BroadcastServiceProvider::class," . PHP_EOL . "        {$namespace}{$class},",
             $appConfig
         ));
 
