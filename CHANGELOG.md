@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.14.3 - 2023-04-25
+
+### What's Changed
+
+- Update README.md by @bishwajitcadhikary in https://github.com/spatie/laravel-package-tools/pull/97
+- Bump dependabot/fetch-metadata from 1.3.6 to 1.4.0 by @dependabot in https://github.com/spatie/laravel-package-tools/pull/98
+- Fix install command on Laravel 10.x breaking change by @erikn69 in https://github.com/spatie/laravel-package-tools/pull/99
+
+### New Contributors
+
+- @bishwajitcadhikary made their first contribution in https://github.com/spatie/laravel-package-tools/pull/97
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.14.2...1.14.3
+
 ## 1.14.2 - 2023-03-14
 
 ### What's Changed
