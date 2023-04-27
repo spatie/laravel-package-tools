@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.15.0 - 2023-04-27
+
+### What's Changed
+
+- Specify commands that will not be available on http calls by @systemsolutionweb in https://github.com/spatie/laravel-package-tools/pull/89
+
+### New Contributors
+
+- @systemsolutionweb made their first contribution in https://github.com/spatie/laravel-package-tools/pull/89
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.14.3...1.15.0
+
 ## 1.14.3 - 2023-04-25
 
 ### What's Changed
