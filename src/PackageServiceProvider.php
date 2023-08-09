@@ -69,8 +69,10 @@ abstract class PackageServiceProvider extends ServiceProvider
             }
 
             if ($this->package->hasInertiaComponents) {
+                $packageDirectoryName = Str::of($this->packageView($this->package->viewNamespace))->studly()->remove('-')->value();
+
                 $this->publishes([
-                    $this->package->basePath('/../resources/js/Pages') => base_path("resources/js/Pages/{$this->packageView($this->package->viewNamespace)}"),
+                    $this->package->basePath('/../resources/js/Pages') => base_path("resources/js/Pages/{$packageDirectoryName}"),
                 ], "{$this->packageView($this->package->viewNamespace)}-inertia-components");
             }
 
