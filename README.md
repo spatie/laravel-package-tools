@@ -220,7 +220,7 @@ $package
 
 Any views your package provides, should be placed in the `<package root>/resources/js/Pages` directory.
 
-You can register these views with the `hasInertiaComponents` command.
+You can register these components with the `hasInertiaComponents` command.
 
 ```php
 $package
@@ -228,10 +228,10 @@ $package
     ->hasInertiaComponents();
 ```
 
-This will register your views with Laravel.
+This will register your components with Laravel.
 
 If you have an inertia component `<package root>/resources/js/Pages/myComponent.vue`, you can use it like
-this: `Inertia::render('myComponent')`. Of course, you can also use subdirectories to organise your components.
+this: `Inertia::render('YourPackageName/myComponent')`. Of course, you can also use subdirectories to organise your components.
 
 #### Publishing inertia components
 
@@ -241,6 +241,8 @@ command:
 ```bash
 php artisan vendor:publish --tag=your-package-name-inertia-components
 ```
+
+And this command is available with your package [installer-command](#adding-an-installer-command)
 
 ### Working with translations
 
