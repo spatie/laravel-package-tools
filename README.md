@@ -218,7 +218,7 @@ $package
 
 ### Working with inertia components
 
-Any views your package provides, should be placed in the `<package root>/resources/js/Pages` directory.
+Any `.vue` or `.jsx` files your package provides, should be placed in the `<package root>/resources/js/Pages` directory.
 
 You can register these components with the `hasInertiaComponents` command.
 
