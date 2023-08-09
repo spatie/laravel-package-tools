@@ -13,6 +13,8 @@ class Package
 
     public bool $hasViews = false;
 
+    public bool $hasInertiaComponents = false;
+
     public ?string $viewNamespace = null;
 
     public bool $hasTranslations = false;
@@ -85,6 +87,15 @@ class Package
     public function hasViews(string $namespace = null): static
     {
         $this->hasViews = true;
+
+        $this->viewNamespace = $namespace;
+
+        return $this;
+    }
+
+    public function hasInertiaComponents(string $namespace = null): static
+    {
+        $this->hasInertiaComponents = true;
 
         $this->viewNamespace = $namespace;
 

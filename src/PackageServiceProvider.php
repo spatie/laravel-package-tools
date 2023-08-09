@@ -68,6 +68,12 @@ abstract class PackageServiceProvider extends ServiceProvider
                 ], "{$this->packageView($this->package->viewNamespace)}-views");
             }
 
+            if ($this->package->hasInertiaComponents) {
+                $this->publishes([
+                    $this->package->basePath('/../resources/js/Pages') => base_path("resources/js/Pages/{$this->packageView($this->package->viewNamespace)}"),
+                ], "{$this->packageView($this->package->viewNamespace)}-inertia-components");
+            }
+
             $now = Carbon::now();
             foreach ($this->package->migrationFileNames as $migrationFileName) {
                 $filePath = $this->package->basePath("/../database/migrations/{$migrationFileName}.php");
