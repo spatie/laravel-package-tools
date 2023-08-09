@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.16.0 - 2023-08-09
+
+### What's Changed
+
+- add inertia components publish option by @ArielMejiaDev in https://github.com/spatie/laravel-package-tools/pull/103
+
+### New Contributors
+
+- @ArielMejiaDev made their first contribution in https://github.com/spatie/laravel-package-tools/pull/103
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.15.0...1.16.0
+
 ## 1.15.0 - 2023-04-27
 
 ### What's Changed
