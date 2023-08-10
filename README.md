@@ -230,6 +230,8 @@ $package
 
 This will register your components with Laravel.
 
+The user should publish the inertia components manually or using the [installer-command](#adding-an-installer-command) in order to use them.
+
 If you have an inertia component `<package root>/resources/js/Pages/myComponent.vue`, you can use it like
 this: `Inertia::render('YourPackageName/myComponent')`. Of course, you can also use subdirectories to organise your components.
 
@@ -242,7 +244,7 @@ command:
 php artisan vendor:publish --tag=your-package-name-inertia-components
 ```
 
-And this command is available with your package [installer-command](#adding-an-installer-command)
+Also, the inertia components are available in a convenient way with your package [installer-command](#adding-an-installer-command)
 
 ### Working with translations
 
