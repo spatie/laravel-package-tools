@@ -44,7 +44,7 @@ class InstallCommand extends Command
 
         foreach ($this->publishes as $tag) {
             $name = str_replace('-', ' ', $tag);
-            $this->comment("Publishing $name...");
+            $this->comment("Publishing {$name}...");
 
             $this->callSilently("vendor:publish", [
                 '--tag' => "{$this->package->shortName()}-{$tag}",
