@@ -88,9 +88,9 @@ class InstallCommand extends Command
         }
     }
 
-    public function publish(string $tag): self
+    public function publish(string ...$tag): self
     {
-        $this->publishes[] = $tag;
+        $this->publishes = array_merge($this->publishes, $tag);
 
         return $this;
     }
