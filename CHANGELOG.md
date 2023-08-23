@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.16.1 - 2023-08-23
+
+### What's Changed
+
+- updating readme by @ArielMejiaDev in https://github.com/spatie/laravel-package-tools/pull/104
+- Enable publishing any tag name with the install command by @misenhower in https://github.com/spatie/laravel-package-tools/pull/105
+
+### New Contributors
+
+- @misenhower made their first contribution in https://github.com/spatie/laravel-package-tools/pull/105
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.16.0...1.16.1
+
 ## 1.16.0 - 2023-08-09
 
 ### What's Changed
