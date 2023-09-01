@@ -14,7 +14,7 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\LaravelPackageTools\Package;
 use MyPackage\ViewComponents\Alert;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
-
+use MyPackage\Channels\SmsChannel;
 class YourPackageServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
@@ -24,6 +24,7 @@ class YourPackageServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasViewComponent('spatie', Alert::class)
+            ->hasNotificationChannel('sms',SmsChannel::class)
             ->hasViewComposer('*', MyViewComposer::class)
             ->sharesDataWithAllViews('downloads', 3)
             ->hasTranslations()
