@@ -33,6 +33,8 @@ class Package
 
     public array $viewComponents = [];
 
+    public array $notificationChannels = [];
+
     public array $sharedViewData = [];
 
     public array $viewComposers = [];
@@ -214,6 +216,12 @@ class Package
     public function hasRoutes(...$routeFileNames): static
     {
         $this->routeFileNames = array_merge($this->routeFileNames, collect($routeFileNames)->flatten()->toArray());
+
+        return $this;
+    }
+    public function hasNotificationChannel(string $name, string $NotificationName): static
+    {
+        $this->notificationChannels[$NotificationName] = $name;
 
         return $this;
     }

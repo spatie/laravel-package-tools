@@ -3,6 +3,7 @@
 namespace Spatie\LaravelPackageTools;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -158,6 +159,12 @@ abstract class PackageServiceProvider extends ServiceProvider
 
         foreach ($this->package->viewComposers as $viewName => $viewComposer) {
             View::composer($viewName, $viewComposer);
+        }
+
+        foreach ($this->package->notificationChannels as $channel => $name) {
+            Notification::extend($name,function($app)use($channel) {
+                return new $channel;
+            });
         }
 
         $this->packageBooted();
