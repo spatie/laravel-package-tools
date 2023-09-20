@@ -85,10 +85,7 @@ abstract class PackageServiceProvider extends ServiceProvider
                 }
 
                 $this->publishes([
-                    $filePath => $this->generateMigrationName(
-                        $migrationFileName,
-                        $now->addSecond()
-                    ), ], "{$this->package->shortName()}-migrations");
+                    $filePath => static::generateMigrationName($migrationFileName, $now->addSecond()), ], "{$this->package->shortName()}-migrations");
 
                 if ($this->package->runsMigrations) {
                     $this->loadMigrationsFrom($filePath);
