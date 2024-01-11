@@ -2,6 +2,23 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.16.2 - 2024-01-11
+
+### What's Changed
+
+* Bump actions/checkout from 3 to 4 by @dependabot in https://github.com/spatie/laravel-package-tools/pull/107
+* Update README.md by @kgrzelak in https://github.com/spatie/laravel-package-tools/pull/109
+* Apply the shorten null coalescing operator by @peter279k in https://github.com/spatie/laravel-package-tools/pull/111
+* Allow Laravel 11 by @TomasVotruba in https://github.com/spatie/laravel-package-tools/pull/117
+
+### New Contributors
+
+* @kgrzelak made their first contribution in https://github.com/spatie/laravel-package-tools/pull/109
+* @peter279k made their first contribution in https://github.com/spatie/laravel-package-tools/pull/111
+* @TomasVotruba made their first contribution in https://github.com/spatie/laravel-package-tools/pull/117
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.16.1...1.16.2
+
 ## 1.16.1 - 2023-08-23
 
 ### What's Changed
