@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": "^8.0",
-        "illuminate/contracts": "^9.28|^10.0"
+        "illuminate/contracts": "^9.28|^10.0|^11.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.5",
