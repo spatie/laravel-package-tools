@@ -3,10 +3,13 @@
 namespace Spatie\LaravelPackageTools;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Traits\Conditionable;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 
 class Package
 {
+    use Conditionable;
+
     public string $name;
 
     public array $configFileNames = [];
