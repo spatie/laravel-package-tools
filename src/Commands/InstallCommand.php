@@ -105,6 +105,11 @@ class InstallCommand extends Command
         return $this->publish('assets');
     }
 
+    public function publishStubs(): self
+    {
+        return $this->publish('stubs');
+    }
+
     public function publishInertiaComponents(): self
     {
         return $this->publish('inertia-components');

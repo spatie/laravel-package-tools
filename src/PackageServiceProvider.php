@@ -106,6 +106,15 @@ abstract class PackageServiceProvider extends ServiceProvider
                     $this->package->basePath('/../resources/dist') => public_path("vendor/{$this->package->shortName()}"),
                 ], "{$this->package->shortName()}-assets");
             }
+
+            if ($this->package->hasStubs) {
+
+                $destination = $this->package->stubsWrapper ? "stubs/{$this->package->shortName()}" : 'stubs';
+
+                $this->publishes([
+                    $this->package->basePath('/../stubs') => base_path($destination),
+                ], "{$this->package->shortName()}-stubs");
+            }
         }
 
         if (! empty($this->package->commands)) {

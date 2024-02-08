@@ -324,6 +324,26 @@ php artisan vendor:publish --tag=your-package-name-assets
 This will copy over the assets to the `public/vendor/<your-package-name>` directory in the app where your package is
 installed in.
 
+### Working with stubs
+
+Any assets your package provides, should be placed in the `<package root>/stubs/` directory.
+
+You can make these stubs publishable using the `hasStubs` method.
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasStubs();
+```
+
+Users of your package will be able to publish the stubs with this command:
+
+```bash
+php artisan vendor:publish --tag=your-package-name-stubs
+```
+
+Also, the stubs are available in a convenient way with your package [installer-command](#adding-an-installer-command)
+
 ### Working with migrations
 
 The `PackageServiceProvider` assumes that any migrations are placed in this
@@ -433,11 +453,13 @@ class YourPackageServiceProvider extends PackageServiceProvider
         $package
             ->name('your-package-name')
             ->hasConfigFile()
+            ->hasStubs()
             ->hasMigration('create_package_tables')
             ->publishesServiceProvider('MyServiceProviderName')
             ->hasInstallCommand(function(InstallCommand $command) {
                 $command
                     ->publishConfigFile()
+                    ->publishStubs()
                     ->publishAssets()
                     ->publishMigrations()
                     ->askToRunMigrations()

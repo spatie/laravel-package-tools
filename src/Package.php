@@ -21,6 +21,10 @@ class Package
 
     public bool $hasAssets = false;
 
+    public bool $hasStubs = false;
+
+    public bool $stubsWrapper = false;
+
     public bool $runsMigrations = false;
 
     public array $migrationFileNames = [];
@@ -148,6 +152,15 @@ class Package
     public function hasAssets(): static
     {
         $this->hasAssets = true;
+
+        return $this;
+    }
+
+    public function hasStubs($stubsWrapper = true): static
+    {
+        $this->hasStubs = true;
+
+        $this->stubsWrapper = $stubsWrapper;
 
         return $this;
     }
