@@ -167,7 +167,8 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     public static function generateMigrationName(string $migrationFileName, Carbon $now): string
     {
-        $migrationsPath = 'migrations/';
+        $migrationsPath = 'migrations/' . dirname($migrationFileName) . '/';
+        $migrationFileName = basename($migrationFileName);
 
         $len = strlen($migrationFileName) + 4;
 
