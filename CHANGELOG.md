@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.16.3 - 2024-03-07
+
+### What's Changed
+
+* handle relative path in migration file exists check by @mvenghaus in https://github.com/spatie/laravel-package-tools/pull/127
+
+### New Contributors
+
+* @mvenghaus made their first contribution in https://github.com/spatie/laravel-package-tools/pull/127
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.16.2...1.16.3
+
 ## 1.16.2 - 2024-01-11
 
 ### What's Changed
