@@ -182,8 +182,8 @@ class InstallCommand extends Command
             ));
         } else {
             file_put_contents(base_path('bootstrap/providers.php'), str_replace(
-                "{$namespace}\\Providers\\BroadcastServiceProvider::class,",
-                "{$namespace}\\Providers\\BroadcastServiceProvider::class," . PHP_EOL . "        {$namespace}{$class},",
+                "{$namespace}\\Providers\\AppServiceProvider::class,",
+                "{$namespace}\\Providers\\AppServiceProvider::class," . PHP_EOL . "        {$namespace}{$class},",
                 $appConfig
             ));
         }
