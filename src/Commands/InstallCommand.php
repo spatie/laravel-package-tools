@@ -162,7 +162,7 @@ class InstallCommand extends Command
 
         $namespace = Str::replaceLast('\\', '', $this->laravel->getNamespace());
 
-        if (intval(app()->version()) < 11) {
+        if (intval(app()->version()) < 11 || !file_exists(base_path('bootstrap/providers.php'))) {
             $appConfig = file_get_contents(config_path('app.php'));
         } else {
             $appConfig = file_get_contents(base_path('bootstrap/providers.php'));
@@ -174,7 +174,7 @@ class InstallCommand extends Command
             return $this;
         }
 
-        if (intval(app()->version()) < 11) {
+        if (intval(app()->version()) < 11 || !file_exists(base_path('bootstrap/providers.php'))) {
             file_put_contents(config_path('app.php'), str_replace(
                 "{$namespace}\\Providers\\BroadcastServiceProvider::class,",
                 "{$namespace}\\Providers\\BroadcastServiceProvider::class," . PHP_EOL . "        {$namespace}{$class},",
