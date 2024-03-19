@@ -162,7 +162,11 @@ class InstallCommand extends Command
 
         $namespace = Str::replaceLast('\\', '', $this->laravel->getNamespace());
 
-        $appConfig = file_get_contents(config_path('app.php'));
+        if (intval(app()->version()) < 11) {
+            $appConfig = file_get_contents(config_path('app.php'));
+        } else {
+            $appConfig = file_get_contents(base_path('bootstrap/providers.php'));
+        }
 
         $class = '\\Providers\\' . $providerName . '::class';
 
@@ -170,11 +174,19 @@ class InstallCommand extends Command
             return $this;
         }
 
-        file_put_contents(config_path('app.php'), str_replace(
-            "{$namespace}\\Providers\\BroadcastServiceProvider::class,",
-            "{$namespace}\\Providers\\BroadcastServiceProvider::class," . PHP_EOL . "        {$namespace}{$class},",
-            $appConfig
-        ));
+        if (intval(app()->version()) < 11) {
+            file_put_contents(config_path('app.php'), str_replace(
+                "{$namespace}\\Providers\\BroadcastServiceProvider::class,",
+                "{$namespace}\\Providers\\BroadcastServiceProvider::class," . PHP_EOL . "        {$namespace}{$class},",
+                $appConfig
+            ));
+        } else {
+            file_put_contents(base_path('bootstrap/providers.php'), str_replace(
+                "{$namespace}\\Providers\\BroadcastServiceProvider::class,",
+                "{$namespace}\\Providers\\BroadcastServiceProvider::class," . PHP_EOL . "        {$namespace}{$class},",
+                $appConfig
+            ));
+        }
 
         file_put_contents(app_path('Providers/' . $providerName . '.php'), str_replace(
             "namespace App\Providers;",
