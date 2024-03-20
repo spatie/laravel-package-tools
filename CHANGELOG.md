@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.16.4 - 2024-03-20
+
+### What's Changed
+
+* fixed #128 - check if l11 with new skeleton is used by @jetwes in https://github.com/spatie/laravel-package-tools/pull/129
+
+### New Contributors
+
+* @jetwes made their first contribution in https://github.com/spatie/laravel-package-tools/pull/129
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.16.3...1.16.4
+
 ## 1.16.3 - 2024-03-07
 
 ### What's Changed
