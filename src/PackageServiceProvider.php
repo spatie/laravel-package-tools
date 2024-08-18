@@ -59,7 +59,7 @@ abstract class PackageServiceProvider extends ServiceProvider
             foreach ($this->package->configFileNames as $configFileName) {
                 $this->publishes([
                     $this->package->basePath("/../config/{$configFileName}.php") => config_path("{$configFileName}.php"),
-                ], "{$this->package->shortName()}-config");
+                ], "{$this->package->name}-config");
             }
 
             if ($this->package->hasViews) {
@@ -88,7 +88,7 @@ abstract class PackageServiceProvider extends ServiceProvider
                     $filePath => $this->generateMigrationName(
                         $migrationFileName,
                         $now->addSecond()
-                    ), ], "{$this->package->shortName()}-migrations");
+                    ), ], "{$this->package->name}-migrations");
 
                 if ($this->package->runsMigrations) {
                     $this->loadMigrationsFrom($filePath);
@@ -98,13 +98,13 @@ abstract class PackageServiceProvider extends ServiceProvider
             if ($this->package->hasTranslations) {
                 $this->publishes([
                     $this->package->basePath('/../resources/lang') => $langPath,
-                ], "{$this->package->shortName()}-translations");
+                ], "{$this->package->name}-translations");
             }
 
             if ($this->package->hasAssets) {
                 $this->publishes([
                     $this->package->basePath('/../resources/dist') => public_path("vendor/{$this->package->shortName()}"),
-                ], "{$this->package->shortName()}-assets");
+                ], "{$this->package->name}-assets");
             }
         }
 
@@ -211,6 +211,6 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     public function packageView(?string $namespace)
     {
-        return is_null($namespace) ? $this->package->shortName() : $this->package->viewNamespace;
+        return is_null($namespace) ? $this->package->name : $this->package->viewNamespace;
     }
 }
