@@ -62,7 +62,7 @@ class InstallCommand extends Command
         if ($this->copyServiceProviderInApp) {
             $this->comment('Publishing service provider...');
 
-            $this->copyServiceProviderInApp();
+            $this->copyServiceProvidersInApp();
         }
 
         if ($this->starRepo) {
@@ -150,9 +150,28 @@ class InstallCommand extends Command
         return $this;
     }
 
-    protected function copyServiceProviderInApp(): self
+    protected function copyServiceProvidersInApp(): self
     {
-        $providerName = $this->package->publishableProviderName;
+        $providersName = $this->package->publishableProviderName;
+
+        if (! $providersName) {
+            return $this;
+        }
+
+        if (is_array($providersName)) {
+            foreach($providersName as $providerName) {
+                $this->copyServiceProviderInApp($providerName);
+            }
+        } else {
+            $this->copyServiceProviderInApp($providersName);
+        }
+
+        return $this;
+    }
+
+    protected function copyServiceProviderInApp(?string $providerName = null): self
+    {
+        $providerName = $providerName ?? $this->package->publishableProviderName;
 
         if (! $providerName) {
             return $this;
