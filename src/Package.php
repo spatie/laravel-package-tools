@@ -39,7 +39,7 @@ class Package
 
     public string $basePath;
 
-    public ?string $publishableProviderName = null;
+    public mixed $publishableProviderName = null;
 
     public function name(string $name): static
     {
@@ -61,7 +61,7 @@ class Package
         return $this;
     }
 
-    public function publishesServiceProvider(string $providerName): static
+    public function publishesServiceProvider(mixed $providerName): static
     {
         $this->publishableProviderName = $providerName;
 
