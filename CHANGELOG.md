@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.16.5 - 2024-08-27
+
+### What's Changed
+
+* Avoid bump on every menor release by @erikn69 in https://github.com/spatie/laravel-package-tools/pull/132
+* Update InstallCommand.php by @gaetan-hexadog in https://github.com/spatie/laravel-package-tools/pull/140
+
+### New Contributors
+
+* @gaetan-hexadog made their first contribution in https://github.com/spatie/laravel-package-tools/pull/140
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.16.4...1.16.5
+
 ## 1.16.4 - 2024-03-20
 
 ### What's Changed
