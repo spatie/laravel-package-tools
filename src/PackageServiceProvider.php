@@ -149,12 +149,8 @@ abstract class PackageServiceProvider extends ServiceProvider
 
             $providers = [];
 
-            foreach ($providersName as $key => $publishableProviderName) {
-                $assoc = [$this->package->basePath("/../resources/stubs/{$publishableProviderName}.php.stub") => base_path("app/Providers/{$publishableProviderName}.php")];
-    
-                foreach ($assoc as $mapKey => $mapValue) {
-                    $providers[$mapKey] = $mapValue;
-                }
+            foreach ($providersName as $publishableProviderName) {
+                $providers[$this->package->basePath("/../resources/stubs/{$publishableProviderName}.php.stub")] = base_path("app/Providers/{$publishableProviderName}.php");
             }
             
             $this->publishes($providers, "{$this->package->shortName()}-provider");
