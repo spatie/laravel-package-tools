@@ -390,6 +390,17 @@ php artisan vendor:publish --tag=your-package-name-provider
 ... will copy `/resources/stubs/{$nameOfYourServiceProvider}.php.stub` in your package
 to `app/Providers/{$nameOfYourServiceProvider}.php` in the app of the user.
 
+You can publish multiple providers at cone by declaring an array of providers name
+```php
+$package
+    ->name('your-package-name')
+    ->publishesServiceProvider([
+        $nameOfYourServiceProvider1,
+        $nameOfYourServiceProvider2,
+        ...
+    ]);
+```
+
 ### Registering commands
 
 You can register any command you package provides with the `hasCommand` function.
