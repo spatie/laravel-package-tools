@@ -1,10 +1,8 @@
 <?php
 
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestClasses\FourthTestCommand;
 use Spatie\LaravelPackageTools\Tests\TestClasses\OtherTestCommand;
 use Spatie\LaravelPackageTools\Tests\TestClasses\TestCommand;
-use Spatie\LaravelPackageTools\Tests\TestClasses\ThirdTestCommand;
 
 trait ConfigurePackageOptimizationTest
 {
@@ -40,7 +38,7 @@ it('can call optimize:clear commands', function () {
         ->assertExitCode(0);
 });
 
-it('registered optimize with laravel', function() {
+it('registered optimize with laravel', function () {
     if (version_compare(app()->version(), '11.27.1', '<')) {
         $this->markTestSkipped('Laravel 11+ functionality');
     }
@@ -48,10 +46,10 @@ it('registered optimize with laravel', function() {
     $this->artisan('optimize')->expectsOutputToContain('laravel-package-tools');
 });
 
-it('registered optimize:clear with laravel', function() {
+it('registered optimize:clear with laravel', function () {
     if (version_compare(app()->version(), '11.27.1', '<')) {
         $this->markTestSkipped('Laravel 11+ functionality');
     }
 
-   $this->artisan('optimize:clear')->expectsOutputToContain('laravel-package-tools');
+    $this->artisan('optimize:clear')->expectsOutputToContain('laravel-package-tools');
 });
