@@ -1,9 +1,9 @@
 <?php
 
 use function PHPUnit\Framework\assertStringContainsString;
+use function PHPUnit\Framework\assertStringNotContainsString;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
-use function PHPUnit\Framework\assertStringNotContainsString;
 
 trait ConfigureCopyAndRegisterServiceProviderInAppTest
 {
