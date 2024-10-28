@@ -41,6 +41,8 @@ class Package
 
     public ?string $publishableProviderName = null;
 
+    public array $optimizeCommands = [];
+
     public function name(string $name): static
     {
         $this->name = $name;
@@ -214,6 +216,25 @@ class Package
     public function hasRoutes(...$routeFileNames): static
     {
         $this->routeFileNames = array_merge($this->routeFileNames, collect($routeFileNames)->flatten()->toArray());
+
+        return $this;
+    }
+
+    public function hasOptimization(?string $optimize = null, ?string $clear = null, ?string $key = null): static
+    {
+        $this->optimizeCommands[] = [
+            'optimize' => $optimize,
+            'clear' => $clear,
+            'key' => $key
+        ];
+
+        if (! in_array($optimize, $this->consoleCommands)) {
+            $this->consoleCommands[] = $optimize;
+        }
+
+        if (! in_array($clear, $this->consoleCommands)) {
+            $this->consoleCommands[] = $clear;
+        }
 
         return $this;
     }
