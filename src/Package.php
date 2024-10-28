@@ -225,7 +225,7 @@ class Package
         $this->optimizeCommands[] = [
             'optimize' => $optimize,
             'clear' => $clear,
-            'key' => $key
+            'key' => $key,
         ];
 
         if (! in_array($optimize, $this->consoleCommands)) {

@@ -108,7 +108,7 @@ abstract class PackageServiceProvider extends ServiceProvider
             }
 
             if (! empty($this->package->optimizeCommands) && method_exists($this, 'optimizes')) {
-                foreach($this->package->optimizeCommands as $optimizeCmd) {
+                foreach ($this->package->optimizeCommands as $optimizeCmd) {
                     $this->optimizes($optimizeCmd['optimize'], $optimizeCmd['clear'], $optimizeCmd['key'] ?? null);
                 }
             }
