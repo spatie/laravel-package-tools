@@ -3,6 +3,7 @@
 use function PHPUnit\Framework\assertStringContainsString;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
+use function PHPUnit\Framework\assertStringNotContainsString;
 
 trait ConfigureCopyAndRegisterServiceProviderInAppTest
 {
@@ -36,18 +37,22 @@ function restoreAppConfigFile(): void
 uses(ConfigureCopyAndRegisterServiceProviderInAppTest::class);
 
 it('can copy and register the service provider in the app', function () {
-    if (intval(app()->version()) >= 11) {
-        $this->markTestSkipped('Respects Laravel 11 skeleton patterns');
-    }
-
     $this
         ->artisan('package-tools:install')
         ->assertSuccessful();
 
-    assertStringContainsString(
-        "App\Providers\MyPackageServiceProvider::class",
-        file_get_contents(base_path('config/app.php'))
-    );
+    if (intval(app()->version()) >= 11) {
+        // This does not happen in L11 because of the different framework skeleton
+        assertStringNotContainsString(
+            "App\Providers\MyPackageServiceProvider::class",
+            file_get_contents(base_path('config/app.php'))
+        );
+    } else {
+        assertStringContainsString(
+            "App\Providers\MyPackageServiceProvider::class",
+            file_get_contents(base_path('config/app.php'))
+        );
+    }
 
     restoreAppConfigFile();
 });
