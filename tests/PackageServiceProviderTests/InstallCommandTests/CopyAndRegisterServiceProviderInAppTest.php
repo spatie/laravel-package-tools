@@ -36,6 +36,10 @@ function restoreAppConfigFile(): void
 uses(ConfigureCopyAndRegisterServiceProviderInAppTest::class);
 
 it('can copy and register the service provider in the app', function () {
+    if (intval(app()->version()) >= 11) {
+        $this->markTestSkipped('Respects Laravel 11 skeleton patterns');
+    }
+
     $this
         ->artisan('package-tools:install')
         ->assertSuccessful();
