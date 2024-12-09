@@ -3,6 +3,7 @@
 namespace Spatie\LaravelPackageTools;
 
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -141,10 +142,18 @@ abstract class PackageServiceProvider extends ServiceProvider
             ], "{$this->package->name}-components");
         }
 
-        if ($this->package->publishableProviderName) {
-            $this->publishes([
-                $this->package->basePath("/../resources/stubs/{$this->package->publishableProviderName}.php.stub") => base_path("app/Providers/{$this->package->publishableProviderName}.php"),
-            ], "{$this->package->shortName()}-provider");
+        if ($providersName = $this->package->publishableProviderName) {
+            if (!is_array($providersName)) {
+                $providersName = [$providersName];
+            }
+
+            $publishableProviders = [];
+
+            foreach ($providersName as $publishableProviderName) {
+                $publishableProviders[$this->package->basePath("/../resources/stubs/{$publishableProviderName}.php.stub")] = base_path("app/Providers/{$publishableProviderName}.php");
+            }
+            
+            $this->publishes($publishableProviders, "{$this->package->shortName()}-provider");
         }
 
 
