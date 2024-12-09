@@ -8,7 +8,7 @@ trait HasViews
 
     public ?string $viewNamespace = null;
 
-    public function hasViews(string $namespace = null): static
+    public function hasViews(?string $namespace = null): static
     {
         $this->hasViews = true;
 

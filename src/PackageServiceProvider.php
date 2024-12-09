@@ -132,7 +132,6 @@ abstract class PackageServiceProvider extends ServiceProvider
             foreach ($this->package->configFileNames as $configFileName) {
                 $vendorConfig = $this->package->basePath("/../config/{$configFileName}.php");
                 $appConfig = config_path("{$configFileName}.php");
-                config_path("{$configFileName}.php");
 
                 $this->publishes([$vendorConfig => $appConfig], "{$this->package->shortName()}-config");
             }
