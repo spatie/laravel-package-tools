@@ -51,7 +51,7 @@ class Package
         return Str::after($this->name, 'laravel-');
     }
 
-    public function basePath(string $directory = null): string
+    public function basePath(?string $directory = null): string
     {
         if ($directory === null) {
             return $this->basePath;

@@ -2,6 +2,30 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.17.0 - 2024-12-09
+
+### What's Changed
+
+* Support Laravel 11 development by @Riley19280 in https://github.com/spatie/laravel-package-tools/pull/146
+
+### New Contributors
+
+* @Riley19280 made their first contribution in https://github.com/spatie/laravel-package-tools/pull/146
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.16.6...1.17.0
+
+## 1.16.6 - 2024-11-18
+
+### What's Changed
+
+* Fix implicit nullable deprecation notice by @mokhosh in https://github.com/spatie/laravel-package-tools/pull/150
+
+### New Contributors
+
+* @mokhosh made their first contribution in https://github.com/spatie/laravel-package-tools/pull/150
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.16.5...1.16.6
+
 ## 1.16.5 - 2024-08-27
 
 ### What's Changed
