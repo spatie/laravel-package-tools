@@ -21,6 +21,8 @@ class Package
 
     public bool $hasAssets = false;
 
+    public bool $discoversMigrations = false;
+
     public bool $runsMigrations = false;
 
     public array $migrationFileNames = [];
@@ -152,6 +154,13 @@ class Package
         return $this;
     }
 
+    public function discoversMigrations(bool $discoversMigrations = true): static
+    {
+        $this->discoversMigrations = $discoversMigrations;
+
+        return $this;
+    }
+
     public function runsMigrations(bool $runsMigrations = true): static
     {
         $this->runsMigrations = $runsMigrations;
@@ -168,6 +177,12 @@ class Package
 
     public function hasMigrations(...$migrationFileNames): static
     {
+        if (empty($migrationFileNames)) {
+            $this->discoversMigrations();
+
+            return $this;
+        }
+
         $this->migrationFileNames = array_merge(
             $this->migrationFileNames,
             collect($migrationFileNames)->flatten()->toArray()
