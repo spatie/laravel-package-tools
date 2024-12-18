@@ -348,7 +348,15 @@ $package
     ->hasMigrations(['my_package_tables', 'some_other_migration']);
 ```
 
-Calling `hasMigration` will also make migrations publishable. Users of your package will be able to publish the
+Alternatively, if you wish to publish all migrations in your package by default, you may call `discoversMigrations`.
+
+```php
+$package
+    ->name('your-package-name')
+    ->discoversMigrations();
+```
+
+Calling either `hasMigration`, `hasMigration` or `discoversMigrations` will also make migrations publishable. Users of your package will be able to publish the
 migrations with this command:
 
 ```bash
