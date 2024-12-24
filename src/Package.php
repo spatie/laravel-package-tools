@@ -23,6 +23,8 @@ class Package
 
     public bool $discoversMigrations = false;
 
+    public ?string $migrationsPath = null;
+
     public bool $runsMigrations = false;
 
     public array $migrationFileNames = [];
@@ -154,9 +156,10 @@ class Package
         return $this;
     }
 
-    public function discoversMigrations(bool $discoversMigrations = true): static
+    public function discoversMigrations(bool $discoversMigrations = true, string $path = '/database/migrations'): static
     {
         $this->discoversMigrations = $discoversMigrations;
+        $this->migrationsPath = $path;
 
         return $this;
     }
@@ -177,12 +180,6 @@ class Package
 
     public function hasMigrations(...$migrationFileNames): static
     {
-        if (empty($migrationFileNames)) {
-            $this->discoversMigrations();
-
-            return $this;
-        }
-
         $this->migrationFileNames = array_merge(
             $this->migrationFileNames,
             collect($migrationFileNames)->flatten()->toArray()
