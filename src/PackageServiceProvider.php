@@ -201,18 +201,15 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     protected function bootPackageMigrations(): void
     {
-        $now = Carbon::now();
-
-        if ($this->package->discoversMigrations && $this->package->migrationsPath) {
+        if ($this->package->discoversMigrations) {
             $this->discoverMigrations();
 
             return;
         }
 
-        $path = trim($this->package->migrationsPath, '/');
-
+        $now = Carbon::now();
         foreach ($this->package->migrationFileNames as $migrationFileName) {
-            $filePath = $this->package->basePath("/../${$path}/${$migrationFileName}.php");
+            $filePath = $this->package->basePath("/../database/migrations/{$migrationFileName}.php");
             if (! file_exists($filePath)) {
                 // Support for the .stub file extension
                 $filePath .= '.stub';
@@ -233,8 +230,8 @@ abstract class PackageServiceProvider extends ServiceProvider
     protected function discoverMigrations(): void
     {
         $now = Carbon::now();
-
-        $files = (new Filesystem())->files($this->package->basePath('/../database/migrations'));
+        $path = trim($this->package->migrationsPath, '/');
+        $files = (new Filesystem())->files($this->package->basePath("/../{$path}"));
 
         foreach ($files as $file) {
             $filePath = $file->getPathname();
