@@ -4,7 +4,6 @@ namespace Spatie\LaravelPackageTools;
 
 use Carbon\Carbon;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
