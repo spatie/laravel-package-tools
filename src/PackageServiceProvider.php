@@ -167,7 +167,12 @@ abstract class PackageServiceProvider extends ServiceProvider
             }
         }
 
-        return database_path($migrationsPath . $now->format('Y_m_d_His') . '_' . Str::of($migrationFileName)->snake()->finish('.php'));
+        $filename = Str::of($migrationFileName)->snake()->finish('.php');
+        if (!self::startsWithDatetime($filename)) {
+            $filename = $now->format('Y_m_d_His') . '_' . $filename;
+        }
+
+        return database_path($migrationsPath . $filename);
     }
 
     public function registeringPackage()
@@ -247,5 +252,10 @@ abstract class PackageServiceProvider extends ServiceProvider
                 $this->loadMigrationsFrom($filePath);
             }
         }
+    }
+
+    private static function startsWithDatetime(string $string): bool {
+        $pattern = '/^\d{4}_\d{2}_\d{2}_\d{6}_/'; // Y_M_D_HIS_
+        return preg_match($pattern, $string) === 1;
     }
 }
