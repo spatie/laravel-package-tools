@@ -3,6 +3,7 @@
 namespace Spatie\LaravelPackageTools;
 
 use Carbon\Carbon;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -159,6 +160,12 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     protected function bootMigrations(): void
     {
+        if ($this->package->discoversMigrations) {
+            $this->discoverMigrations();
+
+            return;
+        }
+
         $now = Carbon::now();
 
         foreach ($this->package->migrationFileNames as $migrationFileName) {
@@ -172,7 +179,7 @@ abstract class PackageServiceProvider extends ServiceProvider
 
             if ($this->app->runningInConsole()) {
                 $this->publishes(
-                    [$vendorMigration => $appMigration,],
+                    [$vendorMigration => $appMigration],
                     "{$this->package->shortName()}-migrations"
                 );
             }
@@ -285,6 +292,32 @@ abstract class PackageServiceProvider extends ServiceProvider
 
         foreach ($this->package->sharedViewData as $name => $value) {
             View::share($name, $value);
+        }
+    }
+
+    protected function discoverMigrations(): void
+    {
+        $now = Carbon::now();
+        $migrationsPath = trim($this->package->migrationsPath, '/');
+
+        $files = (new Filesystem())->files($this->package->basePath("/../{$migrationsPath}"));
+
+        foreach ($files as $file) {
+            $filePath = $file->getPathname();
+            $migrationFileName = Str::replace(['.stub', '.php'], '', $file->getFilename());
+
+            $appMigration = GenerateMigrationName::execute($migrationFileName, $now->addSecond());
+
+            if ($this->app->runningInConsole()) {
+                $this->publishes(
+                    [$filePath => $appMigration],
+                    "{$this->package->shortName()}-migrations"
+                );
+            }
+
+            if ($this->package->runsMigrations) {
+                $this->loadMigrationsFrom($filePath);
+            }
         }
     }
 }

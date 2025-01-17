@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.18.0 - 2024-12-30
+
+### What's Changed
+
+* feature: discover migrations by @joelbutcher in https://github.com/spatie/laravel-package-tools/pull/153
+
+### New Contributors
+
+* @joelbutcher made their first contribution in https://github.com/spatie/laravel-package-tools/pull/153
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.17.0...1.18.0
+
 ## 1.17.0 - 2024-12-09
 
 ### What's Changed

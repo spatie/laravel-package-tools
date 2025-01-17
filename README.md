@@ -348,7 +348,24 @@ $package
     ->hasMigrations(['my_package_tables', 'some_other_migration']);
 ```
 
-Calling `hasMigration` will also make migrations publishable. Users of your package will be able to publish the
+Alternatively, if you wish to publish all migrations in your package by default, you may call `discoversMigrations`.
+
+```php
+$package
+    ->name('your-package-name')
+    ->discoversMigrations();
+```
+
+Calling this method will look for migrations in the `./database/migrations` directory of your project. However, if you have defined your migrations
+in a different folder, you may pass a value to the `$path` variable to instruct the app to discover migrations from that location.
+
+```php
+$package
+    ->name('your-package-name')
+    ->discoversMigrations(path: '/path/to/your/migrations/folder');
+```
+
+Calling either `hasMigration`, `hasMigration` or `discoversMigrations` will also make migrations publishable. Users of your package will be able to publish the
 migrations with this command:
 
 ```bash

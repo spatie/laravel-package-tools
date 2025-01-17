@@ -6,6 +6,10 @@ trait HasMigrations
 {
     public bool $runsMigrations = false;
 
+    public bool $discoversMigrations = false;
+
+    public ?string $migrationsPath = null;
+
     public array $migrationFileNames = [];
 
     public function runsMigrations(bool $runsMigrations = true): static
@@ -28,6 +32,14 @@ trait HasMigrations
             $this->migrationFileNames,
             collect($migrationFileNames)->flatten()->toArray()
         );
+
+        return $this;
+    }
+
+    public function discoversMigrations(bool $discoversMigrations = true, string $path = '/database/migrations'): static
+    {
+        $this->discoversMigrations = $discoversMigrations;
+        $this->migrationsPath = $path;
 
         return $this;
     }
