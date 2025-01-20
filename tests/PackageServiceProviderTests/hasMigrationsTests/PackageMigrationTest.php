@@ -19,7 +19,7 @@ trait ConfigurePackageMigrationTest
 
 uses(ConfigurePackageMigrationTest::class);
 
-it('can publish the migration', function () {
+it('can publish the stubbed migration', function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->doesntExpectOutput('hey')
@@ -28,7 +28,7 @@ it('can publish the migration', function () {
     assertMigrationPublished('create_another_laravel_package_tools_table.php');
 });
 
-it('can publish the migration without being stubbed', function () {
+it('can publish the non-stubbed migration', function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertExitCode(0);
