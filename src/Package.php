@@ -3,20 +3,20 @@
 namespace Spatie\LaravelPackageTools;
 
 use Illuminate\Support\Str;
-use Spatie\LaravelPackageTools\Traits\HasAssets;
-use Spatie\LaravelPackageTools\Traits\HasCommands;
-use Spatie\LaravelPackageTools\Traits\HasConfigs;
-use Spatie\LaravelPackageTools\Traits\HasConsoleCommands;
-use Spatie\LaravelPackageTools\Traits\HasInertia;
-use Spatie\LaravelPackageTools\Traits\HasInstallCommand;
-use Spatie\LaravelPackageTools\Traits\HasMigrations;
-use Spatie\LaravelPackageTools\Traits\HasProviders;
-use Spatie\LaravelPackageTools\Traits\HasRoutes;
-use Spatie\LaravelPackageTools\Traits\HasTranslations;
-use Spatie\LaravelPackageTools\Traits\HasViewComponents;
-use Spatie\LaravelPackageTools\Traits\HasViewComposers;
-use Spatie\LaravelPackageTools\Traits\HasViews;
-use Spatie\LaravelPackageTools\Traits\HasViewSharedData;
+use Spatie\LaravelPackageTools\Concerns\Package\HasAssets;
+use Spatie\LaravelPackageTools\Concerns\Package\HasCommands;
+use Spatie\LaravelPackageTools\Concerns\Package\HasConfigs;
+use Spatie\LaravelPackageTools\Concerns\Package\HasConsoleCommands;
+use Spatie\LaravelPackageTools\Concerns\Package\HasInertia;
+use Spatie\LaravelPackageTools\Concerns\Package\HasInstallCommand;
+use Spatie\LaravelPackageTools\Concerns\Package\HasMigrations;
+use Spatie\LaravelPackageTools\Concerns\Package\HasProviders;
+use Spatie\LaravelPackageTools\Concerns\Package\HasRoutes;
+use Spatie\LaravelPackageTools\Concerns\Package\HasTranslations;
+use Spatie\LaravelPackageTools\Concerns\Package\HasViewComponents;
+use Spatie\LaravelPackageTools\Concerns\Package\HasViewComposers;
+use Spatie\LaravelPackageTools\Concerns\Package\HasViews;
+use Spatie\LaravelPackageTools\Concerns\Package\HasViewSharedData;
 
 class Package
 {

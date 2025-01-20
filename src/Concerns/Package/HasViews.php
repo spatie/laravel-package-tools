@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Traits;
+namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasViews
 {

@@ -178,7 +178,7 @@ abstract class PackageServiceProvider extends ServiceProvider
 
         foreach ($this->package->migrationFileNames as $migrationFileName) {
             $vendorMigration = $this->package->basePath("/../database/migrations/{$migrationFileName}.php");
-            $appMigration = GenerateMigrationName::execute($migrationFileName, $now->addSecond());
+            $appMigration = $this->generateMigrationName($migrationFileName, $now->addSecond());
 
             // Support for the .stub file extension
             if (! file_exists($vendorMigration)) {
@@ -314,7 +314,7 @@ abstract class PackageServiceProvider extends ServiceProvider
             $filePath = $file->getPathname();
             $migrationFileName = Str::replace(['.stub', '.php'], '', $file->getFilename());
 
-            $appMigration = GenerateMigrationName::execute($migrationFileName, $now->addSecond());
+            $appMigration = $this->generateMigrationName($migrationFileName, $now->addSecond());
 
             if ($this->app->runningInConsole()) {
                 $this->publishes(
@@ -327,5 +327,29 @@ abstract class PackageServiceProvider extends ServiceProvider
                 $this->loadMigrationsFrom($filePath);
             }
         }
+    }
+
+    protected function generateMigrationName(string $migrationFileName, Carbon $now): string
+    {
+        $migrationsPath = 'migrations/'.dirname($migrationFileName).'/';
+        $migrationFileName = basename($migrationFileName);
+
+        $len = strlen($migrationFileName) + 4;
+
+        if (Str::contains($migrationFileName, '/')) {
+            $migrationsPath .= Str::of($migrationFileName)->beforeLast('/')->finish('/');
+            $migrationFileName = Str::of($migrationFileName)->afterLast('/');
+        }
+
+        foreach (glob(database_path("{$migrationsPath}*.php")) as $filename) {
+            if ((substr($filename, -$len) === $migrationFileName.'.php')) {
+                return $filename;
+            }
+        }
+
+        $timestamp = $now->format('Y_m_d_His');
+        $migrationFileName = Str::of($migrationFileName)->snake()->finish('.php');
+
+        return database_path($migrationsPath.$timestamp.'_'.$migrationFileName);
     }
 }
