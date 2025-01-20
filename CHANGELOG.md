@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.18.1 - 2025-01-20
+
+### What's Changed
+
+* General readability/extendability improvements by @stuart-elliott in https://github.com/spatie/laravel-package-tools/pull/157
+
+### New Contributors
+
+* @stuart-elliott made their first contribution in https://github.com/spatie/laravel-package-tools/pull/157
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.18.0...1.18.1
+
 ## 1.18.0 - 2024-12-30
 
 ### What's Changed
