@@ -45,7 +45,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         return new Package();
     }
 
-    public function registerConfigs(): void
+    public function registerConfigs()
     {
         if (empty($this->package->configFileNames)) {
             return;
@@ -117,7 +117,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         $this->publishes([$vendorAssets => $appAssets], "{$this->package->shortName()}-assets");
     }
 
-    protected function bootCommands(): void
+    protected function bootCommands()
     {
         if (empty($this->package->commands)) {
             return;
@@ -126,7 +126,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         $this->commands($this->package->commands);
     }
 
-    protected function bootConsoleCommands(): void
+    protected function bootConsoleCommands()
     {
         if (empty($this->package->consoleCommands) || ! $this->app->runningInConsole()) {
             return;
@@ -135,7 +135,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         $this->commands($this->package->consoleCommands);
     }
 
-    protected function bootConfigs(): void
+    protected function bootConfigs()
     {
         if ($this->app->runningInConsole()) {
             foreach ($this->package->configFileNames as $configFileName) {
@@ -147,7 +147,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         }
     }
 
-    protected function bootInertia(): void
+    protected function bootInertia()
     {
         if (! $this->package->hasInertiaComponents) {
             return;
@@ -166,7 +166,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         }
     }
 
-    protected function bootMigrations(): void
+    protected function bootMigrations()
     {
         if ($this->package->discoversMigrations) {
             $this->discoverMigrations();
@@ -198,7 +198,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         }
     }
 
-    protected function bootProviders(): void
+    protected function bootProviders()
     {
         if (! $this->package->publishableProviderName || ! $this->app->runningInConsole()) {
             return;
@@ -211,7 +211,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         $this->publishes([$vendorProvider => $appProvider], "{$this->package->shortName()}-provider");
     }
 
-    protected function bootRoutes(): void
+    protected function bootRoutes()
     {
         if (empty($this->package->routeFileNames)) {
             return;
@@ -222,7 +222,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         }
     }
 
-    protected function bootTranslations(): void
+    protected function bootTranslations()
     {
         if (! $this->package->hasTranslations) {
             return;
@@ -246,7 +246,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         }
     }
 
-    protected function bootViews(): void
+    protected function bootViews()
     {
         if (! $this->package->hasViews) {
             return;
@@ -263,7 +263,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         }
     }
 
-    protected function bootViewComponents(): void
+    protected function bootViewComponents()
     {
         if (empty($this->package->viewComponents)) {
             return;
@@ -281,7 +281,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         }
     }
 
-    protected function bootViewComposers(): void
+    protected function bootViewComposers()
     {
         if (empty($this->package->viewComposers)) {
             return;
@@ -292,7 +292,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         }
     }
 
-    protected function bootViewSharedData(): void
+    protected function bootViewSharedData()
     {
         if (empty($this->package->sharedViewData)) {
             return;
@@ -303,7 +303,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         }
     }
 
-    protected function discoverMigrations(): void
+    protected function discoverMigrations()
     {
         $now = Carbon::now();
         $migrationsPath = trim($this->package->migrationsPath, '/');
