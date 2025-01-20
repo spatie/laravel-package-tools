@@ -72,7 +72,7 @@ it('does overwrite the existing migration with force', function () {
 
     $this->assertStringEqualsFile(
         $filePath,
-        file_get_contents(__DIR__.'/../TestPackage/database/migrations/create_another_laravel_package_tools_table.php.stub')
+        file_get_contents(__DIR__.'/../../TestPackage/database/migrations/create_another_laravel_package_tools_table.php.stub')
     );
 });
 
