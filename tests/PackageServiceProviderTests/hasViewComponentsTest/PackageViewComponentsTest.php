@@ -29,5 +29,5 @@ it('can publish the view components', function () {
         ->artisan('vendor:publish --tag=laravel-package-tools-components')
         ->assertExitCode(0);
 
-    assertFileExists(base_path('app/View/Components/vendor/package-tools/TestComponent.php'));
+    assertFileExists(app_path('View/Components/vendor/package-tools/TestComponent.php'));
 });

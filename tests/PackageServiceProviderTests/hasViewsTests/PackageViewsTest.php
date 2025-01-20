@@ -27,5 +27,5 @@ it('can publish the views', function () {
         ->artisan('vendor:publish --tag=package-tools-views')
         ->assertExitCode(0);
 
-    assertFileExists(base_path('resources/views/vendor/package-tools/test.blade.php'));
+    assertFileExists(resource_path('views/vendor/package-tools/test.blade.php'));
 });

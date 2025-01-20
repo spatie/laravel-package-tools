@@ -27,5 +27,5 @@ it('can publish the views with a custom namespace', function () {
         ->artisan('vendor:publish --tag=custom-namespace-views')
         ->assertExitCode(0);
 
-    assertFileExists(base_path('resources/views/vendor/custom-namespace/test.blade.php'));
+    assertFileExists(resource_path('views/vendor/custom-namespace/test.blade.php'));
 });
