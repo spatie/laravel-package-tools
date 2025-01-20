@@ -2,6 +2,7 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
+use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Support\Facades\File;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestCase;
@@ -22,6 +23,15 @@ abstract class PackageServiceProviderTestCase extends TestCase
         testTime()->freeze('2020-01-01 00:00:00');
 
         $this->deletePublishedFiles();
+        $this->createApplication();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->deletePublishedFiles();
+        $this->deleteMigrations();
+
+        parent::tearDown();
     }
 
     abstract public function configurePackage(Package $package);
@@ -41,6 +51,11 @@ abstract class PackageServiceProviderTestCase extends TestCase
             unlink($configPath);
         }
 
+        $configPath = config_path('alternative-config.php');
+
+        if (file_exists($configPath)) {
+            unlink($configPath);
+        }
 
         collect(File::allFiles(database_path('migrations')))
             ->each(function (SplFileInfo $file) {
@@ -51,6 +66,21 @@ abstract class PackageServiceProviderTestCase extends TestCase
             ->each(function (SplFileInfo $file) {
                 unlink($file->getPathname());
             });
+
+        /* Clear publishes from previous tests */
+        ServiceProvider::$publishes[ServiceProvider::class] = [];
+
+        return $this;
+    }
+
+    protected function deleteMigrations(): self
+    {
+        /* Clear migrations from previous tests */
+        $migrator = app('migrator');
+        $reflection = new \ReflectionClass($migrator::class);
+        $property = $reflection->getProperty('paths');
+        $property->setAccessible(true);
+        $property->setvalue($migrator, []);
 
         return $this;
     }
