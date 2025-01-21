@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Concerns\Package;
+namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
 trait ProcessConsoleCommands
 {

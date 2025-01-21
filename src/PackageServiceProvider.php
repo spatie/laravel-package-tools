@@ -5,19 +5,19 @@ namespace Spatie\LaravelPackageTools;
 use Illuminate\Support\ServiceProvider;
 use ReflectionClass;
 
-use Spatie\LaravelPackageTools\Concerns\Package\ProcessAssets;
-use Spatie\LaravelPackageTools\Concerns\Package\ProcessCommands;
-use Spatie\LaravelPackageTools\Concerns\Package\ProcessConfigs;
-use Spatie\LaravelPackageTools\Concerns\Package\ProcessConsoleCommands;
-use Spatie\LaravelPackageTools\Concerns\Package\ProcessInertia;
-use Spatie\LaravelPackageTools\Concerns\Package\ProcessMigrations;
-use Spatie\LaravelPackageTools\Concerns\Package\ProcessProviders;
-use Spatie\LaravelPackageTools\Concerns\Package\ProcessRoutes;
-use Spatie\LaravelPackageTools\Concerns\Package\ProcessTranslations;
-use Spatie\LaravelPackageTools\Concerns\Package\ProcessViewComponents;
-use Spatie\LaravelPackageTools\Concerns\Package\ProcessViewComposers;
-use Spatie\LaravelPackageTools\Concerns\Package\ProcessViews;
-use Spatie\LaravelPackageTools\Concerns\Package\ProcessViewSharedData;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessAssets;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessCommands;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessConfigs;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessConsoleCommands;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessInertia;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessMigrations;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessProviders;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessRoutes;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessTranslations;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewComponents;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewComposers;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViews;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewSharedData;
 
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
