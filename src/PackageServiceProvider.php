@@ -5,37 +5,37 @@ namespace Spatie\LaravelPackageTools;
 use Illuminate\Support\ServiceProvider;
 use ReflectionClass;
 
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessAssets;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessCommands;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessConfigs;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessConsoleCommands;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessInertia;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessMigrations;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessProviders;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessRoutes;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessTranslations;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewComponents;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewComposers;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViews;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewSharedData;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageAssets;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageCommands;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageConfigs;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageConsoleCommands;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageInertia;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageMigrations;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageProviders;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageRoutes;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageTranslations;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageViewComponents;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageViewComposers;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageViews;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageViewSharedData;
 
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
 abstract class PackageServiceProvider extends ServiceProvider
 {
-    use ProcessAssets;
-    use ProcessCommands;
-    use ProcessConsoleCommands;
-    use ProcessConfigs;
-    use ProcessInertia;
-    use ProcessMigrations;
-    use ProcessProviders;
-    use ProcessRoutes;
-    use ProcessTranslations;
-    use ProcessViews;
-    use ProcessViewComponents;
-    use ProcessViewComposers;
-    use ProcessViewSharedData;
+    use ProcessPackageAssets;
+    use ProcessPackageCommands;
+    use ProcessPackageConsoleCommands;
+    use ProcessPackageConfigs;
+    use ProcessPackageInertia;
+    use ProcessPackageMigrations;
+    use ProcessPackageProviders;
+    use ProcessPackageRoutes;
+    use ProcessPackageTranslations;
+    use ProcessPackageViews;
+    use ProcessPackageViewComponents;
+    use ProcessPackageViewComposers;
+    use ProcessPackageViewSharedData;
 
     protected Package $package;
 
@@ -54,7 +54,7 @@ abstract class PackageServiceProvider extends ServiceProvider
             throw InvalidPackage::nameIsRequired();
         }
 
-        $this->registerConfigs();
+        $this->registerPackageConfigs();
 
         $this->packageRegistered();
 
@@ -77,19 +77,20 @@ abstract class PackageServiceProvider extends ServiceProvider
     {
         $this->bootingPackage();
 
-        $this->bootAssets();
-        $this->bootCommands();
-        $this->bootConsoleCommands();
-        $this->bootConfigs();
-        $this->bootInertia();
-        $this->bootMigrations();
-        $this->bootProviders();
-        $this->bootRoutes();
-        $this->bootTranslations();
-        $this->bootViews();
-        $this->bootViewComponents();
-        $this->bootViewComposers();
-        $this->bootViewSharedData();
+        $this
+            ->bootPackageAssets()
+            ->bootPackageCommands()
+            ->bootPackageConsoleCommands()
+            ->bootPackageConfigs()
+            ->bootPackageInertia()
+            ->bootPackageMigrations()
+            ->bootPackageProviders()
+            ->bootPackageRoutes()
+            ->bootPackageTranslations()
+            ->bootPackageViews()
+            ->bootPackageViewComponents()
+            ->bootPackageViewComposers()
+            ->bootPackageViewSharedData();
 
         $this->packageBooted();
 

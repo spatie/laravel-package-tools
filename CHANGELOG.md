@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.18.3 - 2025-01-22
+
+- avoid method name collisions
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.18.2...1.18.3
+
 ## 1.18.2 - 2025-01-20
 
 ### What's Changed
