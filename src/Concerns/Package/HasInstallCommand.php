@@ -6,7 +6,7 @@ use Spatie\LaravelPackageTools\Commands\InstallCommand;
 
 trait HasInstallCommand
 {
-    public function hasInstallCommand($callable): static
+    public function hasInstallCommand($callable): self
     {
         $installCommand = new InstallCommand($this);
 

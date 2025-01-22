@@ -10,6 +10,6 @@ class OtherTestCommand extends Command
 
     public function handle()
     {
-        $this->info('output of test command');
+        $this->info('output of other test command');
     }
 }

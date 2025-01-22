@@ -6,7 +6,7 @@ trait HasProviders
 {
     public ?string $publishableProviderName = null;
 
-    public function publishesServiceProvider(string $providerName): static
+    public function publishesServiceProvider(string $providerName): self
     {
         $this->publishableProviderName = $providerName;
 

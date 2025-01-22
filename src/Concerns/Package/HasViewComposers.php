@@ -6,7 +6,7 @@ trait HasViewComposers
 {
     public array $viewComposers = [];
 
-    public function hasViewComposer($view, $viewComposer): static
+    public function hasViewComposer($view, $viewComposer): self
     {
         if (! is_array($view)) {
             $view = [$view];

@@ -10,6 +10,6 @@ class FourthTestCommand extends Command
 
     public function handle()
     {
-        $this->info('output of test command');
+        $this->info('output of fourth test command');
     }
 }

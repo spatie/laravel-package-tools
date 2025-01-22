@@ -6,7 +6,7 @@ trait ProcessPackageCommands
 {
     protected function bootPackageCommands(): self
     {
-        if (!empty($this->package->commands)) {
+        if (empty($this->package->commands)) {
             return $this;
         }
 

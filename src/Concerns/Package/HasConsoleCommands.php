@@ -6,14 +6,14 @@ trait HasConsoleCommands
 {
     public array $consoleCommands = [];
 
-    public function hasConsoleCommand(string $commandClassName): static
+    public function hasConsoleCommand(string $commandClassName): self
     {
         $this->consoleCommands[] = $commandClassName;
 
         return $this;
     }
 
-    public function hasConsoleCommands(...$commandClassNames): static
+    public function hasConsoleCommands(...$commandClassNames): self
     {
         $this->consoleCommands = array_merge(
             $this->consoleCommands,

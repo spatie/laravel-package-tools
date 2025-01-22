@@ -6,7 +6,7 @@ trait HasInertia
 {
     public bool $hasInertiaComponents = false;
 
-    public function hasInertiaComponents(?string $namespace = null): static
+    public function hasInertiaComponents(?string $namespace = null): self
     {
         $this->hasInertiaComponents = true;
 

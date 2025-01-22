@@ -6,7 +6,7 @@ trait HasTranslations
 {
     public bool $hasTranslations = false;
 
-    public function hasTranslations(): static
+    public function hasTranslations(): self
     {
         $this->hasTranslations = true;
 
