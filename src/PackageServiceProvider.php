@@ -108,7 +108,7 @@ abstract class PackageServiceProvider extends ServiceProvider
     protected function bootPackageAssets(): static
     {
         if (!$this->package->hasAssets || !$this->app->runningInConsole()) {
-            return;
+            return $this;
         }
 
         $vendorAssets = $this->package->basePath('/../resources/dist');
@@ -122,7 +122,7 @@ abstract class PackageServiceProvider extends ServiceProvider
     protected function bootPackageCommands(): self
     {
         if (empty($this->package->commands)) {
-            return;
+            return $this;
         }
 
         $this->commands($this->package->commands);
@@ -133,7 +133,7 @@ abstract class PackageServiceProvider extends ServiceProvider
     protected function bootPackageConsoleCommands(): self
     {
         if (empty($this->package->consoleCommands) || !$this->app->runningInConsole()) {
-            return;
+            return $this;
         }
 
         $this->commands($this->package->consoleCommands);
