@@ -2,12 +2,12 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-trait ProcessTranslations
+trait ProcessPackageTranslations
 {
-    protected function bootTranslations()
+    protected function bootPackageTranslations(): self
     {
         if (! $this->package->hasTranslations) {
-            return;
+            return $this;
         }
 
         $vendorTranslations = $this->package->basePath('/../resources/lang');
@@ -26,5 +26,7 @@ trait ProcessTranslations
                 "{$this->package->shortName()}-translations"
             );
         }
+
+        return $this;
     }
 }

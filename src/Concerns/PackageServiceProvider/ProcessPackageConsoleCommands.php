@@ -2,14 +2,16 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-trait ProcessConsoleCommands
+trait ProcessPackageConsoleCommands
 {
-    protected function bootConsoleCommands()
+    protected function bootPackageConsoleCommands(): self
     {
         if (empty($this->package->consoleCommands) || ! $this->app->runningInConsole()) {
-            return;
+            return $this;
         }
 
         $this->commands($this->package->consoleCommands);
+
+        return $this;
     }
 }

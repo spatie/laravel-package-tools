@@ -6,14 +6,12 @@ use Carbon\Carbon;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 
-trait ProcessMigrations
+trait ProcessPackageMigrations
 {
-    protected function bootMigrations()
+    protected function bootPackageMigrations(): self
     {
         if ($this->package->discoversMigrations) {
-            $this->discoverMigrations();
-
-            return;
+            return $this->discoverPackageMigrations();
         }
 
         $now = Carbon::now();
@@ -38,9 +36,11 @@ trait ProcessMigrations
                 $this->loadMigrationsFrom($vendorMigration);
             }
         }
+
+        return $this;
     }
 
-    protected function discoverMigrations()
+    protected function discoverPackageMigrations(): self
     {
         $now = Carbon::now();
         $migrationsPath = trim($this->package->migrationsPath, '/');
@@ -64,11 +64,13 @@ trait ProcessMigrations
                 $this->loadMigrationsFrom($filePath);
             }
         }
+
+        return $this;
     }
 
     protected function generateMigrationName(string $migrationFileName, Carbon $now): string
     {
-        $migrationsPath = 'migrations/'.dirname($migrationFileName).'/';
+        $migrationsPath = 'migrations/' . dirname($migrationFileName) . '/';
         $migrationFileName = basename($migrationFileName);
 
         $len = strlen($migrationFileName) + 4;
@@ -79,7 +81,7 @@ trait ProcessMigrations
         }
 
         foreach (glob(database_path("{$migrationsPath}*.php")) as $filename) {
-            if ((substr($filename, -$len) === $migrationFileName.'.php')) {
+            if ((substr($filename, -$len) === $migrationFileName . '.php')) {
                 return $filename;
             }
         }
@@ -87,6 +89,6 @@ trait ProcessMigrations
         $timestamp = $now->format('Y_m_d_His');
         $migrationFileName = Str::of($migrationFileName)->snake()->finish('.php');
 
-        return database_path($migrationsPath.$timestamp.'_'.$migrationFileName);
+        return database_path($migrationsPath . $timestamp . '_' . $migrationFileName);
     }
 }

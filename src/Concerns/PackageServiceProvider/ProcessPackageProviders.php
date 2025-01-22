@@ -2,12 +2,12 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-trait ProcessProviders
+trait ProcessPackageProviders
 {
-    protected function bootProviders()
+    protected function bootPackageProviders(): self
     {
         if (! $this->package->publishableProviderName || ! $this->app->runningInConsole()) {
-            return;
+            return $this;
         }
 
         $providerName = $this->package->publishableProviderName;
@@ -15,5 +15,7 @@ trait ProcessProviders
         $appProvider = base_path("app/Providers/{$providerName}.php");
 
         $this->publishes([$vendorProvider => $appProvider], "{$this->package->shortName()}-provider");
+
+        return $this;
     }
 }

@@ -2,25 +2,29 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-trait ProcessConfigs
+trait ProcessPackageConfigs
 {
-    protected function convertDiscoversConfigs(): void
+    protected function convertPackageDiscoversConfigs(): self
     {
         $this->package->configFileNames = $this->convertDiscovers($this->package->configPath());
+
+        return $this;
     }
 
-    public function registerConfigs()
+    public function registerPackageConfigs(): self
     {
         if (empty($this->package->configFileNames)) {
-            return;
+            return $this;
         }
 
         foreach ($this->package->configFileNames as $configFileName) {
             $this->mergeConfigFrom($this->package->basePath("/../config/{$configFileName}.php"), $configFileName);
         }
+
+        return $this;
     }
 
-    protected function bootConfigs()
+    protected function bootPackageConfigs(): self
     {
         if ($this->app->runningInConsole()) {
             foreach ($this->package->configFileNames as $configFileName) {
@@ -30,5 +34,7 @@ trait ProcessConfigs
                 $this->publishes([$vendorConfig => $appConfig], "{$this->package->shortName()}-config");
             }
         }
+
+        return $this;
     }
 }

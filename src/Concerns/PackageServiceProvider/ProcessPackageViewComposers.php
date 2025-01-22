@@ -4,16 +4,18 @@ namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
 use Illuminate\Support\Facades\View;
 
-trait ProcessViewComposers
+trait ProcessPackageViewComposers
 {
-    protected function bootViewComposers()
+    protected function bootPackageViewComposers(): self
     {
         if (empty($this->package->viewComposers)) {
-            return;
+            return $this;
         }
 
         foreach ($this->package->viewComposers as $viewName => $viewComposer) {
             View::composer($viewName, $viewComposer);
         }
+
+        return $this;
     }
 }

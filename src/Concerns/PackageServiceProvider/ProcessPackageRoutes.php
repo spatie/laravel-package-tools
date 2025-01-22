@@ -2,16 +2,18 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-trait ProcessRoutes
+trait ProcessPackageRoutes
 {
-    protected function bootRoutes()
+    protected function bootPackageRoutes(): self
     {
         if (empty($this->package->routeFileNames)) {
-            return;
+            return $this;
         }
 
         foreach ($this->package->routeFileNames as $routeFileName) {
             $this->loadRoutesFrom("{$this->package->basePath('/../routes/')}{$routeFileName}.php");
         }
+
+        return $this;
     }
 }

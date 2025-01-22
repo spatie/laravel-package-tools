@@ -2,12 +2,12 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-trait ProcessViewComponents
+trait ProcessPackageViewComponents
 {
-    protected function bootViewComponents()
+    protected function bootPackageViewComponents(): self
     {
         if (empty($this->package->viewComponents)) {
-            return;
+            return $this;
         }
 
         foreach ($this->package->viewComponents as $componentClass => $prefix) {
@@ -20,5 +20,7 @@ trait ProcessViewComponents
 
             $this->publishes([$vendorComponents => $appComponents], "{$this->package->name}-components");
         }
+
+        return $this;
     }
 }

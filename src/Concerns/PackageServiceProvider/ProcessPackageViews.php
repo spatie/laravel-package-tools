@@ -2,12 +2,12 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-trait ProcessViews
+trait ProcessPackageViews
 {
-    protected function bootViews()
+    protected function bootPackageViews(): self
     {
         if (! $this->package->hasViews) {
-            return;
+            return $this;
         }
 
         $namespace = $this->package->viewNamespace;
@@ -19,5 +19,7 @@ trait ProcessViews
         if ($this->app->runningInConsole()) {
             $this->publishes([$vendorViews => $appViews], "{$this->packageView($namespace)}-views");
         }
+
+        return $this;
     }
 }

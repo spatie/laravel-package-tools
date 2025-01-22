@@ -2,12 +2,12 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-trait ProcessInertia
+trait ProcessPackageInertia
 {
-    protected function bootInertia()
+    protected function bootPackageInertia()
     {
         if (! $this->package->hasInertiaComponents) {
-            return;
+            return $this;
         }
 
         $namespace = $this->package->viewNamespace;
@@ -21,5 +21,7 @@ trait ProcessInertia
                 "{$this->packageView($namespace)}-inertia-components"
             );
         }
+
+        return $this;
     }
 }

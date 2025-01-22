@@ -4,16 +4,18 @@ namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
 use Illuminate\Support\Facades\View;
 
-trait ProcessViewSharedData
+trait ProcessPackageViewSharedData
 {
-    protected function bootViewSharedData()
+    protected function bootPackageViewSharedData(): self
     {
         if (empty($this->package->sharedViewData)) {
-            return;
+            return $this;
         }
 
         foreach ($this->package->sharedViewData as $name => $value) {
             View::share($name, $value);
         }
+
+        return $this;
     }
 }
