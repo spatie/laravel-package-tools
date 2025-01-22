@@ -63,19 +63,20 @@ abstract class PackageServiceProvider extends ServiceProvider
     {
         $this->bootingPackage();
 
-        $this->bootAssets();
-        $this->bootCommands();
-        $this->bootConsoleCommands();
-        $this->bootConfigs();
-        $this->bootInertia();
-        $this->bootMigrations();
-        $this->bootProviders();
-        $this->bootRoutes();
-        $this->bootTranslations();
-        $this->bootViews();
-        $this->bootViewComponents();
-        $this->bootViewComposers();
-        $this->bootViewSharedData();
+        $this
+            ->bootPackageAssets()
+            ->bootPackageCommands()
+            ->bootPackageConsoleCommands()
+            ->bootPackageConfigs()
+            ->bootPackageInertia()
+            ->bootPackageMigrations()
+            ->bootPackageProviders()
+            ->bootPackageRoutes()
+            ->bootPackageTranslations()
+            ->bootPackageViews()
+            ->bootPackageViewComponents()
+            ->bootPackageViewComposers()
+            ->bootPackageViewSharedData();
 
         $this->packageBooted();
 
@@ -104,9 +105,9 @@ abstract class PackageServiceProvider extends ServiceProvider
             : $this->package->viewNamespace;
     }
 
-    protected function bootAssets(): void
+    protected function bootPackageAssets(): static
     {
-        if (! $this->package->hasAssets || ! $this->app->runningInConsole()) {
+        if (!$this->package->hasAssets || !$this->app->runningInConsole()) {
             return;
         }
 
@@ -114,27 +115,33 @@ abstract class PackageServiceProvider extends ServiceProvider
         $appAssets = public_path("vendor/{$this->package->shortName()}");
 
         $this->publishes([$vendorAssets => $appAssets], "{$this->package->shortName()}-assets");
+
+        return $this;
     }
 
-    protected function bootCommands()
+    protected function bootPackageCommands(): self
     {
         if (empty($this->package->commands)) {
             return;
         }
 
         $this->commands($this->package->commands);
+
+        return $this;
     }
 
-    protected function bootConsoleCommands()
+    protected function bootPackageConsoleCommands(): self
     {
-        if (empty($this->package->consoleCommands) || ! $this->app->runningInConsole()) {
+        if (empty($this->package->consoleCommands) || !$this->app->runningInConsole()) {
             return;
         }
 
         $this->commands($this->package->consoleCommands);
+
+        return $this;
     }
 
-    protected function bootConfigs()
+    protected function bootPackageConfigs(): self
     {
         if ($this->app->runningInConsole()) {
             foreach ($this->package->configFileNames as $configFileName) {
@@ -144,12 +151,14 @@ abstract class PackageServiceProvider extends ServiceProvider
                 $this->publishes([$vendorConfig => $appConfig], "{$this->package->shortName()}-config");
             }
         }
+
+        return $this;
     }
 
-    protected function bootInertia()
+    protected function bootPackageInertia(): self
     {
-        if (! $this->package->hasInertiaComponents) {
-            return;
+        if (!$this->package->hasInertiaComponents) {
+            return $this;
         }
 
         $namespace = $this->package->viewNamespace;
@@ -163,14 +172,16 @@ abstract class PackageServiceProvider extends ServiceProvider
                 "{$this->packageView($namespace)}-inertia-components"
             );
         }
+
+        return $this;
     }
 
-    protected function bootMigrations()
+    protected function bootPackageMigrations(): self
     {
         if ($this->package->discoversMigrations) {
-            $this->discoverMigrations();
+            $this->discoverPackageMigrations();
 
-            return;
+            return $this;
         }
 
         $now = Carbon::now();
@@ -180,7 +191,7 @@ abstract class PackageServiceProvider extends ServiceProvider
             $appMigration = $this->generateMigrationName($migrationFileName, $now->addSecond());
 
             // Support for the .stub file extension
-            if (! file_exists($vendorMigration)) {
+            if (!file_exists($vendorMigration)) {
                 $vendorMigration .= '.stub';
             }
 
@@ -195,12 +206,14 @@ abstract class PackageServiceProvider extends ServiceProvider
                 $this->loadMigrationsFrom($vendorMigration);
             }
         }
+
+        return $this;
     }
 
-    protected function bootProviders()
+    protected function bootPackageProviders(): self
     {
-        if (! $this->package->publishableProviderName || ! $this->app->runningInConsole()) {
-            return;
+        if (!$this->package->publishableProviderName || !$this->app->runningInConsole()) {
+            return $this;
         }
 
         $providerName = $this->package->publishableProviderName;
@@ -208,23 +221,27 @@ abstract class PackageServiceProvider extends ServiceProvider
         $appProvider = base_path("app/Providers/{$providerName}.php");
 
         $this->publishes([$vendorProvider => $appProvider], "{$this->package->shortName()}-provider");
+
+        return $this;
     }
 
-    protected function bootRoutes()
+    protected function bootPackageRoutes(): self
     {
         if (empty($this->package->routeFileNames)) {
-            return;
+            return $this;
         }
 
         foreach ($this->package->routeFileNames as $routeFileName) {
             $this->loadRoutesFrom("{$this->package->basePath('/../routes/')}{$routeFileName}.php");
         }
+
+        return $this;
     }
 
-    protected function bootTranslations()
+    protected function bootPackageTranslations(): self
     {
-        if (! $this->package->hasTranslations) {
-            return;
+        if (!$this->package->hasTranslations) {
+            return $this;
         }
 
         $vendorTranslations = $this->package->basePath('/../resources/lang');
@@ -243,12 +260,14 @@ abstract class PackageServiceProvider extends ServiceProvider
                 "{$this->package->shortName()}-translations"
             );
         }
+
+        return $this;
     }
 
-    protected function bootViews()
+    protected function bootPackageViews(): self
     {
-        if (! $this->package->hasViews) {
-            return;
+        if (!$this->package->hasViews) {
+            return $this;
         }
 
         $namespace = $this->package->viewNamespace;
@@ -260,12 +279,14 @@ abstract class PackageServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([$vendorViews => $appViews], "{$this->packageView($namespace)}-views");
         }
+
+        return $this;
     }
 
-    protected function bootViewComponents()
+    protected function bootPackageViewComponents(): self
     {
         if (empty($this->package->viewComponents)) {
-            return;
+            return $this;
         }
 
         foreach ($this->package->viewComponents as $componentClass => $prefix) {
@@ -278,31 +299,37 @@ abstract class PackageServiceProvider extends ServiceProvider
 
             $this->publishes([$vendorComponents => $appComponents], "{$this->package->name}-components");
         }
+
+        return $this;
     }
 
-    protected function bootViewComposers()
+    protected function bootPackageViewComposers(): self
     {
         if (empty($this->package->viewComposers)) {
-            return;
+            return $this;
         }
 
         foreach ($this->package->viewComposers as $viewName => $viewComposer) {
             View::composer($viewName, $viewComposer);
         }
+
+        return $this;
     }
 
-    protected function bootViewSharedData()
+    protected function bootPackageViewSharedData(): self
     {
         if (empty($this->package->sharedViewData)) {
-            return;
+            return $this;
         }
 
         foreach ($this->package->sharedViewData as $name => $value) {
             View::share($name, $value);
         }
+
+        return $this;
     }
 
-    protected function discoverMigrations()
+    protected function discoverPackageMigrations(): void
     {
         $now = Carbon::now();
         $migrationsPath = trim($this->package->migrationsPath, '/');
@@ -330,7 +357,7 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     protected function generateMigrationName(string $migrationFileName, Carbon $now): string
     {
-        $migrationsPath = 'migrations/'.dirname($migrationFileName).'/';
+        $migrationsPath = 'migrations/' . dirname($migrationFileName) . '/';
         $migrationFileName = basename($migrationFileName);
 
         $len = strlen($migrationFileName) + 4;
@@ -341,7 +368,7 @@ abstract class PackageServiceProvider extends ServiceProvider
         }
 
         foreach (glob(database_path("{$migrationsPath}*.php")) as $filename) {
-            if ((substr($filename, -$len) === $migrationFileName.'.php')) {
+            if ((substr($filename, -$len) === $migrationFileName . '.php')) {
                 return $filename;
             }
         }
@@ -349,6 +376,6 @@ abstract class PackageServiceProvider extends ServiceProvider
         $timestamp = $now->format('Y_m_d_His');
         $migrationFileName = Str::of($migrationFileName)->snake()->finish('.php');
 
-        return database_path($migrationsPath.$timestamp.'_'.$migrationFileName);
+        return database_path($migrationsPath . $timestamp . '_' . $migrationFileName);
     }
 }
