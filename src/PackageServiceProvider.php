@@ -107,7 +107,7 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     protected function bootPackageAssets(): static
     {
-        if (!$this->package->hasAssets || !$this->app->runningInConsole()) {
+        if (! $this->package->hasAssets || ! $this->app->runningInConsole()) {
             return $this;
         }
 
@@ -132,7 +132,7 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     protected function bootPackageConsoleCommands(): self
     {
-        if (empty($this->package->consoleCommands) || !$this->app->runningInConsole()) {
+        if (empty($this->package->consoleCommands) || ! $this->app->runningInConsole()) {
             return $this;
         }
 
@@ -157,7 +157,7 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     protected function bootPackageInertia(): self
     {
-        if (!$this->package->hasInertiaComponents) {
+        if (! $this->package->hasInertiaComponents) {
             return $this;
         }
 
@@ -191,7 +191,7 @@ abstract class PackageServiceProvider extends ServiceProvider
             $appMigration = $this->generateMigrationName($migrationFileName, $now->addSecond());
 
             // Support for the .stub file extension
-            if (!file_exists($vendorMigration)) {
+            if (! file_exists($vendorMigration)) {
                 $vendorMigration .= '.stub';
             }
 
@@ -212,7 +212,7 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     protected function bootPackageProviders(): self
     {
-        if (!$this->package->publishableProviderName || !$this->app->runningInConsole()) {
+        if (! $this->package->publishableProviderName || ! $this->app->runningInConsole()) {
             return $this;
         }
 
@@ -240,7 +240,7 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     protected function bootPackageTranslations(): self
     {
-        if (!$this->package->hasTranslations) {
+        if (! $this->package->hasTranslations) {
             return $this;
         }
 
@@ -266,7 +266,7 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     protected function bootPackageViews(): self
     {
-        if (!$this->package->hasViews) {
+        if (! $this->package->hasViews) {
             return $this;
         }
 
