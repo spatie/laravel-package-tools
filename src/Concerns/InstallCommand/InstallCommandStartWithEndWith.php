@@ -2,7 +2,9 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\InstallCommand;
 
-trait startWithEndWith
+use Closure;
+
+trait InstallCommandStartWithEndWith
 {
     public ?Closure $startWith = null;
     public ?Closure $endWith = null;
@@ -21,17 +23,21 @@ trait startWithEndWith
         return $this;
     }
 
-    protected function processStartWith(): void
+    protected function processStartWith(): self
     {
         if ($this->startWith) {
             ($this->startWith)($this);
         }
+
+        return $this;
     }
 
-    protected function processEndWith(): void
+    protected function processEndWith(): self
     {
         if ($this->endWith) {
             ($this->endWith)($this);
         }
+
+        return $this;
     }
 }

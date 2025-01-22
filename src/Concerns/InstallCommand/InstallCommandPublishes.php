@@ -2,7 +2,7 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\InstallCommand;
 
-trait publishes
+trait InstallCommandPublishes
 {
     protected array $publishes = [];
 
@@ -36,7 +36,7 @@ trait publishes
         return $this->publish('migrations');
     }
 
-    protected function processPublishes(): void
+    protected function processPublishes(): self
     {
         foreach ($this->publishes as $tag) {
             $name = str_replace('-', ' ', $tag);
@@ -46,5 +46,7 @@ trait publishes
                 '--tag' => "{$this->package->shortName()}-{$tag}",
             ]);
         }
+
+        return $this;
     }
 }

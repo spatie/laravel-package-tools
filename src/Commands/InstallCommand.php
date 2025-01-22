@@ -6,19 +6,19 @@ use Closure;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Concerns\InstallCommand\askToRunMigrations;
-use Spatie\LaravelPackageTools\Concerns\InstallCommand\askToStarRepoOnGitHub;
-use Spatie\LaravelPackageTools\Concerns\InstallCommand\publishes;
-use Spatie\LaravelPackageTools\Concerns\InstallCommand\serviceProviderInApp;
-use Spatie\LaravelPackageTools\Concerns\InstallCommand\startWithEndWith;
+use Spatie\LaravelPackageTools\Concerns\InstallCommand\InstallCommandAskToRunMigrations;
+use Spatie\LaravelPackageTools\Concerns\InstallCommand\InstallCommandAskToStarRepoOnGitHub;
+use Spatie\LaravelPackageTools\Concerns\InstallCommand\InstallCommandPublishes;
+use Spatie\LaravelPackageTools\Concerns\InstallCommand\InstallCommandServiceProviderInApp;
+use Spatie\LaravelPackageTools\Concerns\InstallCommand\InstallCommandStartWithEndWith;
 
 class InstallCommand extends Command
 {
-    use askToRunMigrations;
-    use askToStarRepoOnGitHub;
-    use publishes;
-    use serviceProviderInApp;
-    use startWithEndWith;
+    use InstallCommandAskToRunMigrations;
+    use InstallCommandAskToStarRepoOnGitHub;
+    use InstallCommandPublishes;
+    use InstallCommandServiceProviderInApp;
+    use InstallCommandStartWithEndWith;
 
     protected Package $package;
 

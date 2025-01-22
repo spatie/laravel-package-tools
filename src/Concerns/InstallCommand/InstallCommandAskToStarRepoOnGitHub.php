@@ -2,7 +2,7 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\InstallCommand;
 
-trait askToStarRepoOnGitHub
+trait InstallCommandAskToStarRepoOnGitHub
 {
     protected ?string $starRepo = null;
 
@@ -13,7 +13,7 @@ trait askToStarRepoOnGitHub
         return $this;
     }
 
-    protected function processStarRepo(): void
+    protected function processStarRepo(): self
     {
         if ($this->starRepo) {
             if ($this->confirm('Would you like to star our repo on GitHub?')) {
@@ -28,5 +28,7 @@ trait askToStarRepoOnGitHub
                 }
             }
         }
+
+        return $this;
     }
 }

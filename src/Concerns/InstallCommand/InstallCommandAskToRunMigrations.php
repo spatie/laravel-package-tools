@@ -2,7 +2,7 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\InstallCommand;
 
-trait askToRunMigrations
+trait InstallCommandAskToRunMigrations
 {
     protected bool $askToRunMigrations = false;
 
@@ -13,7 +13,7 @@ trait askToRunMigrations
         return $this;
     }
 
-    protected function processAskToRunMigrations(): void
+    protected function processAskToRunMigrations(): self
     {
         if ($this->askToRunMigrations) {
             if ($this->confirm('Would you like to run the migrations now?')) {
@@ -22,5 +22,7 @@ trait askToRunMigrations
                 $this->call('migrate');
             }
         }
+
+        return $this;
     }
 }

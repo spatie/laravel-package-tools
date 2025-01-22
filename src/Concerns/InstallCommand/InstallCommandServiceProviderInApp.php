@@ -2,7 +2,9 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\InstallCommand;
 
-trait serviceProviderInApp
+use Illuminate\Support\Str;
+
+trait InstallCommandServiceProviderInApp
 {
     protected bool $copyServiceProviderInApp = false;
 
@@ -13,16 +15,18 @@ trait serviceProviderInApp
         return $this;
     }
 
-    protected function processServiceProviderInApp(): void
+    protected function processServiceProviderInApp(): self
     {
         if ($this->copyServiceProviderInApp) {
             $this->comment('Publishing service provider...');
 
             $this->copyServiceProviderInApp();
         }
+
+        return $this;
     }
 
-    protected function copyServiceProviderInApp(): void
+    protected function copyServiceProviderInApp(): self
     {
         $providerName = $this->package->publishableProviderName;
 
