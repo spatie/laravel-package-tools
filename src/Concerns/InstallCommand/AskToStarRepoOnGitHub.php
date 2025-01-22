@@ -2,7 +2,7 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\InstallCommand;
 
-trait InstallCommandAskToStarRepoOnGitHub
+trait AskToStarRepoOnGitHub
 {
     protected ?string $starRepo = null;
 

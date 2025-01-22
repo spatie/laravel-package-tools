@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Concerns\InstallCommand;
 
 use Illuminate\Support\Str;
 
-trait InstallCommandServiceProviderInApp
+trait ServiceProviderInApp
 {
     protected bool $copyServiceProviderInApp = false;
 

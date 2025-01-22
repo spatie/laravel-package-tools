@@ -2,7 +2,7 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\InstallCommand;
 
-trait InstallCommandAskToRunMigrations
+trait AskToRunMigrations
 {
     protected bool $askToRunMigrations = false;
 

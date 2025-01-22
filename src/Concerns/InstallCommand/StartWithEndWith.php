@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Concerns\InstallCommand;
 
 use Closure;
 
-trait InstallCommandStartWithEndWith
+trait StartWithEndWith
 {
     public ?Closure $startWith = null;
     public ?Closure $endWith = null;
