@@ -26,7 +26,7 @@ it('publishes discovered migrations', function () {
         ->doesntExpectOutput('hey')
         ->assertExitCode(0);
 
-    assertMigrationPublished('create_another_laravel_package_tools_table.php');
+    assertMigrationPublished('migrations/create_another_laravel_package_tools_table.php');
 });
 
 it('can publish the migration without being stubbed', function () {
@@ -34,7 +34,15 @@ it('can publish the migration without being stubbed', function () {
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertExitCode(0);
 
-    assertMigrationPublished('create_regular_laravel_package_tools_table.php');
+    assertMigrationPublished('migrations/create_regular_laravel_package_tools_table.php');
+});
+
+it('doesn\'t publish sub-folders', function () {
+    $this
+        ->artisan('vendor:publish --tag=package-tools-migrations')
+        ->assertExitCode(0);
+
+    assertMigrationNotPublished('migrations/folder/create_laravel_package_tools_table_in_the_folder.php');
 });
 
 it('does not overwrite the existing migration', function () {
