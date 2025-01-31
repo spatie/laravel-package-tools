@@ -12,12 +12,9 @@ trait HasConfigs
     {
         $configFileNames = collect($configFileNames)->flatten()->toArray();
 
-        if (count($configFileNames) == 1 and $configFileNames[0] == '*')
-        {
+        if (count($configFileNames) == 1 and $configFileNames[0] == '*') {
             return $this->discoversConfigs();
-        }
-        elseif (count($configFileNames) == 0)
-        {
+        } elseif (count($configFileNames) == 0) {
             $configFileNames = [$this->shortName()];
         }
 

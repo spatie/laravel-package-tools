@@ -26,5 +26,4 @@ trait HasTranslations
 
         return $this;
     }
-
 }

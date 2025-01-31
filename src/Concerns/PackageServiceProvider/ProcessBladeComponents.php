@@ -73,6 +73,7 @@ trait ProcessBladeComponents
             foreach (glob($path . '/*.php') as $file) {
                 if ($namespace = getNamespaceFromFile($file)) {
                     $namespaces[$prefix] = $namespace;
+
                     break;
                 }
             }
@@ -109,16 +110,18 @@ trait ProcessBladeComponents
         $tokens = PhpToken::tokenize(file_get_contents($file));
         $namespace = [];
         foreach ($tokens as $index => $token) {
-            if ($token->is(T_NAMESPACE) && $tokens[$index+2]->is(T_STRING)){
-                for ($i = $index+2 ;!$tokens[$i]->is(T_WHITESPACE);$i++){
-                    if ($tokens[$i]->text === ";"){
+            if ($token->is(T_NAMESPACE) && $tokens[$index + 2]->is(T_STRING)) {
+                for ($i = $index + 2 ;! $tokens[$i]->is(T_WHITESPACE);$i++) {
+                    if ($tokens[$i]->text === ";") {
                         continue;
                     }
                     $namespace[] = $tokens[$i]->text;
                 }
-                return implode('',$namespace)."\\";
+
+                return implode('', $namespace)."\\";
             }
         }
+
         return "";
     }
 }

@@ -10,8 +10,6 @@
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use function PHPUnit\Framework\assertEmpty;
-use function PHPUnit\Framework\assertFalse;
-use function PHPUnit\Framework\assertTrue;
 use Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\PackageServiceProviderTestCase;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -62,8 +60,10 @@ function assertMigrationsNotLoaded(string $vendorMigrationPath, ...$testFiles): 
         var_export($failures, true) . PHP_EOL . "Loaded: " . var_export($loadedFiles, true));
 }
 
-function get_loaded_migrations(string $vendorMigrationPath): array {
+function get_loaded_migrations(string $vendorMigrationPath): array
+{
     $vendorMigrationPath = realpath($vendorMigrationPath) . DIRECTORY_SEPARATOR;
+
     return collect(app('migrator')->paths())
         ->map(function (string $file) use ($vendorMigrationPath): string {
             return Str::replace('\\', '/', Str::after(realpath($file), $vendorMigrationPath));
@@ -103,8 +103,10 @@ function assertMigrationsNotPublished(...$testFiles): void
         var_export($failures, true) . PHP_EOL . "Published: " . var_export($publishedFiles, true));
 }
 
-function get_published_migrations(): array {
+function get_published_migrations(): array
+{
     $databasePath = realpath(database_path("migrations")) . DIRECTORY_SEPARATOR;
+
     return collect(File::allfiles($databasePath))
         ->map(function (SplFileInfo $file) use ($databasePath): string {
             return Str::replace('\\', '/', Str::after(realpath($file->getPathname()), $databasePath));
@@ -116,23 +118,28 @@ function get_published_migrations(): array {
 * Utility functions
 */
 
-function is_file_listed(array $listedFiles, string $testFile, bool $endsWith): bool {
+function is_file_listed(array $listedFiles, string $testFile, bool $endsWith): bool
+{
     $fileName = basename($testFile);
-    $filePath = substr($testFile, 0, -strlen($fileName)-1);
+    $filePath = substr($testFile, 0, -strlen($fileName) - 1);
+
     return local_array_any($listedFiles, function (string $file, int $ix) use ($filePath, $fileName, $endsWith) {
-            $fileBase = basename($file);
-            if (str_contains($file, '/') && substr($file, 0, -strlen($fileBase)-1) != $filePath) {
-                return false;
-            }
-            return $endsWith ? Str::endsWith($fileBase, $fileName) : Str::contains($fileBase, $fileName) ;
-        });
+        $fileBase = basename($file);
+        if (str_contains($file, '/') && substr($file, 0, -strlen($fileBase) - 1) != $filePath) {
+            return false;
+        }
+
+        return $endsWith ? Str::endsWith($fileBase, $fileName) : Str::contains($fileBase, $fileName) ;
+    });
 }
 
-function local_array_any(array $array, callable $callback): bool {
-    foreach ($array as $key=>$value) {
+function local_array_any(array $array, callable $callback): bool
+{
+    foreach ($array as $key => $value) {
         if ($callback($value, $key)) {
             return true;
         }
     }
+
     return false;
 }

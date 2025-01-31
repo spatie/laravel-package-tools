@@ -47,5 +47,4 @@ trait HasLivewire
 
         return $this;
     }
-
 }

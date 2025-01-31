@@ -1,8 +1,6 @@
 <?php
 
-use function PHPUnit\Framework\assertEquals;
 use Spatie\LaravelPackageTools\Package;
-use function Spatie\PestPluginTestTime\testTime;
 
 trait ConfigurePackageMigrationTest
 {

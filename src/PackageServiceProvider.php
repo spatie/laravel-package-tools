@@ -2,14 +2,13 @@
 
 namespace Spatie\LaravelPackageTools;
 
-use ReflectionClass;
-
 use Illuminate\Support\Facades\File;
+
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use Symfony\Component\Finder\SplFileInfo;
-
+use ReflectionClass;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessAssets;
+
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessBladeComponents;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessCommands;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessConfigs;
@@ -19,11 +18,12 @@ use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessMigrations
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessProviders;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessRoutes;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessTranslations;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViews;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewComposers;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViews;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewSharedData;
-
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
+
+use Symfony\Component\Finder\SplFileInfo;
 
 abstract class PackageServiceProvider extends ServiceProvider
 {
@@ -157,11 +157,12 @@ abstract class PackageServiceProvider extends ServiceProvider
     {
         return collect(File::allfiles($path))->map(function (SplFileInfo $file) use ($path): string {
             $relativePath = Str::after($file->getPathname(), $path);
-            foreach([".stub", ".php"] as $suffix) {
+            foreach ([".stub", ".php"] as $suffix) {
                 if (str_ends_with($relativePath, $suffix)) {
                     $relativePath = substr($relativePath, 0, -strlen($suffix));
                 }
             }
+
             return $relativePath;
         })->toArray();
     }

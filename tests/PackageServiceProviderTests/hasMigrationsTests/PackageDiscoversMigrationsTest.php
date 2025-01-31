@@ -2,9 +2,7 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
-use Illuminate\Support\Facades\File;
 use Spatie\LaravelPackageTools\Package;
-use function Spatie\PestPluginTestTime\testTime;
 
 trait ConfigurePackageDiscoverMigrationsTest
 {

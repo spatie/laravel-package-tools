@@ -14,5 +14,4 @@ trait HasViewComposers
 
         return $this;
     }
-
 }

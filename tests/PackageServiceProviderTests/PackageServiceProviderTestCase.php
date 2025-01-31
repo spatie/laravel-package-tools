@@ -2,7 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
-use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Spatie\LaravelPackageTools\Package;
@@ -84,7 +83,7 @@ abstract class PackageServiceProviderTestCase extends TestCase
                 continue;
             }
             collect(File::allFiles($basePath . $dir))->each(function (SplFileInfo $file) use ($basePath) {
-                if (!in_array(Str::replace('\\', '/', Str::after($file->getPathname(), $basePath)), $this->cleanExclusions)) {
+                if (! in_array(Str::replace('\\', '/', Str::after($file->getPathname(), $basePath)), $this->cleanExclusions)) {
                     if (! unlink($file->getPathname())) {
                         fwrite(STDERR, "Failed to delete: " . $file->getPathname() . PHP_EOL);
                     }

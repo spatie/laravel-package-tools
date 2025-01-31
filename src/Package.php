@@ -9,6 +9,7 @@ use Spatie\LaravelPackageTools\Concerns\Package\HasBladeComponents;
 use Spatie\LaravelPackageTools\Concerns\Package\HasCommands;
 use Spatie\LaravelPackageTools\Concerns\Package\HasConfigs;
 use Spatie\LaravelPackageTools\Concerns\Package\HasInertia;
+use Spatie\LaravelPackageTools\Concerns\Package\HasInstallCommand;
 use Spatie\LaravelPackageTools\Concerns\Package\HasLivewire;
 use Spatie\LaravelPackageTools\Concerns\Package\HasMigrations;
 use Spatie\LaravelPackageTools\Concerns\Package\HasProviders;
@@ -16,9 +17,8 @@ use Spatie\LaravelPackageTools\Concerns\Package\HasRoutes;
 use Spatie\LaravelPackageTools\Concerns\Package\HasTranslations;
 use Spatie\LaravelPackageTools\Concerns\Package\HasViewComposers;
 use Spatie\LaravelPackageTools\Concerns\Package\HasViews;
-use Spatie\LaravelPackageTools\Concerns\Package\HasViewSharedData;
 
-use Spatie\LaravelPackageTools\Concerns\Package\HasInstallCommand;
+use Spatie\LaravelPackageTools\Concerns\Package\HasViewSharedData;
 
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
@@ -109,5 +109,4 @@ final class Package
             $dir
         );
     }
-
 }

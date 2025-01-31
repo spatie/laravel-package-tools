@@ -19,7 +19,7 @@ trait HasInertia
     public function inertiaNamespace(): string
     {
         return $this->inertiaNamespace ?? $this->shortName();
-   }
+    }
 
     public function inertiaComponentsPath(?string $directory = null): string
     {

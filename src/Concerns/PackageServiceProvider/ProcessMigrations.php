@@ -3,7 +3,6 @@
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
 use Carbon\Carbon;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
@@ -73,6 +72,7 @@ trait ProcessMigrations
         }
 
         $timestamp = $now->format('Y_m_d_His_');
+
         return $migrationPath . $timestamp . $migrationFileName;
     }
 }

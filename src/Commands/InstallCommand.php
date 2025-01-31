@@ -2,15 +2,13 @@
 
 namespace Spatie\LaravelPackageTools\Commands;
 
-use Closure;
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
-use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Concerns\InstallCommand\AskToRunMigrations;
 use Spatie\LaravelPackageTools\Concerns\InstallCommand\AskToStarRepoOnGitHub;
 use Spatie\LaravelPackageTools\Concerns\InstallCommand\Publishes;
 use Spatie\LaravelPackageTools\Concerns\InstallCommand\ServiceProviderInApp;
 use Spatie\LaravelPackageTools\Concerns\InstallCommand\StartWithEndWith;
+use Spatie\LaravelPackageTools\Package;
 
 class InstallCommand extends Command
 {
