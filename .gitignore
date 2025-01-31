@@ -9,3 +9,4 @@ docs
 phpunit.xml
 psalm.xml
 vendor
+/.phpunit.cache

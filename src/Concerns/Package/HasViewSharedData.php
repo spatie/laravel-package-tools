@@ -6,7 +6,7 @@ trait HasViewSharedData
 {
     public array $sharedViewData = [];
 
-    public function sharesDataWithAllViews(string $name, $value): static
+    public function sharesDataWithAllViews(string $name, $value): self
     {
         $this->sharedViewData[$name] = $value;
 

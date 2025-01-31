@@ -6,13 +6,9 @@ trait HasViewComposers
 {
     public array $viewComposers = [];
 
-    public function hasViewComposer($view, $viewComposer): static
+    public function hasViewComposer($view, $viewComposer): self
     {
-        if (! is_array($view)) {
-            $view = [$view];
-        }
-
-        foreach ($view as $viewName) {
+        foreach (collect($view)->flatten()->toArray() as $viewName) {
             $this->viewComposers[$viewName] = $viewComposer;
         }
 

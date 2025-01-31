@@ -4,12 +4,11 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        php: [8.0, 8.1, 8.2]
+        php: [8.0, 8.1, 8.2, 8.3, 8.4]
         laravel: [11.*, 10.*, 9.*]
         stability: [prefer-lowest, prefer-stable]
         include:
@@ -20,12 +19,20 @@ jobs:
           - laravel: 11.*
             testbench: 9.*
         exclude:
+          - laravel: 9.*
+            php: 8.3
+          - laravel: 9.*
+            php: 8.4
           - laravel: 10.*
             php: 8.0
+          - laravel: 10.*
+            php: 8.4
           - laravel: 11.*
             php: 8.0
           - laravel: 11.*
             php: 8.1
+
+    runs-on: ${{ matrix.os }}
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
