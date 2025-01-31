@@ -55,14 +55,14 @@ abstract class PackageServiceProviderTestCase extends TestCase
 
         testTime()->freeze('2020-01-01 00:00:00');
 
-        $this->deletePublishedFiles();
         $this->createApplication();
     }
 
     protected function tearDown(): void
     {
-        $this->deletePublishedFiles();
-        $this->deleteMigrations();
+        $this
+            ->deletePublishedFiles()
+            ->clearServiceProviderStaticLists();
 
         parent::tearDown();
     }
@@ -85,25 +85,31 @@ abstract class PackageServiceProviderTestCase extends TestCase
             }
             collect(File::allFiles($basePath . $dir))->each(function (SplFileInfo $file) use ($basePath) {
                 if (!in_array(Str::replace('\\', '/', Str::after($file->getPathname(), $basePath)), $this->cleanExclusions)) {
-                    unlink($file->getPathname());
+                    if (! unlink($file->getPathname())) {
+                        fwrite(STDERR, "Failed to delete: " . $file->getPathname() . PHP_EOL);
+                    }
                 }
             });
         }
 
-        /* Clear publishes from previous tests */
-        ServiceProvider::$publishes[ServiceProvider::class] = [];
-
         return $this;
     }
 
-    protected function deleteMigrations(): self
+    /* Clear all Laravel ServiceProvider static arrays which are not otherwise cleared between tests */
+    protected function clearServiceProviderStaticLists(): self
     {
-        /* Clear migrations from previous tests */
-        $migrator = app('migrator');
-        $reflection = new \ReflectionClass($migrator::class);
-        $property = $reflection->getProperty('paths');
-        $property->setAccessible(true);
-        $property->setvalue($migrator, []);
+        ServiceProvider::$publishes = [];
+        ServiceProvider::$publishGroups = [];
+        /* Following don't exist in Laravel 9.x or 10.x */
+        if (property_exists(ServiceProvider::class, 'optimizeCommands')) {
+            ServiceProvider::$optimizeCommands = [];
+            ServiceProvider::$optimizeClearCommands = [];
+
+            $reflection = new \ReflectionClass(ServiceProvider::class);
+            $property = $reflection->getProperty('publishableMigrationPaths');
+            $property->setAccessible(true);
+            $property->setvalue(ServiceProvider::class, []);
+        }
 
         return $this;
     }
