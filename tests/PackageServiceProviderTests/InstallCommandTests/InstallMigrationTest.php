@@ -10,7 +10,7 @@ trait ConfigureMigrationTest
         $package
             ->name('laravel-package-tools')
             ->hasConfigFile()
-            ->hasMigration('create_another_laravel_package_tools_table')
+            ->hasMigration('create_table_explicit_normal')
             ->hasInstallCommand(function (InstallCommand $command) {
                 $command->publishMigrations();
             });
@@ -24,5 +24,5 @@ it('can install the migrations', function () {
         ->artisan('package-tools:install')
         ->assertSuccessful();
 
-    assertMigrationPublished('create_another_laravel_package_tools_table.php');
+    assertMigrationsPublished('create_table_explicit_normal');
 });
