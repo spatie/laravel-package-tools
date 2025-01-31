@@ -2,7 +2,7 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-trait ProcessPackageAssets
+trait ProcessAssets
 {
     protected function bootPackageAssets(): self
     {
@@ -10,11 +10,8 @@ trait ProcessPackageAssets
             return $this;
         }
 
-        $vendorAssets = $this->package->basePath('/../resources/dist');
-        $appAssets = public_path("vendor/{$this->package->shortName()}");
-
         $this->publishes(
-            [$vendorAssets => $appAssets],
+            [$this->package->assetsPath() => public_path("vendor/{$this->package->shortName()}")],
             "{$this->package->shortName()}-assets"
         );
 

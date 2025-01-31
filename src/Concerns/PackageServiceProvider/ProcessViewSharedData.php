@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
 use Illuminate\Support\Facades\View;
 
-trait ProcessPackageViewSharedData
+trait ProcessViewSharedData
 {
     protected function bootPackageViewSharedData(): self
     {

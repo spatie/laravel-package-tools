@@ -4,27 +4,11 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasMigrations
 {
-    public bool $runsMigrations = false;
-
-    public bool $discoversMigrations = false;
-
-    public ?string $migrationsPath = null;
 
     public array $migrationFileNames = [];
-
-    public function runsMigrations(bool $runsMigrations = true): self
-    {
-        $this->runsMigrations = $runsMigrations;
-
-        return $this;
-    }
-
-    public function hasMigration(string $migrationFileName): self
-    {
-        $this->migrationFileNames[] = $migrationFileName;
-
-        return $this;
-    }
+    public bool $loadMigrations = false;
+    public bool $discoversMigrations = false;
+    protected string $migrationsPath = '/../database/migrations';
 
     public function hasMigrations(...$migrationFileNames): self
     {
@@ -36,11 +20,43 @@ trait HasMigrations
         return $this;
     }
 
-    public function discoversMigrations(bool $discoversMigrations = true, string $path = '/database/migrations'): self
+    /* Legacy backwards compatibility */
+    public function hasMigration(...$migrationFileNames): self
     {
-        $this->discoversMigrations = $discoversMigrations;
+        return $this->hasMigrations(...$migrationFileNames);
+    }
+
+    public function migrationsPath(?string $directory = null): string
+    {
+        return $this->buildDirectory($this->migrationsPath, $directory);
+    }
+
+    public function setMigrationsPath(string $path): self
+    {
+        $this->verifyDir($this->buildDirectory($path));
         $this->migrationsPath = $path;
 
         return $this;
+    }
+
+    public function discoversMigrations(bool $discoversMigrations = true, ?string $path = null): self
+    {
+        $this->discoversMigrations = $discoversMigrations;
+        $this->migrationsPath = $path ?? $this->migrationsPath;
+
+        return $this;
+    }
+
+    public function loadMigrations(bool $loadMigrations = true): self
+    {
+        $this->loadMigrations = $loadMigrations;
+
+        return $this;
+    }
+
+    /* Legacy backwards compatibility */
+    public function runsMigrations(bool $runsMigrations = true): self
+    {
+        return $this->loadMigrations($runsMigrations);
     }
 }

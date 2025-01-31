@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
 use Illuminate\Support\Facades\View;
 
-trait ProcessPackageViewComposers
+trait ProcessViewComposers
 {
     protected function bootPackageViewComposers(): self
     {

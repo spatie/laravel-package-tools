@@ -2,47 +2,52 @@
 
 namespace Spatie\LaravelPackageTools;
 
-use Illuminate\Support\ServiceProvider;
 use ReflectionClass;
 
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageAssets;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageCommands;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageConfigs;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageConsoleCommands;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageInertia;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageMigrations;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageProviders;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageRoutes;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageTranslations;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageViewComponents;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageViewComposers;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageViews;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessPackageViewSharedData;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
+use Symfony\Component\Finder\SplFileInfo;
+
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessAssets;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessBladeComponents;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessCommands;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessConfigs;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessInertia;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessLivewire;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessMigrations;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessProviders;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessRoutes;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessTranslations;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViews;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewComposers;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewSharedData;
 
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
 abstract class PackageServiceProvider extends ServiceProvider
 {
-    use ProcessPackageAssets;
-    use ProcessPackageCommands;
-    use ProcessPackageConsoleCommands;
-    use ProcessPackageConfigs;
-    use ProcessPackageInertia;
-    use ProcessPackageMigrations;
-    use ProcessPackageProviders;
-    use ProcessPackageRoutes;
-    use ProcessPackageTranslations;
-    use ProcessPackageViews;
-    use ProcessPackageViewComponents;
-    use ProcessPackageViewComposers;
-    use ProcessPackageViewSharedData;
+    use ProcessAssets;
+    use ProcessBladeComponents;
+    use ProcessCommands;
+    use ProcessConfigs;
+    use ProcessInertia;
+    use ProcessLivewire;
+    use ProcessMigrations;
+    use ProcessProviders;
+    use ProcessRoutes;
+    use ProcessTranslations;
+    use ProcessViews;
+    use ProcessViewComposers;
+    use ProcessViewSharedData;
+
 
     protected Package $package;
 
     abstract public function configurePackage(Package $package): void;
 
     /** @throws InvalidPackage */
-    public function register()
+    public function register(): self
     {
         $this->registeringPackage();
 
@@ -50,6 +55,8 @@ abstract class PackageServiceProvider extends ServiceProvider
         $this->package->setBasePath($this->getPackageBaseDir());
 
         $this->configurePackage($this->package);
+
+        /* Validate mandatory attributes */
         if (empty($this->package->name)) {
             throw InvalidPackage::nameIsRequired();
         }
@@ -73,35 +80,31 @@ abstract class PackageServiceProvider extends ServiceProvider
         return dirname($reflector->getFileName());
     }
 
-    public function boot()
+    public function boot(): self
     {
         $this->bootingPackage();
 
         $this
             ->bootPackageAssets()
+            ->bootPackageBladeComponents()
+            ->bootPackageBladeComponentNamespaces()
+            ->bootPackageBladeComponentPaths()
             ->bootPackageCommands()
             ->bootPackageConsoleCommands()
             ->bootPackageConfigs()
             ->bootPackageInertia()
+            ->bootPackageLivewire()
             ->bootPackageMigrations()
             ->bootPackageProviders()
             ->bootPackageRoutes()
             ->bootPackageTranslations()
             ->bootPackageViews()
-            ->bootPackageViewComponents()
             ->bootPackageViewComposers()
             ->bootPackageViewSharedData();
 
         $this->packageBooted();
 
         return $this;
-    }
-
-    public function packageView(?string $namespace): ?string
-    {
-        return is_null($namespace)
-            ? $this->package->shortName()
-            : $this->package->viewNamespace;
     }
 
     /* Lifecycle hooks */
@@ -124,5 +127,36 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     public function packageBooted(): void
     {
+    }
+
+    /* Utility methods */
+
+    private function phpOrStub(string $filename): string
+    {
+        if (is_file($file = $filename . '.php')) {
+            return $file;
+        }
+
+        if (is_file($file = $filename . '.php.stub')) {
+            return $file;
+        }
+
+        return "";
+    }
+
+    protected function existingFile(string $file): string
+    {
+        if (is_file($file)) {
+            return $file;
+        }
+
+        return "";
+    }
+
+    protected static function convertDiscovers(string $path): array
+    {
+        return collect(File::allfiles($path))->map(function (SplFileInfo $file) use ($path): string {
+            return Str::replaceEnd('.php', '', Str::replaceEnd('.php.stub', '', Str::after($file->getPathname(), $path)));
+        })->toArray();
     }
 }
