@@ -156,7 +156,13 @@ abstract class PackageServiceProvider extends ServiceProvider
     protected static function convertDiscovers(string $path): array
     {
         return collect(File::allfiles($path))->map(function (SplFileInfo $file) use ($path): string {
-            return Str::replaceEnd('.php', '', Str::replaceEnd('.php.stub', '', Str::after($file->getPathname(), $path)));
+            $relativePath = Str::after($file->getPathname(), $path);
+            foreach([".stub", ".php"] as $suffix) {
+                if (str_ends_with($relativePath, $suffix)) {
+                    $relativePath = substr($relativePath, 0, -strlen($suffix));
+                }
+            }
+            return $relativePath;
         })->toArray();
     }
 }

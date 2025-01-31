@@ -119,11 +119,20 @@ function get_published_migrations(): array {
 function is_file_listed(array $listedFiles, string $testFile, bool $endsWith): bool {
     $fileName = basename($testFile);
     $filePath = substr($testFile, 0, -strlen($fileName)-1);
-    return array_any($listedFiles, function (string $file, int $ix) use ($filePath, $fileName, $endsWith) {
+    return local_array_any($listedFiles, function (string $file, int $ix) use ($filePath, $fileName, $endsWith) {
             $fileBase = basename($file);
             if (str_contains($file, '/') && substr($file, 0, -strlen($fileBase)-1) != $filePath) {
                 return false;
             }
             return $endsWith ? Str::endsWith($fileBase, $fileName) : Str::contains($fileBase, $fileName) ;
         });
+}
+
+function local_array_any(array $array, callable $callback): bool {
+    foreach ($array as $key=>$value) {
+        if ($callback($value, $key)) {
+            return true;
+        }
+    }
+    return false;
 }
