@@ -45,7 +45,7 @@ trait HasCommands
         return $this;
     }
 
-    public function hasConsoleCommandsByPath(... $paths): self
+    public function hasConsoleCommandsByPath(...$paths): self
     {
         $this->verifyRelativeDirs(__FUNCTION__, $paths);
 

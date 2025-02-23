@@ -21,7 +21,6 @@ use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewCompos
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViews;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewSharedData;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
-use Symfony\Component\Finder\SplFileInfo;
 
 abstract class PackageServiceProvider extends ServiceProvider
 {
@@ -153,17 +152,17 @@ abstract class PackageServiceProvider extends ServiceProvider
     // Get namespace for directory from the first class file in the directory
     protected static function getNamespaceOfDirectory($path): string
     {
-            foreach (glob($path . '/*.php') as $file) {
-                if ($namespace = self::getNamespaceFromFile($file)) {
-                    return $namespace;
-                }
+        foreach (glob($path . '/*.php') as $file) {
+            if ($namespace = self::getNamespaceFromFile($file)) {
+                return $namespace;
             }
+        }
 
-            throw InvalidPackage::cannotDetermineNamespace(
-                $this->package->name,
-                'hasBladeComponentsByPath',
-                $path
-            );
+        throw InvalidPackage::cannotDetermineNamespace(
+            $this->package->name,
+            'hasBladeComponentsByPath',
+            $path
+        );
     }
 
     protected static function getNamespaceFromFile($file): string
