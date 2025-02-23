@@ -8,41 +8,36 @@ trait HasMigrations
     public array $migrationFileNames = [];
     public bool $loadMigrations = false;
     public bool $discoversMigrations = false;
-    protected string $migrationsPath = '/../database/migrations';
+    public array $migrationPaths = [];
+    protected ?string $migrationsPath = '/../database/migrations';
 
-    public function hasMigrations(...$migrationFileNames): self
+    public function hasMigrationsByName(...$migrationFileNames): self
     {
         $this->migrationFileNames = array_merge(
             $this->migrationFileNames,
             collect($migrationFileNames)->flatten()->toArray()
         );
 
-        return $this;
-    }
+        $this->migrationsPath = $this->verifyDirOrNull($this->migrationsPath);
 
-    /* Legacy backwards compatibility */
-    public function hasMigration(...$migrationFileNames): self
-    {
-        return $this->hasMigrations(...$migrationFileNames);
+        return $this;
     }
 
     public function migrationsPath(?string $directory = null): string
     {
-        return $this->buildDirectory($this->migrationsPath, $directory);
+        return $this->verifyPathSet(__FUNCTION__, $this->migrationsPath, $directory);
     }
 
     public function setMigrationsPath(string $path): self
     {
-        $this->verifyDir($this->buildDirectory($path));
-        $this->migrationsPath = $path;
+        $this->migrationsPath = $this->verifyRelativeDir(__FUNCTION__, $path);
 
         return $this;
     }
 
-    public function discoversMigrations(bool $discoversMigrations = true, ?string $path = null): self
+    public function hasMigrationsByPath(string $path): self
     {
-        $this->discoversMigrations = $discoversMigrations;
-        $this->migrationsPath = $path ?? $this->migrationsPath;
+        $this->migrationPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path);
 
         return $this;
     }
@@ -55,6 +50,26 @@ trait HasMigrations
     }
 
     /* Legacy backwards compatibility */
+    public function hasMigration(...$migrationFileNames): self
+    {
+        return $this->hasMigrationsByName(...$migrationFileNames);
+    }
+
+    public function hasMigrations(...$migrationFileNames): self
+    {
+        return $this->hasMigrationsByName(...$migrationFileNames);
+    }
+
+    public function discoversMigrations(bool $discoversMigrations = true, ?string $path = null): self
+    {
+        $this->discoversMigrations = $discoversMigrations;
+        if ($discoversMigrations and ! is_null($path)) {
+            return $this->hasMigrationsByPath($path);
+        }
+
+        return $this;
+    }
+
     public function runsMigrations(bool $runsMigrations = true): self
     {
         return $this->loadMigrations($runsMigrations);

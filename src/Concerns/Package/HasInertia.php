@@ -6,12 +6,14 @@ trait HasInertia
 {
     public bool $hasInertiaComponents = false;
     protected ?string $inertiaNamespace = null;
-    protected string $inertiaComponentsPath = '/../resources/js/Pages';
+    protected ?string $inertiaComponentsPath = '/../resources/js/Pages';
 
     public function hasInertiaComponents(?string $namespace = null): self
     {
         $this->hasInertiaComponents = true;
         $this->inertiaNamespace = $namespace;
+
+        $this->inertiaComponentsPath = $this->verifyDirOrNull($this->inertiaComponentsPath);
 
         return $this;
     }
@@ -23,13 +25,12 @@ trait HasInertia
 
     public function inertiaComponentsPath(?string $directory = null): string
     {
-        return $this->buildDirectory($this->inertiaComponentsPath, $directory);
+        return $this->verifyPathSet(__FUNCTION__, $this->inertiaComponentsPath, $directory);
     }
 
     public function setInertiaComponentsPath(string $path): self
     {
-        $this->verifyDir($this->buildDirectory($path));
-        $this->inertiaComponentsPath = $path;
+        $this->inertiaComponentsPath = $this->verifyRelativeDir(__FUNCTION__, $path);
 
         return $this;
     }

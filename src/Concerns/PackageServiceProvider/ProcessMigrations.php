@@ -3,9 +3,12 @@
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
+
+use Symfony\Component\Finder\SplFileInfo;
 
 trait ProcessMigrations
 {
@@ -20,7 +23,7 @@ trait ProcessMigrations
                 );
             }
 
-            $this->package->migrationFileNames = $this->convertDiscovers($this->package->migrationsPath());
+            $this->package->migrationFileNames = self::convertDiscovers($this->package->migrationsPath());
         }
 
         if (empty($this->package->migrationFileNames)) {
@@ -74,5 +77,19 @@ trait ProcessMigrations
         $timestamp = $now->format('Y_m_d_His_');
 
         return $migrationPath . $timestamp . $migrationFileName;
+    }
+
+    protected static function convertDiscovers(string $path): array
+    {
+        return collect(File::allfiles($path))->map(function (SplFileInfo $file) use ($path): string {
+            $relativePath = Str::after($file->getPathname(), $path);
+            foreach ([".stub", ".php"] as $suffix) {
+                if (str_ends_with($relativePath, $suffix)) {
+                    $relativePath = substr($relativePath, 0, -strlen($suffix));
+                }
+            }
+
+            return $relativePath;
+        })->toArray();
     }
 }

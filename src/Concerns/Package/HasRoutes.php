@@ -6,41 +6,40 @@ trait HasRoutes
 {
     public array $routeFileNames = [];
     public bool $discoversRoutes = false;
-    protected string $routesPath = '/../routes';
+    protected ?string $routesPath = '/../routes';
 
-    public function hasRoutes(...$routeFileNames): self
+    public function hasRoutesByName(...$routeFileNames): self
     {
         $this->routeFileNames = array_merge(
             $this->routeFileNames,
             collect($routeFileNames)->flatten()->toArray()
         );
 
-        return $this;
-    }
+        $this->routesPath = $this->verifyDirOrNull($this->routesPath);
 
-    public function hasRoute(...$routeFileNames): self
-    {
-        return $this->hasRoutes(...$routeFileNames);
+        return $this;
     }
 
     public function routesPath(?string $directory = null): string
     {
-        return $this->buildDirectory($this->routesPath, $directory);
+        return $this->verifyPathSet(__FUNCTION__, $this->routesPath, $directory);
     }
 
     public function setRoutesPath(string $path): self
     {
-        $this->verifyDir($this->buildDirectory($path));
-        $this->routesPath = $path;
+        $this->routesPath = $this->verifyRelativeDir(__FUNCTION__, $path);
 
         return $this;
     }
 
-    public function discoversRoutes(bool $discoversRoutes = true, ?string $path = null): self
+    /* Legacy backwards compatibility */
+    public function hasRoute(...$routeFileNames): self
     {
-        $this->discoversRoutes = $discoversRoutes;
-        $this->routesPath = $path ?? $this->routesPath;
+        return $this->hasRoutesByName(...$routeFileNames);
+    }
 
-        return $this;
+    public function hasRoutes(...$routeFileNames): self
+    {
+        return $this->hasRoutesByName(...$routeFileNames);
     }
 }

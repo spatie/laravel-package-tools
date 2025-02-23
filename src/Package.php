@@ -3,11 +3,11 @@
 namespace Spatie\LaravelPackageTools;
 
 use Illuminate\Support\Str;
-
 use Spatie\LaravelPackageTools\Concerns\Package\HasAssets;
-use Spatie\LaravelPackageTools\Concerns\Package\HasBladeComponents;
+use Spatie\LaravelPackageTools\Concerns\Package\HasBlade;
 use Spatie\LaravelPackageTools\Concerns\Package\HasCommands;
 use Spatie\LaravelPackageTools\Concerns\Package\HasConfigs;
+use Spatie\LaravelPackageTools\Concerns\Package\HasEvents;
 use Spatie\LaravelPackageTools\Concerns\Package\HasInertia;
 use Spatie\LaravelPackageTools\Concerns\Package\HasInstallCommand;
 use Spatie\LaravelPackageTools\Concerns\Package\HasLivewire;
@@ -17,17 +17,16 @@ use Spatie\LaravelPackageTools\Concerns\Package\HasRoutes;
 use Spatie\LaravelPackageTools\Concerns\Package\HasTranslations;
 use Spatie\LaravelPackageTools\Concerns\Package\HasViewComposers;
 use Spatie\LaravelPackageTools\Concerns\Package\HasViews;
-
 use Spatie\LaravelPackageTools\Concerns\Package\HasViewSharedData;
-
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
 final class Package
 {
     use HasAssets;
-    use HasBladeComponents;
+    use HasBlade;
     use HasCommands;
     use HasConfigs;
+    use HasEvents;
     use HasInertia;
     use HasLivewire;
     use HasMigrations;
@@ -62,7 +61,7 @@ final class Package
 
     public function setBasePath(string $path): self
     {
-        $this->verifyDir($path);
+        $this->verifyDir(__FUNCTION__, $path);
         $this->basePath = $path;
 
         return $this;
@@ -70,12 +69,12 @@ final class Package
 
     /* Utility methods */
 
-    private function buildDirectory(string $path, ?string $directory): string
+    public function buildDirectory(string $path, ?string $directory = null): string
     {
         return $this->appendDirectory($this->basePath($path), $directory);
     }
 
-    private function appendDirectory(string $basePath, ?string $directory): string
+    private function appendDirectory(string $basePath, ?string $directory = null): string
     {
         if ($directory === null) {
             return $basePath;
@@ -84,29 +83,78 @@ final class Package
         return $basePath . DIRECTORY_SEPARATOR . ltrim($directory, DIRECTORY_SEPARATOR);
     }
 
-    protected function verifyFile(string ...$files): string
+    public function verifyClassNames(string $method, ...$classes): void
     {
-        foreach (collect($files)->flatten()->toArray() as $file) {
-            if (is_file($file)) {
-                return $file;
+        /* Avoid autoloading classes if production */
+        if (! env('APP_DEBUG', false)) {
+            return;
+        }
+
+        $classes = collect($classes)->flatten()->toArray();
+        foreach ($classes as $class) {
+            if (! class_exists($class)) {
+                throw InvalidPackage::classDoesNotExist(
+                    $this->name,
+                    $method,
+                    $class
+                );
             }
         }
-
-        throw InvalidPackage::FileDoesNotExist(
-            $this->package->name,
-            $file
-        );
     }
 
-    protected function verifyDir(string $dir): string
+    private function verifyFiles(string $method, string ...$files): void
     {
-        if (is_dir($dir)) {
-            return $dir;
+        foreach (collect($files)->flatten()->toArray() as $file) {
+            if (! is_file($this->buildDirectory($file))) {
+                throw InvalidPackage::fileDoesNotExist(
+                    $this->name,
+                    $method,
+                    $file
+                );
+            }
+        }
+    }
+
+    private function verifyDir(string $method, string $dir): void
+    {
+        if (! is_dir($dir)) {
+            throw InvalidPackage::dirDoesNotExist(
+                $this->name,
+                $method,
+                $dir
+            );
+        }
+    }
+
+    private function verifyRelativeDir(string $method, string $dir): string
+    {
+        $this->verifyDir($method, $this->buildDirectory($dir));
+        return $dir;
+    }
+
+    private function verifyRelativeDirs(string $method, array $dirs): void
+    {
+        foreach ($dirs as $dir) {
+            $this->verifyDir($method, $this->buildDirectory($dir));
+        }
+    }
+
+    private function verifyDirOrNull(string $dir): string
+    {
+        return is_dir($this->buildDirectory($dir)) ? $dir : null;
+    }
+
+    private function verifyPathSet(string $method, string $path, ?string $subpath = null): string
+    {
+        if (! $path) {
+            throw InvalidPackage::defaultPathDoesNotExist(
+                $this->name,
+                __FUNCTION__
+            );
         }
 
-        throw InvalidPackage::DirDoesNotExist(
-            $this->package->name,
-            $dir
-        );
+        return $this->buildDirectory($path, $subpath);
     }
+
+
 }

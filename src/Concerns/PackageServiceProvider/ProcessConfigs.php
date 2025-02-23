@@ -2,31 +2,26 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
+use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
+
 trait ProcessConfigs
 {
     public function registerPackageConfigs(): self
     {
-        if ($this->package->discoversConfigs) {
-            if (! empty($this->package->configFileNames)) {
-                throw InvalidPackage::conflictingMethods(
-                    $this->package->name,
-                    'hasConfigs',
-                    'discoversConfigs'
-                );
-            }
-
-            $this->package->configFileNames = $this->convertDiscovers($this->package->configPath());
-        }
-
         if (empty($this->package->configFileNames)) {
             return $this;
         }
 
         foreach ($this->package->configFileNames as $configFileName) {
-            $this->mergeConfigFrom(
-                $this->phpOrStub($this->package->configPath("{$configFileName}")),
-                $configFileName
-            );
+            /**
+             * Laravel will only load/merge config files ending in .php so we cannot load or merge config .stub files
+             **/
+            if (is_file($cFN = $this->package->configPath("{$configFileName}.php"))) {
+                $this->mergeConfigFrom(
+                    $cFN,
+                    $configFileName
+                );
+            }
         }
 
         return $this;
@@ -40,10 +35,18 @@ trait ProcessConfigs
 
         $shortName = $this->package->shortName();
         foreach ($this->package->configFileNames as $configFileName) {
-            $this->publishes(
-                [$this->phpOrStub($this->package->configPath("{$configFileName}")) => config_path("{$configFileName}.php")],
-                "{$shortName}-config"
-            );
+            if ($cFN = $this->phpOrStub($this->package->configPath($configFileName))) {
+                $this->publishes(
+                    [$cFN => config_path("{$configFileName}.php")],
+                    "{$shortName}-config"
+                );
+            } else {
+                throw InvalidPackage::filenameNeitherPhpNorStub(
+                    $this->package->name,
+                    'Config',
+                    $configFileName
+                );
+            }
         }
 
         return $this;

@@ -4,10 +4,24 @@ namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
 use PhpToken;
 use ReflectionClass;
+use Illuminate\Support\Facades\Blade;
 
-trait ProcessBladeComponents
+trait ProcessBlade
 {
-    protected function bootPackageBladeComponents(): self
+    protected function bootPackageBlade(): self
+    {
+        $this
+            ->bootPackageBladeComponentsByClass()
+            ->bootPackageBladeComponentsByNamespace()
+            ->bootPackageBladeComponentsByPath()
+            ->bootPackageBladeDirectives()
+            ->bootPackageBladeEchos()
+            ->bootPackageBladeIfs();
+
+        return $this;
+    }
+
+    protected function bootPackageBladeComponentsByClass(): self
     {
         if (empty($this->package->bladeComponents)) {
             return $this;
@@ -40,45 +54,41 @@ trait ProcessBladeComponents
         return $this;
     }
 
-    protected function bootPackageBladeComponentNamespaces(): self
+    protected function bootPackageBladeComponentsByNamespace(): self
     {
         if (empty($this->package->bladeComponentNamespaces)) {
             return $this;
         }
 
-        return $this->bladeLoadComponentNamespaces($this->package->bladeComponentNamespaces);
+        foreach ($this->package->bladeComponentNamespaces as $prefix => $namespace) {
+            Blade::componentNamespace($namespace, $prefix);
+        }
+
+        return $this;
 
         /**
          * Ideally this method would also publish the files in a namespace,
          * however even though it is easy to get the path of an object using reflection,
-         * it is not easy to discover an object in a namespace,
+         * it is not easy to discover an object in a namespace in order to determine the path,
          * and so not easy to determine the path associated with a namespace.
          *
          * If needed, this might be possible in the future by querying composer autoloads,
-         * but for the moment this is a documented restruction.
+         * but for the moment this is a documented restriction.
          **/
 
     }
 
-    protected function bootPackageBladeComponentPaths(): self
+    protected function bootPackageBladeComponentsByPath(): self
     {
         if (empty($this->package->bladeComponentPaths)) {
             return $this;
         }
 
-        $namespaces = [];
         foreach ($this->package->bladeComponentPaths as $prefix => $path) {
             // Get namespace for directory from the first class file in the directory
             // Load the namespace
-            foreach (glob($path . '/*.php') as $file) {
-                if ($namespace = getNamespaceFromFile($file)) {
-                    $namespaces[$prefix] = $namespace;
-
-                    break;
-                }
-            }
+            Blade::componentNamespace(self::getNamespaceOfDirectory($path), $prefix);
         }
-        $this->bladeLoadComponentNamespaces($namespaces);
 
         if (! $this->app->runningInConsole()) {
             return $this;
@@ -96,32 +106,42 @@ trait ProcessBladeComponents
         return $this;
     }
 
-    private function bladeLoadComponentNamespaces(array $namespaces): self
+    protected function bootPackageBladeDirectives(): self
     {
-        foreach ($namespaces as $prefix => $namespace) {
-            Blade::componentNamespace($namespace, $prefix);
+        if (empty($this->package->bladeDirectives)) {
+            return $this;
+        }
+
+        foreach ($this->package->bladeEchos as $name=>$callable) {
+            Blade::directive($name, $callable);
         }
 
         return $this;
     }
 
-    private static function getNamespaceFromFile($file): string
+    protected function bootPackageBladeEchos(): self
     {
-        $tokens = PhpToken::tokenize(file_get_contents($file));
-        $namespace = [];
-        foreach ($tokens as $index => $token) {
-            if ($token->is(T_NAMESPACE) && $tokens[$index + 2]->is(T_STRING)) {
-                for ($i = $index + 2 ;! $tokens[$i]->is(T_WHITESPACE);$i++) {
-                    if ($tokens[$i]->text === ";") {
-                        continue;
-                    }
-                    $namespace[] = $tokens[$i]->text;
-                }
-
-                return implode('', $namespace)."\\";
-            }
+        if (empty($this->package->bladeEchos)) {
+            return $this;
         }
 
-        return "";
+        foreach ($this->package->bladeEchos as $callable) {
+            Blade::stringable($callable);
+        }
+
+        return $this;
+    }
+
+    protected function bootPackageBladeIfs(): self
+    {
+        if (empty($this->package->bladeIfs)) {
+            return $this;
+        }
+
+        foreach ($this->package->bladeIfs as $name=>$callable) {
+            Blade::if($name, $callable);
+        }
+
+        return $this;
     }
 }

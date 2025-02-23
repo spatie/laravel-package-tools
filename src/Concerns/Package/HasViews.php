@@ -13,6 +13,8 @@ trait HasViews
         $this->hasViews = true;
         $this->viewNamespace = $namespace;
 
+        $this->viewsPath = $this->verifyDirOrNull($this->viewsPath);
+
         return $this;
     }
 
@@ -23,13 +25,12 @@ trait HasViews
 
     public function viewsPath(?string $directory = null): string
     {
-        return $this->buildDirectory($this->viewsPath, $directory);
+        return $this->verifyPathSet(__FUNCTION__, $this->viewsPath, $directory);
     }
 
     public function setViewsPath(string $path): self
     {
-        $this->verifyDir($this->buildDirectory($path));
-        $this->viewsPath = $path;
+        $this->viewsPath = $this->verifyRelativeDir(__FUNCTION__, $path);
 
         return $this;
     }

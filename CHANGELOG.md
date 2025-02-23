@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.19.0 - 2025-03-01
+
+* Major improvements by @Sophist-UK in https://github.com/spatie/laravel-package-tools/pull/158
+- Extend support to Events and Livewire
+- Extend defining hasX by paths rather than individual file names or classes (cf. discoverMigrations).
+  This avoids the need to list each item individually,
+  allowing you to simply specify a path from which all files will be loaded/published.
+- Allow setting alternative paths to standard ones for all hasX.
+- Make Package->method() names consistent hasXByClass/hasXByName/hasXByPath etc.
+- Provide comprehensive validations for files, paths, classes etc. existing and exceptions where they don't.
+- Provide full backwards compatibility
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.18.2...1.18.3
+
 ## 1.18.3 - 2025-01-22
 
 - avoid method name collisions

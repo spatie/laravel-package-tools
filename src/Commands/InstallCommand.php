@@ -3,6 +3,7 @@
 namespace Spatie\LaravelPackageTools\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use Spatie\LaravelPackageTools\Concerns\InstallCommand\AskToRunMigrations;
 use Spatie\LaravelPackageTools\Concerns\InstallCommand\AskToStarRepoOnGitHub;
 use Spatie\LaravelPackageTools\Concerns\InstallCommand\Publishes;
@@ -22,11 +23,11 @@ class InstallCommand extends Command
 
     public $hidden = true;
 
-    public function __construct(Package $package)
+    public function __construct(Package $package, ?string $command = 'install', ?string $description = null)
     {
-        $this->signature = $package->shortName() . ':install';
+        $this->signature = $package->shortName() . ':' . $command;
 
-        $this->description = 'Install ' . $package->name;
+        $this->description ??= Str::title($command) . ' ' . $package->name;
 
         $this->package = $package;
 

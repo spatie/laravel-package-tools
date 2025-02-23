@@ -2,22 +2,12 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
+use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
+
 trait ProcessRoutes
 {
     protected function bootPackageRoutes(): self
     {
-
-        if ($this->package->discoversRoutes) {
-            if (! empty($this->package->routeFileNames)) {
-                throw InvalidPackage::conflictingMethods(
-                    $this->package->name,
-                    'hasRoutes',
-                    'discoversRoutes'
-                );
-            }
-
-            $this->package->routeFileNames = $this->convertDiscovers($this->package->routesPath());
-        }
 
         if (empty($this->package->routeFileNames)) {
             return $this;

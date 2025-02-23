@@ -3,15 +3,14 @@
 namespace Spatie\LaravelPackageTools;
 
 use Illuminate\Support\Facades\File;
-
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessAssets;
-
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessBladeComponents;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessBlade;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessCommands;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessConfigs;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessEvents;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessInertia;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessLivewire;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessMigrations;
@@ -22,15 +21,15 @@ use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewCompos
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViews;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewSharedData;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
-
 use Symfony\Component\Finder\SplFileInfo;
 
 abstract class PackageServiceProvider extends ServiceProvider
 {
     use ProcessAssets;
-    use ProcessBladeComponents;
+    use ProcessBlade;
     use ProcessCommands;
     use ProcessConfigs;
+    use ProcessEvents;
     use ProcessInertia;
     use ProcessLivewire;
     use ProcessMigrations;
@@ -86,12 +85,10 @@ abstract class PackageServiceProvider extends ServiceProvider
 
         $this
             ->bootPackageAssets()
-            ->bootPackageBladeComponents()
-            ->bootPackageBladeComponentNamespaces()
-            ->bootPackageBladeComponentPaths()
+            ->bootPackageBlade()
             ->bootPackageCommands()
-            ->bootPackageConsoleCommands()
             ->bootPackageConfigs()
+            ->bootPackageEvents()
             ->bootPackageInertia()
             ->bootPackageLivewire()
             ->bootPackageMigrations()
@@ -153,17 +150,74 @@ abstract class PackageServiceProvider extends ServiceProvider
         return "";
     }
 
-    protected static function convertDiscovers(string $path): array
+    // Get namespace for directory from the first class file in the directory
+    protected static function getNamespaceOfDirectory($path): string
     {
-        return collect(File::allfiles($path))->map(function (SplFileInfo $file) use ($path): string {
-            $relativePath = Str::after($file->getPathname(), $path);
-            foreach ([".stub", ".php"] as $suffix) {
-                if (str_ends_with($relativePath, $suffix)) {
-                    $relativePath = substr($relativePath, 0, -strlen($suffix));
+            foreach (glob($path . '/*.php') as $file) {
+                if ($namespace = self::getNamespaceFromFile($file)) {
+                    return $namespace;
                 }
             }
 
-            return $relativePath;
-        })->toArray();
+            throw InvalidPackage::cannotDetermineNamespace(
+                $this->package->name,
+                'hasBladeComponentsByPath',
+                $path
+            );
+    }
+
+    protected static function getNamespaceFromFile($file): string
+    {
+        $tokens = PhpToken::tokenize(file_get_contents($file));
+        $namespace = [];
+        foreach ($tokens as $index => $token) {
+            if ($token->is(T_NAMESPACE) && $tokens[$index + 2]->is(T_STRING)) {
+                for ($i = $index + 2 ;! $tokens[$i]->is(T_WHITESPACE);$i++) {
+                    if ($tokens[$i]->text === ";") {
+                        continue;
+                    }
+                    $namespace[] = $tokens[$i]->text;
+                }
+
+                return implode('', $namespace)."\\";
+            }
+        }
+
+        return "";
+    }
+
+    protected static function getClassesInPaths(string $method, ...$paths): array
+    {
+        $classes = [];
+        foreach (collect($paths)->flatten()->toArray() as $path) {
+            $namespace = self::getNamespaceOfDirectory($path);
+            $pathClasses = [];
+
+            foreach (File::allfiles($this->package->buildDirectory($path)) as $file) {
+                if (! str_ends_with($filename = $file->getPathname(), '.php')) {
+                    continue;
+                }
+
+                $commandClasses[] = $namespace . str_replace(
+                    ['/', '.php'],
+                    ['\\', ''],
+                    Str::after($filename, $path)
+                );
+            }
+
+            if (empty($pathClasses)) {
+                throw InvalidPackage::pathDoesNotContainClasses(
+                    $this->name,
+                    $method,
+                    $path
+                );
+            }
+
+            $classes = array_merge($classes, $pathClasses);
+        }
+
+        $this->package->verifyClassNames($method, $commandClasses);
+
+        return $classes;
     }
 }
