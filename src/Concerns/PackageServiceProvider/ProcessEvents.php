@@ -2,8 +2,8 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-use Illuminate\Support\Facades\Event;
 use function Illuminate\Events\queueable;
+use Illuminate\Support\Facades\Event;
 
 trait ProcessEvents
 {
@@ -23,7 +23,7 @@ trait ProcessEvents
             return $this;
         }
 
-        foreach ($this->package->eventsByClass as $eventClass=>$listener) {
+        foreach ($this->package->eventsByClass as $eventClass => $listener) {
             Event::listen($eventClass, $listener);
         }
 

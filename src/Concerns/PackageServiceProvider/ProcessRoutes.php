@@ -2,8 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
-
 trait ProcessRoutes
 {
     protected function bootPackageRoutes(): self

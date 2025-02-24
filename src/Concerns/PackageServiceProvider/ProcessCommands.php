@@ -2,9 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-use Illuminate\Support\Facades\File;
-use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
-
 trait ProcessCommands
 {
     protected function bootPackageCommands(): self

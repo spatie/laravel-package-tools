@@ -25,6 +25,7 @@ trait HasBlade
 
         return $this;
     }
+
     public function hasBladeComponentsByNamespace(string $prefix, string $viewComponentNamespace): self
     {
         $this->bladeComponentNamespaces[$prefix] = $viewComponentNamespace;
@@ -71,5 +72,4 @@ trait HasBlade
     {
         return $this->hasBladeComponentsByClass($prefix, ...$viewComponentNames);
     }
-
 }

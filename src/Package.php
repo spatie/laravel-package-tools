@@ -129,6 +129,7 @@ final class Package
     private function verifyRelativeDir(string $method, string $dir): string
     {
         $this->verifyDir($method, $this->buildDirectory($dir));
+
         return $dir;
     }
 
@@ -155,6 +156,4 @@ final class Package
 
         return $this->buildDirectory($path, $subpath);
     }
-
-
 }
