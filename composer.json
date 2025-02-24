@@ -37,6 +37,7 @@
     },
     "scripts": {
         "test": "vendor/bin/pest",
+        "test-dirty": "vendor/bin/pest --dirty --compact",
         "test-coverage": "vendor/bin/pest --coverage"
     },
     "config": {

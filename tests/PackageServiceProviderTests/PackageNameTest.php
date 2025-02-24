@@ -1,9 +1,10 @@
 <?php
 
-use function PHPUnit\Framework\assertTrue;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
+
 use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackageNameTest
+trait PackageNameTest
 {
     public function configurePackage(Package $package)
     {
@@ -11,8 +12,8 @@ trait ConfigurePackageNameTest
     }
 }
 
-uses(ConfigurePackageNameTest::class);
+uses(PackageNameTest::class);
 
 it('will not blow up when a name is set', function () {
-    assertTrue(true);
+    $this->assertTrue(true);
 });

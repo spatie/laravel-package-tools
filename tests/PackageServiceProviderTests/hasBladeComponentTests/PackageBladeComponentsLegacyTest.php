@@ -1,11 +1,11 @@
 <?php
 
-use function PHPUnit\Framework\assertFileExists;
-use function PHPUnit\Framework\assertStringStartsWith;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasBladeComponentTests;
+
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Components\TestComponent;
 
-trait ConfigurePackageViewComponentsTest
+trait PackageBladeComponentsLegacyTest
 {
     public function configurePackage(Package $package)
     {
@@ -16,18 +16,18 @@ trait ConfigurePackageViewComponentsTest
     }
 }
 
-uses(ConfigurePackageViewComponentsTest::class);
+uses(PackageBladeComponentsLegacyTest::class);
 
-it('can load the view components', function () {
+it('can load the legacy blade components', function () {
     $content = view('package-tools::component-test')->render();
 
-    assertStringStartsWith('<div>hello world</div>', $content);
+    $this->assertStringStartsWith('<div>hello world</div>', $content);
 });
 
-it('can publish the view components', function () {
+it('can publish the legacy blade components', function () {
     $this
         ->artisan('vendor:publish --tag=laravel-package-tools-components')
         ->assertExitCode(0);
 
-    assertFileExists(app_path('View/Components/vendor/package-tools/TestComponent.php'));
+    $this->assertFileExists(app_path('View/Components/vendor/package-tools/TestComponent.php'));
 });

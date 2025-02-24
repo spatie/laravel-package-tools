@@ -1,14 +1,16 @@
 <?php
 
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCommandTests;
+
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
-use function Spatie\PestPluginTestTime\testTime;
+// use function Spatie\PestPluginTestTime\testTime;
 
-trait ConfigureStarRepoTest
+trait InstallStarRepoTest
 {
     public function configurePackage(Package $package)
     {
-        testTime()->freeze('2020-01-01 00:00:00');
+//        testTime()->freeze('2020-01-01 00:00:00');
 
         $package
             ->name('laravel-package-tools')
@@ -19,7 +21,7 @@ trait ConfigureStarRepoTest
     }
 }
 
-uses(ConfigureStarRepoTest::class);
+uses(InstallStarRepoTest::class);
 
 it('can propose to star the repo', function () {
     $this

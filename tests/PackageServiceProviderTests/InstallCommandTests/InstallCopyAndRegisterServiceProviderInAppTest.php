@@ -1,11 +1,11 @@
 <?php
 
-use function PHPUnit\Framework\assertStringContainsString;
-use function PHPUnit\Framework\assertStringNotContainsString;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCommandTests;
+
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 
-trait ConfigureCopyAndRegisterServiceProviderInAppTest
+trait InstallCopyAndRegisterServiceProviderInAppTest
 {
     public function configurePackage(Package $package)
     {
@@ -34,7 +34,7 @@ function restoreAppConfigFile(): void
     file_put_contents(base_path('config/app.php'), $newContent);
 }
 
-uses(ConfigureCopyAndRegisterServiceProviderInAppTest::class);
+uses(InstallCopyAndRegisterServiceProviderInAppTest::class);
 
 it('can copy and register the service provider in the app', function () {
     $this
@@ -43,12 +43,12 @@ it('can copy and register the service provider in the app', function () {
 
     if (intval(app()->version()) >= 11) {
         // This does not happen in L11 because of the different framework skeleton
-        assertStringNotContainsString(
+        $this->assertStringNotContainsString(
             "App\Providers\MyPackageServiceProvider::class",
             file_get_contents(base_path('config/app.php'))
         );
     } else {
-        assertStringContainsString(
+        $this->assertStringContainsString(
             "App\Providers\MyPackageServiceProvider::class",
             file_get_contents(base_path('config/app.php'))
         );

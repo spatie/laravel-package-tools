@@ -1,9 +1,11 @@
 <?php
 
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCommandTests;
+
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 
-trait ConfigureMigrationTest
+trait InstallMigrationTest
 {
     public function configurePackage(Package $package)
     {
@@ -17,7 +19,7 @@ trait ConfigureMigrationTest
     }
 }
 
-uses(ConfigureMigrationTest::class);
+uses(InstallMigrationTest::class);
 
 it('can install the migrations', function () {
     $this

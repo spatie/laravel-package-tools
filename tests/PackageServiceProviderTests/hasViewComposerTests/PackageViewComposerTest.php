@@ -1,9 +1,10 @@
 <?php
 
-use function PHPUnit\Framework\assertStringStartsWith;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasViewComposerTests;
+
 use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackageViewComposerTest
+trait PackageViewComposerTest
 {
     public function configurePackage(Package $package)
     {
@@ -16,10 +17,10 @@ trait ConfigurePackageViewComposerTest
     }
 }
 
-uses(ConfigurePackageViewComposerTest::class);
+uses(PackageViewComposerTest::class);
 
 it('can load the view composer and render shared data', function () {
     $content = view('package-tools::shared-data')->render();
 
-    assertStringStartsWith('hello world', $content);
+    $this->assertStringStartsWith('hello world', $content);
 });

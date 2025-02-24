@@ -1,10 +1,10 @@
 <?php
 
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertFileExists;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasConfigTests;
+
 use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackageMultipleConfigTest
+trait PackageMultipleConfigTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,12 +14,12 @@ trait ConfigurePackageMultipleConfigTest
     }
 }
 
-uses(ConfigurePackageMultipleConfigTest::class);
+uses(PackageMultipleConfigTest::class);
 
 it('can register multiple config files', function () {
-    assertEquals('value', config('package-tools.key'));
+    $this->assertEquals('value', config('package-tools.key'));
 
-    assertEquals('alternative_value', config('alternative-config.alternative_key'));
+    $this->assertEquals('alternative_value', config('alternative-config.alternative_key'));
 });
 
 it('can publish multiple config files', function () {
@@ -27,5 +27,5 @@ it('can publish multiple config files', function () {
         ->artisan('vendor:publish --tag=package-tools-config')
         ->assertExitCode(0);
 
-    assertFileExists(config_path('alternative-config.php'));
+    $this->assertFileExists(config_path('alternative-config.php'));
 });

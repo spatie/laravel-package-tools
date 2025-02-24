@@ -1,12 +1,14 @@
 <?php
 
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestClasses\FourthTestCommand;
-use Spatie\LaravelPackageTools\Tests\TestClasses\OtherTestCommand;
-use Spatie\LaravelPackageTools\Tests\TestClasses\TestCommand;
-use Spatie\LaravelPackageTools\Tests\TestClasses\ThirdTestCommand;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasCommandTests;
 
-trait ConfigurePackageCommandsTest
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Console\Commands\FourthTestCommand;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Console\Commands\OtherTestCommand;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Console\Commands\TestCommand;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Console\Commands\ThirdTestCommand;
+
+trait PackageCommandsTest
 {
     public function configurePackage(Package $package)
     {
@@ -18,7 +20,7 @@ trait ConfigurePackageCommandsTest
     }
 }
 
-uses(ConfigurePackageCommandsTest::class);
+uses(PackageCommandsTest::class);
 
 it('can execute a registered commands', function () {
     $this

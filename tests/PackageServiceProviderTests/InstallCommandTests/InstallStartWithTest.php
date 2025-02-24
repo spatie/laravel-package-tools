@@ -1,15 +1,16 @@
 <?php
 
-use function PHPUnit\Framework\assertEquals;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCommandTests;
+
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
-use function Spatie\PestPluginTestTime\testTime;
+// use function Spatie\PestPluginTestTime\testTime;
 
-trait ConfigureStartWithTest
+trait InstallStartWithTest
 {
     public function configurePackage(Package $package)
     {
-        testTime()->freeze('2020-01-01 00:00:00');
+//        testTime()->freeze('2020-01-01 00:00:00');
 
         $package
             ->name('laravel-package-tools')
@@ -22,7 +23,7 @@ trait ConfigureStartWithTest
     }
 }
 
-uses(ConfigureStartWithTest::class);
+uses(InstallStartWithTest::class);
 
 beforeEach(function () {
     $this->stringFromStart = '';
@@ -33,5 +34,5 @@ it('can execute the start with', function () {
         ->artisan('package-tools:install')
         ->assertSuccessful();
 
-    assertEquals('set by package-tools:install', $this->stringFromStart);
+    $this->assertEquals('set by package-tools:install', $this->stringFromStart);
 });

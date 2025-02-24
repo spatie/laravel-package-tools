@@ -1,10 +1,10 @@
 <?php
 
-use function PHPUnit\Framework\assertFileExists;
-use function PHPUnit\Framework\assertStringStartsWith;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasViewsTests;
+
 use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackageViewsWithCustomNamespaceTest
+trait PackageViewsWithCustomNamespaceTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,12 +14,12 @@ trait ConfigurePackageViewsWithCustomNamespaceTest
     }
 }
 
-uses(ConfigurePackageViewsWithCustomNamespaceTest::class);
+uses(PackageViewsWithCustomNamespaceTest::class);
 
 it('can load the views with a custom namespace', function () {
     $content = view('custom-namespace::test')->render();
 
-    assertStringStartsWith('This is a blade view', $content);
+    $this->assertStringStartsWith('This is a blade view', $content);
 });
 
 it('can publish the views with a custom namespace', function () {
@@ -27,5 +27,5 @@ it('can publish the views with a custom namespace', function () {
         ->artisan('vendor:publish --tag=custom-namespace-views')
         ->assertExitCode(0);
 
-    assertFileExists(resource_path('views/vendor/custom-namespace/test.blade.php'));
+    $this->assertFileExists(resource_path('views/vendor/custom-namespace/test.blade.php'));
 });

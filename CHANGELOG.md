@@ -5,6 +5,7 @@ All notable changes to `laravel-package-tools` will be documented in this file.
 ## 1.19.0 - 2025-03-01
 
 * Major improvements by @Sophist-UK in https://github.com/spatie/laravel-package-tools/pull/158
+- Extend the restructing/readability/extendability approach started in #157
 - Extend support to Events and Livewire
 - Extend defining hasX by paths rather than individual file names or classes (cf. discoverMigrations).
   This avoids the need to list each item individually,
@@ -12,7 +13,8 @@ All notable changes to `laravel-package-tools` will be documented in this file.
 - Allow setting alternative paths to standard ones for all hasX.
 - Make Package->method() names consistent hasXByClass/hasXByName/hasXByPath etc.
 - Provide comprehensive validations for files, paths, classes etc. existing and exceptions where they don't.
-- Provide full backwards compatibility
+- Provide full backwards compatibility for previous versions
+- Switch test cases from Pest/PHPunit hybrid using the PHPunit Assertion API to full Pest Expactation API
 
 **Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.18.2...1.18.3
 

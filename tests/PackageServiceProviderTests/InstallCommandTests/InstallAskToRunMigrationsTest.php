@@ -1,14 +1,16 @@
 <?php
 
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCommandTests;
+
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
-use function Spatie\PestPluginTestTime\testTime;
+// use function Spatie\PestPluginTestTime\testTime;
 
-trait ConfigureAskToRunMigrationsTest
+trait InstallAskToRunMigrationsTest
 {
     public function configurePackage(Package $package)
     {
-        testTime()->freeze('2020-01-01 00:00:00');
+//        testTime()->freeze('2020-01-01 00:00:00');
 
         $package
             ->name('laravel-package-tools')
@@ -19,7 +21,7 @@ trait ConfigureAskToRunMigrationsTest
     }
 }
 
-uses(ConfigureAskToRunMigrationsTest::class);
+uses(InstallAskToRunMigrationsTest::class);
 
 it('can ask to run the migrations', function () {
     $this

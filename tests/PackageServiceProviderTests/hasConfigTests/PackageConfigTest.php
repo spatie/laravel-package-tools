@@ -1,10 +1,10 @@
 <?php
 
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertFileExists;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasConfigTests;
+
 use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackageConfigTest
+trait PackageConfigTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,10 +14,10 @@ trait ConfigurePackageConfigTest
     }
 }
 
-uses(ConfigurePackageConfigTest::class);
+uses(PackageConfigTest::class);
 
 it('can register the config file', function () {
-    assertEquals('value', config('package-tools.key'));
+    $this->assertEquals('value', config('package-tools.key'));
 });
 
 it('can publish the config file', function () {
@@ -25,5 +25,5 @@ it('can publish the config file', function () {
         ->artisan('vendor:publish --tag=package-tools-config')
         ->assertExitCode(0);
 
-    assertFileExists(config_path('package-tools.php'));
+    $this->assertFileExists(config_path('package-tools.php'));
 });

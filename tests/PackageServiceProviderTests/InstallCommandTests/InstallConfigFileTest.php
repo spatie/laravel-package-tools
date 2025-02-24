@@ -1,15 +1,16 @@
 <?php
 
-use function PHPUnit\Framework\assertFileExists;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCommandTests;
+
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
-use function Spatie\PestPluginTestTime\testTime;
+// use function Spatie\PestPluginTestTime\testTime;
 
-trait ConfigureConfigFileTest
+trait InstallConfigFileTest
 {
     public function configurePackage(Package $package)
     {
-        testTime()->freeze('2020-01-01 00:00:00');
+//        testTime()->freeze('2020-01-01 00:00:00');
 
         $package
             ->name('laravel-package-tools')
@@ -20,7 +21,7 @@ trait ConfigureConfigFileTest
     }
 }
 
-uses(ConfigureConfigFileTest::class);
+uses(InstallConfigFileTest::class);
 
 it('can install the config file', function () {
     $configPath = config_path('package-tools.php');
@@ -29,5 +30,5 @@ it('can install the config file', function () {
         ->artisan('package-tools:install')
         ->assertSuccessful();
 
-    assertFileExists($configPath);
+    $this->assertFileExists($configPath);
 });

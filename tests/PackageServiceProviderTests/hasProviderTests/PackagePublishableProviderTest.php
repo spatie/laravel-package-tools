@@ -1,10 +1,10 @@
 <?php
 
-use function PHPUnit\Framework\assertFileDoesNotExist;
-use function PHPUnit\Framework\assertFileExists;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasProviderTests;
+
 use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackagePublishableProviderTest
+trait PackagePublishableProviderTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,16 +14,16 @@ trait ConfigurePackagePublishableProviderTest
     }
 }
 
-uses(ConfigurePackagePublishableProviderTest::class);
+uses(PackagePublishableProviderTest::class);
 
 it('can publish a service provider', function () {
     $providerPath = app_path('Providers/MyPackageServiceProvider.php');
 
-    assertFileDoesNotExist($providerPath);
+    $this->assertFileDoesNotExist($providerPath);
 
     $this
         ->artisan('vendor:publish --tag=package-tools-provider')
         ->assertSuccessful();
 
-    assertFileExists($providerPath);
+    $this->assertFileExists($providerPath);
 });

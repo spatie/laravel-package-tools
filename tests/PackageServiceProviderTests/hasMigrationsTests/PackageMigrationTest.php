@@ -1,8 +1,10 @@
 <?php
 
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasMigrationsTests;
+
 use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackageMigrationTest
+trait PackageMigrationTest
 {
     public function configurePackage(Package $package)
     {
@@ -15,7 +17,7 @@ trait ConfigurePackageMigrationTest
     }
 }
 
-uses(ConfigurePackageMigrationTest::class);
+uses(PackageMigrationTest::class);
 
 $expectPublished = [
     'create_table_explicit_normal',

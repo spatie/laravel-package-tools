@@ -1,10 +1,10 @@
 <?php
 
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertFileExists;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasTranslationsTests;
+
 use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackageTranslationsTest
+trait PackageTranslationsTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,10 +14,10 @@ trait ConfigurePackageTranslationsTest
     }
 }
 
-uses(ConfigurePackageTranslationsTest::class);
+uses(PackageTranslationsTest::class);
 
 it('can load the translations', function () {
-    assertEquals('translation', trans('package-tools::translations.translatable'));
+    $this->assertEquals('translation', trans('package-tools::translations.translatable'));
 });
 
 it('can publish the translations', function () {
@@ -25,5 +25,5 @@ it('can publish the translations', function () {
         ->artisan('vendor:publish --tag=package-tools-translations')
         ->assertExitCode(0);
 
-    assertFileExists(lang_path("vendor/package-tools/en/translations.php"));
+    $this->assertFileExists(lang_path("vendor/package-tools/en/translations.php"));
 });

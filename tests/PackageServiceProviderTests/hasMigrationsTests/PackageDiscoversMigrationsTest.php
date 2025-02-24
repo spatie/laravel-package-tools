@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasMigrationsTests;
 
 use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackageDiscoverMigrationsTest
+trait PackageDiscoversMigrationsTest
 {
     public function configurePackage(Package $package)
     {
@@ -15,7 +15,7 @@ trait ConfigurePackageDiscoverMigrationsTest
     }
 }
 
-uses(ConfigurePackageDiscoverMigrationsTest::class);
+uses(PackageDiscoversMigrationsTest::class);
 
 $expectPublished = [
     'create_table_discover_normal',

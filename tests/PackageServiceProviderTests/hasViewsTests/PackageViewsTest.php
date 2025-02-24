@@ -1,10 +1,10 @@
 <?php
 
-use function PHPUnit\Framework\assertFileExists;
-use function PHPUnit\Framework\assertStringStartsWith;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasViewsTests;
+
 use Spatie\LaravelPackageTools\Package;
 
-trait ConfigurePackageViewsTest
+trait PackageViewsTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,12 +14,12 @@ trait ConfigurePackageViewsTest
     }
 }
 
-uses(ConfigurePackageViewsTest::class);
+uses(PackageViewsTest::class);
 
 it('can load the views', function () {
     $content = view('package-tools::test')->render();
 
-    assertStringStartsWith('This is a blade view', $content);
+    $this->assertStringStartsWith('This is a blade view', $content);
 });
 
 it('can publish the views', function () {
@@ -27,5 +27,5 @@ it('can publish the views', function () {
         ->artisan('vendor:publish --tag=package-tools-views')
         ->assertExitCode(0);
 
-    assertFileExists(resource_path('views/vendor/package-tools/test.blade.php'));
+    $this->assertFileExists(resource_path('views/vendor/package-tools/test.blade.php'));
 });

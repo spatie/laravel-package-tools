@@ -1,9 +1,11 @@
 <?php
 
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestClasses\TestCommand;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasCommandTests;
 
-trait ConfigurePackageCommandTest
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Console\Commands\TestCommand;
+
+trait PackageCommandTest
 {
     public function configurePackage(Package $package)
     {
@@ -13,7 +15,7 @@ trait ConfigurePackageCommandTest
     }
 }
 
-uses(ConfigurePackageCommandTest::class);
+uses(PackageCommandTest::class);
 
 it('can execute a registered commands', function () {
     $this
