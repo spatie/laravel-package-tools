@@ -118,7 +118,7 @@ function getLoadedMigrations(string $vendorMigrationPath): array
  * so that they will be run when the user does a php artisan migrate
  **/
 
-expect()->extend('toHaveMigrationsPublished',function (...$testFiles) {
+expect()->extend('toHaveMigrationsPublished', function (...$testFiles) {
     $testFiles = collect($testFiles)->flatten()->toArray();
     $publishedFiles = getPublishedMigrations();
     $failures = [];
