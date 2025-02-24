@@ -9,7 +9,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         php: [8.0, 8.1, 8.2, 8.3, 8.4]
-        laravel: [11.*, 10.*, 9.*]
+        laravel: [12.*, 11.*, 10.*, 9.*]
         stability: [prefer-lowest, prefer-stable]
         include:
           - laravel: 9.*
@@ -18,6 +18,8 @@ jobs:
             testbench: 8.*
           - laravel: 11.*
             testbench: 9.*
+          - laravel: 12.*
+            testbench: 10.*
         exclude:
           - laravel: 9.*
             php: 8.3
@@ -30,6 +32,10 @@ jobs:
           - laravel: 11.*
             php: 8.0
           - laravel: 11.*
+            php: 8.1
+          - laravel: 12.*
+            php: 8.0
+          - laravel: 12.*
             php: 8.1
 
     runs-on: ${{ matrix.os }}
@@ -52,9 +58,14 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
+      - name: Fix dependencies
+        if: ${{ startsWith(matrix.laravel, '9') }}
+        run: |
+          composer require "nesbot/carbon:^2.72.6" --no-interaction --no-update
+
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:^2.72.2" --no-interaction --no-update
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: Execute tests
