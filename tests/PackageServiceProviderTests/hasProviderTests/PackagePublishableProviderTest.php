@@ -19,11 +19,11 @@ uses(PackagePublishableProviderTest::class);
 it('can publish a service provider', function () {
     $providerPath = app_path('Providers/MyPackageServiceProvider.php');
 
-    $this->assertFileDoesNotExist($providerPath);
+    expect($providerPath)->not->toBeFileOrDirectory();
 
     $this
         ->artisan('vendor:publish --tag=package-tools-provider')
         ->assertSuccessful();
 
-    $this->assertFileExists($providerPath);
+    expect($providerPath)->toBeFile();
 });

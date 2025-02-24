@@ -21,5 +21,5 @@ uses(PackageCommandWithinAppTest::class);
 it('can execute a registered command in the context of the app', function () {
     $response = $this->get('execute-command');
 
-    $response->assertSee('output of test command');
+    expect($response->baseResponse->getContent())->toContain('output of test command');
 });

@@ -22,5 +22,5 @@ uses(PackageViewComposerTest::class);
 it('can load the view composer and render shared data', function () {
     $content = view('package-tools::shared-data')->render();
 
-    $this->assertStringStartsWith('hello world', $content);
+    expect($content)->toStartWith('hello world');
 });

@@ -31,5 +31,5 @@ it('can execute the end with', function () {
         ->artisan('package-tools:install')
         ->assertSuccessful();
 
-    $this->assertEquals('set by package-tools:install', $this->stringFromEnd);
+    expect($this->stringFromEnd)->toBe('set by package-tools:install');
 });

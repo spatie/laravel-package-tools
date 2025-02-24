@@ -20,5 +20,5 @@ uses(PackageCommandTest::class);
 it('can execute a registered commands', function () {
     $this
         ->artisan('test-command')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 });

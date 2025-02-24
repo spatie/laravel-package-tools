@@ -21,9 +21,12 @@ it('can load the translations', function () {
 });
 
 it('can publish the translations', function () {
+    $file = lang_path("vendor/package-tools/en/translations.php");
+    expect($file)->not->toBeFileOrDirectory();
+
     $this
         ->artisan('vendor:publish --tag=package-tools-translations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    $this->assertFileExists(lang_path("vendor/package-tools/en/translations.php"));
+    expect($file)->toBeFile();
 });

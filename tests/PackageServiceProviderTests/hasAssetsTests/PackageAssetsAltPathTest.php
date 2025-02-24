@@ -18,9 +18,12 @@ trait PackageAssetsAltPathTest
 uses(PackageAssetsAltPathTest::class);
 
 it('can publish the alternate assets', function () {
+    $file = public_path('vendor/package-tools/dummy_alt.js');
+    expect($file)->not->toBeFileOrDirectory();
+
     $this
         ->artisan('vendor:publish --tag=package-tools-assets')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    $this->assertFileExists(public_path('vendor/package-tools/dummy_alt.js'));
+    expect($file)->toBeFile();
 });

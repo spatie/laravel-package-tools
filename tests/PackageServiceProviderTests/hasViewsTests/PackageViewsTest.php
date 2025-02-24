@@ -19,13 +19,16 @@ uses(PackageViewsTest::class);
 it('can load the views', function () {
     $content = view('package-tools::test')->render();
 
-    $this->assertStringStartsWith('This is a blade view', $content);
+    expect($content)->toStartWith('This is a blade view');
 });
 
 it('can publish the views', function () {
+    $file = resource_path('views/vendor/package-tools/test.blade.php');
+    expect($file)->not->toBeFileOrDirectory();
+
     $this
         ->artisan('vendor:publish --tag=package-tools-views')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    $this->assertFileExists(resource_path('views/vendor/package-tools/test.blade.php'));
+    expect($file)->toBeFile();
 });

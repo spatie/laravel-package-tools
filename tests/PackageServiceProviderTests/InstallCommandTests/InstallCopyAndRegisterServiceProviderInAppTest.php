@@ -25,13 +25,14 @@ trait InstallCopyAndRegisterServiceProviderInAppTest
  */
 function restoreAppConfigFile(): void
 {
+    $file = config_path('app.php');
     $newContent = str_replace(
         'App\Providers\MyPackageServiceProvider::class,',
         '',
-        file_get_contents(base_path('config/app.php'))
+        file_get_contents($file)
     );
 
-    file_put_contents(base_path('config/app.php'), $newContent);
+    file_put_contents($file, $newContent);
 }
 
 uses(InstallCopyAndRegisterServiceProviderInAppTest::class);
@@ -41,17 +42,8 @@ it('can copy and register the service provider in the app', function () {
         ->artisan('package-tools:install')
         ->assertSuccessful();
 
-    if (intval(app()->version()) >= 11) {
-        // This does not happen in L11 because of the different framework skeleton
-        $this->assertStringNotContainsString(
-            "App\Providers\MyPackageServiceProvider::class",
-            file_get_contents(base_path('config/app.php'))
-        );
-    } else {
-        $this->assertStringContainsString(
-            "App\Providers\MyPackageServiceProvider::class",
-            file_get_contents(base_path('config/app.php'))
-        );
+    if (intval(app()->version()) < 11) {
+        expect(base_path('config/app.php'))->toHaveContentsIncluding("App\Providers\MyPackageServiceProvider::class");
     }
 
     restoreAppConfigFile();

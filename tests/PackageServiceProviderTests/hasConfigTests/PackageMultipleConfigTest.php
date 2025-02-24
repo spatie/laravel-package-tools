@@ -17,15 +17,17 @@ trait PackageMultipleConfigTest
 uses(PackageMultipleConfigTest::class);
 
 it('can register multiple config files', function () {
-    $this->assertEquals('value', config('package-tools.key'));
-
-    $this->assertEquals('alternative_value', config('alternative-config.alternative_key'));
+    expect(config('package-tools.key'))->toBe('value');
+    expect(config('alternative-config.alternative_key'))->toBe('alternative_value');
 });
 
 it('can publish multiple config files', function () {
+    $file = config_path('alternative-config.php');
+    expect($file)->not->toBeFileOrDirectory();
+
     $this
         ->artisan('vendor:publish --tag=package-tools-config')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    $this->assertFileExists(config_path('alternative-config.php'));
+    expect($file)->toBeFile();
 });

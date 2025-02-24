@@ -49,49 +49,49 @@ $expectNotLoaded = [
 it('publishes all migrations', function () use ($expectPublished) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    assertMigrationsPublished($expectPublished);
+    expect()->toHaveMigrationsPublished($expectPublished);
 });
 
 it('doesn\'t publish non-migration files', function () use ($expectNotPublished) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    assertMigrationsNotPublished($expectNotPublished);
+    expect()->toHaveMigrationsNotPublished($expectNotPublished);
 });
 
 it('does not overwrite an existing migration', function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
+
+    expect()->toHaveMigrationsPublished('2020_01_01_000001_create_table_discover_normal');
 
     $filePath = database_path('migrations/2020_01_01_000001_create_table_discover_normal.php');
-
-    assertMigrationsPublished('2020_01_01_000001_create_table_discover_normal');
 
     file_put_contents($filePath, 'modified');
 
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    $this->assertStringEqualsFile($filePath, 'modified');
+    expect($filePath)->toHaveContentsMatching('modified');
 });
 
 it('loads the discovered non-stub migrations for "artisan migrate"', function () use ($expectLoaded) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    assertMigrationsLoaded(__DIR__ . '/../../TestPackage/database/migrations', $expectLoaded);
+    expect(__DIR__ . '/../../TestPackage/database/migrations')->toHaveMigrationsLoaded($expectLoaded);
 });
 
 it('doesn\'t load the stub migrations for "artisan migrate"', function () use ($expectNotLoaded) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    assertMigrationsNotLoaded(__DIR__ . '/../../TestPackage/database/migrations', $expectNotLoaded);
+    expect(__DIR__ . '/../../TestPackage/database/migrations')->toHaveMigrationsNotLoaded($expectNotLoaded);
 });

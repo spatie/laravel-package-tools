@@ -52,70 +52,67 @@ $expectNotLoaded = [
 it('publishes the explicitly listed migrations', function () use ($expectPublished) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    assertMigrationsPublished($expectPublished);
+    expect()->toHaveMigrationsPublished($expectPublished);
 });
 
 it('doesn\'t publish the non-listed migrations', function () use ($expectNotPublished) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    assertMigrationsNotPublished($expectNotPublished);
+    expect()->toHaveMigrationsNotPublished($expectNotPublished);
 });
 
 it('doesn\'t overwrite an existing migration', function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
     $filePath = database_path('migrations/2020_01_01_000001_create_table_explicit_normal.php');
 
-    assertMigrationsPublished('2020_01_01_000001_create_table_explicit_normal');
+    expect()->toHaveMigrationsPublished('2020_01_01_000001_create_table_explicit_normal');
 
     file_put_contents($filePath, 'modified');
 
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    $this->assertStringEqualsFile($filePath, 'modified');
+    expect($filePath)->toHaveContentsMatching('modified');
 });
 
 it('does overwrite an existing migration with "artisan migrate --force"', function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
+
+    expect()->toHaveMigrationsPublished('2020_01_01_000001_create_table_explicit_normal');
 
     $filePath = database_path('migrations/2020_01_01_000001_create_table_explicit_normal.php');
 
-    assertMigrationsPublished('2020_01_01_000001_create_table_explicit_normal');
-
-    file_put_contents($filePath, 'modified');
+    file_put_contents($filePath, 'overwritten');
 
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations  --force')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    $this->assertStringEqualsFile(
-        $filePath,
-        file_get_contents(__DIR__.'/../../TestPackage/database/migrations/create_table_explicit_normal.php')
-    );
+    expect($filePath)->toHaveContentsMatchingFile(__DIR__.'/../../TestPackage/database/migrations/create_table_explicit_normal.php');
 });
 
 it('loads the explicitly listed non-stub migrations for "artisan migrate"', function () use ($expectLoaded) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    assertMigrationsLoaded(__DIR__ . '/../../TestPackage/database/migrations', $expectLoaded);
+    expect(__DIR__ . '/../../TestPackage/database/migrations')->toHaveMigrationsLoaded($expectLoaded);
 });
 
 it('doesn\'t load the non-listed migrations or stub files for "artisan migrate"', function () use ($expectNotLoaded) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    assertMigrationsNotLoaded(__DIR__ . '/../../TestPackage/database/migrations', $expectNotLoaded);
+    expect(__DIR__ . '/../../TestPackage/database/migrations')->toHaveMigrationsNotLoaded($expectNotLoaded);
 });

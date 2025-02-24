@@ -20,5 +20,5 @@ uses(PackageBladeComponentsByNamespaceTest::class);
 it('can load the blade components by namespace', function () {
     $content = view('package-tools::component-test-namespace')->render();
 
-    $this->assertStringStartsWith('<div>hello world</div>', $content);
+    expect($content)->toStartWith('<div>hello world</div>');
 });

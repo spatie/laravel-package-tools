@@ -15,5 +15,5 @@ trait PackageNameTest
 uses(PackageNameTest::class);
 
 it('will not blow up when a name is set', function () {
-    $this->assertTrue(true);
+    expect(true)->toBeTrue();
 });

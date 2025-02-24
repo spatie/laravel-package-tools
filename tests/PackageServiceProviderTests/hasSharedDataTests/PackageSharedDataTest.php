@@ -21,6 +21,6 @@ it('can share data with all views', function () {
     $content1 = view('package-tools::shared-data')->render();
     $content2 = view('package-tools::shared-data-2')->render();
 
-    $this->assertStringStartsWith('hello_world', $content1);
-    $this->assertStringStartsWith('hello_world', $content2);
+    expect($content1)->toStartWith('hello_world');
+    expect($content2)->toStartWith('hello_world');
 });

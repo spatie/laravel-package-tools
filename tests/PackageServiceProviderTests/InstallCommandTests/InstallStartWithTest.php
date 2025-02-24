@@ -31,5 +31,5 @@ it('can execute the start with', function () {
         ->artisan('package-tools:install')
         ->assertSuccessful();
 
-    $this->assertEquals('set by package-tools:install', $this->stringFromStart);
+    expect($this->stringFromStart)->toBe('set by package-tools:install');
 });

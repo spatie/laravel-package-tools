@@ -21,13 +21,16 @@ uses(PackageBladeComponentsByClassTest::class);
 it('can load the blade components by class', function () {
     $content = view('package-tools::component-test')->render();
 
-    $this->assertStringStartsWith('<div>hello world</div>', $content);
+    expect($content)->toStartWith('<div>hello world</div>');
 });
 
 it('can publish the blade components by class', function () {
+    $file = app_path('View/Components/vendor/package-tools/TestComponent.php');
+    expect($file)->not->toBeFileOrDirectory();
+
     $this
         ->artisan('vendor:publish --tag=laravel-package-tools-components')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    $this->assertFileExists(app_path('View/Components/vendor/package-tools/TestComponent.php'));
+    expect($file)->toBeFile();
 });

@@ -17,9 +17,12 @@ trait PackageAssetsTest
 uses(PackageAssetsTest::class);
 
 it('can publish the assets', function () {
+    $file = public_path('vendor/package-tools/dummy.js');
+    expect($file)->not->toBeFileOrDirectory();
+
     $this
         ->artisan('vendor:publish --tag=package-tools-assets')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    $this->assertFileExists(public_path('vendor/package-tools/dummy.js'));
+    expect($file)->toBeFile();
 });

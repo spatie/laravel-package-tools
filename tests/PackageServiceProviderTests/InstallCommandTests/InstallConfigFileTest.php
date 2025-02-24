@@ -21,11 +21,12 @@ trait InstallConfigFileTest
 uses(InstallConfigFileTest::class);
 
 it('can install the config file', function () {
-    $configPath = config_path('package-tools.php');
+    $configFile = config_path('package-tools.php');
+    expect($configFile)->not->toBeFileOrDirectory();
 
     $this
         ->artisan('package-tools:install')
         ->assertSuccessful();
 
-    $this->assertFileExists($configPath);
+    expect($configFile)->toBeFile();
 });

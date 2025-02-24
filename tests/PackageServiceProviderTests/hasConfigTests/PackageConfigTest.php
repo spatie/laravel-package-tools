@@ -17,13 +17,16 @@ trait PackageConfigTest
 uses(PackageConfigTest::class);
 
 it('can register the config file', function () {
-    $this->assertEquals('value', config('package-tools.key'));
+    expect(config('package-tools.key'))->toBe('value');
 });
 
 it('can publish the config file', function () {
+    $file = config_path('package-tools.php');
+    expect($file)->not->toBeFileOrDirectory();
+
     $this
         ->artisan('vendor:publish --tag=package-tools-config')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    $this->assertFileExists(config_path('package-tools.php'));
+    expect($file)->toBeFile();
 });

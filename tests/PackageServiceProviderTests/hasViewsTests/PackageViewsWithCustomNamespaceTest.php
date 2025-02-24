@@ -19,13 +19,16 @@ uses(PackageViewsWithCustomNamespaceTest::class);
 it('can load the views with a custom namespace', function () {
     $content = view('custom-namespace::test')->render();
 
-    $this->assertStringStartsWith('This is a blade view', $content);
+    expect($content)->toStartWith('This is a blade view');
 });
 
 it('can publish the views with a custom namespace', function () {
+    $file = resource_path('views/vendor/custom-namespace/test.blade.php');
+    expect($file)->not->toBeFileOrDirectory();
+
     $this
         ->artisan('vendor:publish --tag=custom-namespace-views')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    $this->assertFileExists(resource_path('views/vendor/custom-namespace/test.blade.php'));
+    expect($file)->toBeFile();
 });

@@ -21,11 +21,12 @@ trait InstallAssetsTest
 uses(InstallAssetsTest::class);
 
 it('can install the assets', function () {
-    $assetPath = public_path('/vendor/package-tools');
+    $file = public_path('vendor/package-tools/dummy.js');
+    expect($file)->not->toBeFileOrDirectory();
 
     $this
         ->artisan('package-tools:install')
         ->assertSuccessful();
 
-    $this->assertDirectoryExists($assetPath);
+    expect($file)->toBeFile();
 });
