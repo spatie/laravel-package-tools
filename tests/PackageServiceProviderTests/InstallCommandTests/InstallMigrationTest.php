@@ -26,5 +26,5 @@ it('can install the migrations', function () {
         ->artisan('package-tools:install')
         ->assertSuccessful();
 
-    expect()->toHaveMigrationsPublished('create_table_explicit_normal');
+    expect(true)->toHaveMigrationsPublished('create_table_explicit_normal');
 });

@@ -54,7 +54,7 @@ it('publishes the explicitly listed migrations', function () use ($expectPublish
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
 
-    expect()->toHaveMigrationsPublished($expectPublished);
+    expect(true)->toHaveMigrationsPublished($expectPublished);
 });
 
 it('doesn\'t publish the non-listed migrations', function () use ($expectNotPublished) {
@@ -62,7 +62,7 @@ it('doesn\'t publish the non-listed migrations', function () use ($expectNotPubl
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
 
-    expect()->toHaveMigrationsNotPublished($expectNotPublished);
+    expect(true)->toHaveMigrationsNotPublished($expectNotPublished);
 });
 
 it('doesn\'t overwrite an existing migration', function () {
@@ -72,7 +72,7 @@ it('doesn\'t overwrite an existing migration', function () {
 
     $filePath = database_path('migrations/2020_01_01_000001_create_table_explicit_normal.php');
 
-    expect()->toHaveMigrationsPublished('2020_01_01_000001_create_table_explicit_normal');
+    expect(true)->toHaveMigrationsPublished('2020_01_01_000001_create_table_explicit_normal');
 
     file_put_contents($filePath, 'modified');
 
@@ -88,7 +88,7 @@ it('does overwrite an existing migration with "artisan migrate --force"', functi
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
 
-    expect()->toHaveMigrationsPublished('2020_01_01_000001_create_table_explicit_normal');
+    expect(true)->toHaveMigrationsPublished('2020_01_01_000001_create_table_explicit_normal');
 
     $filePath = database_path('migrations/2020_01_01_000001_create_table_explicit_normal.php');
 

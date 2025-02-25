@@ -51,7 +51,7 @@ it('publishes all migrations', function () use ($expectPublished) {
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
 
-    expect()->toHaveMigrationsPublished($expectPublished);
+    expect(true)->toHaveMigrationsPublished($expectPublished);
 });
 
 it('doesn\'t publish non-migration files', function () use ($expectNotPublished) {
@@ -59,7 +59,7 @@ it('doesn\'t publish non-migration files', function () use ($expectNotPublished)
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
 
-    expect()->toHaveMigrationsNotPublished($expectNotPublished);
+    expect(true)->toHaveMigrationsNotPublished($expectNotPublished);
 });
 
 it('does not overwrite an existing migration', function () {
@@ -67,7 +67,7 @@ it('does not overwrite an existing migration', function () {
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
 
-    expect()->toHaveMigrationsPublished('2020_01_01_000001_create_table_discover_normal');
+    expect(true)->toHaveMigrationsPublished('2020_01_01_000001_create_table_discover_normal');
 
     $filePath = database_path('migrations/2020_01_01_000001_create_table_discover_normal.php');
 
