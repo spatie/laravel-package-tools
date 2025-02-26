@@ -29,6 +29,7 @@ class ServiceProvider extends PackageServiceProvider
     public function register(): self
     {
         self::$thrownException = null;
+
         try {
             parent::register();
         } catch (Exception $e) {
