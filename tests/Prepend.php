@@ -40,5 +40,11 @@ function test(?string $description = null, ?Closure $closure = null): HigherOrde
         }
     };
 
-    return new TestCall(TestSuite::getInstance(), $filename, $description, $rethrower);
+    if (function_exists("Pest\PendingCalls\TestCall")) {
+        // Pest v2/v3
+        return new Pest\PendingCalls\TestCall(TestSuite::getInstance(), $filename, $description, $rethrower);
+    } else {
+        // Pest v1
+        return new Pest\PendingObjects\TestCall(TestSuite::getInstance(), $filename, $description, $rethrower);
+    }
 }
