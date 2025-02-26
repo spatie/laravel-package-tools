@@ -57,10 +57,6 @@ abstract class PackageServiceProviderTestCase extends TestCase
         testTime()->freeze('2020-01-01 00:00:00');
 
         $this->createApplication();
-
-        // if (ServiceProvider::$thrownException) {
-        // throw ServiceProvider::$thrownException;
-        // }
     }
 
     protected function tearDown(): void
@@ -114,18 +110,6 @@ abstract class PackageServiceProviderTestCase extends TestCase
             $property = $reflection->getProperty('publishableMigrationPaths');
             $property->setAccessible(true);
             $property->setvalue(ServiceProvider::class, []);
-        }
-
-        return $this;
-    }
-
-    /* For tests that expect an (InvalidPackage) exception to be thrown
-       during PackageServiceProvider register/boot,
-       re-throw an exception saved in the TestPackage ServiceProvider */
-    protected function reThrowException(): self
-    {
-        if (ServiceProvider::$thrownException) {
-            throw ServiceProvider::$thrownException;
         }
 
         return $this;

@@ -28,8 +28,9 @@ class ServiceProvider extends PackageServiceProvider
      **/
     public function register(): self
     {
+        self::$thrownException = null;
         try {
-            return parent::register();
+            parent::register();
         } catch (Exception $e) {
             self::$thrownException = $e;
         }
@@ -40,12 +41,12 @@ class ServiceProvider extends PackageServiceProvider
     public function boot(): self
     {
         // Do not run boot if there was an exception in register
-        if (ServiceProvider::$thrownException) {
+        if (self::$thrownException) {
             return $this;
         }
 
         try {
-            return parent::boot();
+            parent::boot();
         } catch (Exception $e) {
             self::$thrownException = $e;
         }

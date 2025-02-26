@@ -36,9 +36,9 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/pest",
-        "test-dirty": "vendor/bin/pest --dirty --compact",
-        "test-coverage": "vendor/bin/pest --coverage"
+        "test": "php -d auto_prepend_file=tests/Prepend.php vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "test-dirty": "vendor/bin/pest --dirty --compact"
     },
     "config": {
         "sort-packages": true,
