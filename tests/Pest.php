@@ -15,4 +15,3 @@ uses(PackageServiceProviderTestCase::class)->in('PackageServiceProviderTests');
 | Expectations - see Expectations.php
 |--------------------------------------------------------------------------
 */
-

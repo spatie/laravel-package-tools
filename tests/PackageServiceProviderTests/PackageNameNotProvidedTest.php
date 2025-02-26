@@ -2,8 +2,8 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
-use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
+use Spatie\LaravelPackageTools\Package;
 
 trait PackageNameNotProvidedTest
 {

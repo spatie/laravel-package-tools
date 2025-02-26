@@ -59,7 +59,7 @@ abstract class PackageServiceProviderTestCase extends TestCase
         $this->createApplication();
 
         // if (ServiceProvider::$thrownException) {
-           // throw ServiceProvider::$thrownException;
+        // throw ServiceProvider::$thrownException;
         // }
     }
 
@@ -131,4 +131,3 @@ abstract class PackageServiceProviderTestCase extends TestCase
         return $this;
     }
 }
-
