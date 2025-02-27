@@ -15,13 +15,12 @@ declare(strict_types=1);
  * https://github.com/pestphp/pest/blob/3.x/src/Functions.php
  **/
 
-use Pest\PendingObjects\TestCall;
 use Pest\Support\Backtrace;
 use Pest\Support\HigherOrderTapProxy;
 use Pest\TestSuite;
 use Spatie\LaravelPackageTools\Tests\TestPackage\Src\ServiceProvider;
 
-function test(?string $description = null, ?Closure $closure = null): HigherOrderTapProxy|TestCall
+function test(?string $description = null, ?Closure $closure = null): HigherOrderTapProxy|Pest\PendingCalls\TestCall|Pest\PendingObjects\TestCall
 {
     if ($description === null && TestSuite::getInstance()->test instanceof \PHPUnit\Framework\TestCase) {
         return new HigherOrderTapProxy(TestSuite::getInstance()->test);
@@ -40,7 +39,7 @@ function test(?string $description = null, ?Closure $closure = null): HigherOrde
         }
     };
 
-    if (function_exists("Pest\PendingCalls\TestCall")) {
+    if (class_exists("Pest\PendingCalls\TestCall")) {
         // Pest v2/v3
         return new Pest\PendingCalls\TestCall(TestSuite::getInstance(), $filename, $description, $rethrower);
     } else {
