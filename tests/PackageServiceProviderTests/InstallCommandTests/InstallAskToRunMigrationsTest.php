@@ -20,7 +20,7 @@ trait InstallAskToRunMigrationsTest
 
 uses(InstallAskToRunMigrationsTest::class);
 
-it('can ask to run the migrations', function () {
+it("can ask to run the migrations", function () {
     $this
         ->artisan('package-tools:install')
         ->assertSuccessful()

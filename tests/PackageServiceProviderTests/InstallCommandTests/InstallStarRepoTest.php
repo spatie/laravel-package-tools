@@ -20,7 +20,7 @@ trait InstallStarRepoTest
 
 uses(InstallStarRepoTest::class);
 
-it('can propose to star the repo', function () {
+it("can propose to star the repo", function () {
     $this
         ->artisan('package-tools:install')
         ->assertSuccessful()

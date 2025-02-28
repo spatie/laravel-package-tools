@@ -10,12 +10,12 @@ trait HasRoutes
 
     public function hasRoutesByName(...$routeFileNames): self
     {
-        $this->routeFileNames = array_merge(
+        $this->routeFileNames = array_unique(array_merge(
             $this->routeFileNames,
             collect($routeFileNames)->flatten()->toArray()
-        );
+        ));
 
-        $this->routesPath = $this->verifyDirOrNull($this->routesPath);
+        $this->routesPath = $this->verifyRelativeDirOrNull($this->routesPath);
 
         return $this;
     }

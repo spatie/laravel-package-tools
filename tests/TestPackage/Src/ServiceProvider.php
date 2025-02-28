@@ -15,7 +15,7 @@ class ServiceProvider extends PackageServiceProvider
 
     public function configurePackage(Package $package): void
     {
-        $configClosure = self::$configurePackageUsing ?? function (Package $package) {
+        $configClosure = static::$configurePackageUsing ?? function (Package $package) {
         };
 
         ($configClosure)($package);
@@ -28,12 +28,12 @@ class ServiceProvider extends PackageServiceProvider
      **/
     public function register(): self
     {
-        self::$thrownException = null;
+        static::$thrownException = null;
 
         try {
             parent::register();
         } catch (Exception $e) {
-            self::$thrownException = $e;
+            static::$thrownException = $e;
         }
 
         return $this;
@@ -42,16 +42,30 @@ class ServiceProvider extends PackageServiceProvider
     public function boot(): self
     {
         // Do not run boot if there was an exception in register
-        if (self::$thrownException) {
+        if (static::$thrownException) {
             return $this;
         }
 
         try {
             parent::boot();
         } catch (Exception $e) {
-            self::$thrownException = $e;
+            static::$thrownException = $e;
         }
 
         return $this;
+    }
+
+    public static function reset(): void
+    {
+        static::$thrownException = null;
+        static::$publishes = [];
+        static::$publishGroups = [];
+
+        /* Following don't exist in Laravel 9.x or 10.x */
+        if (version_compare(app()->version(), '11') >= 0) {
+            static::$optimizeCommands = [];
+            static::$optimizeClearCommands = [];
+            static::$publishableMigrationPaths = [];
+        }
     }
 }

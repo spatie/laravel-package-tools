@@ -13,6 +13,8 @@ declare(strict_types=1);
  * https://github.com/pestphp/pest/blob/1.x/src/Functions.php
  * https://github.com/pestphp/pest/blob/2.x/src/Functions.php
  * https://github.com/pestphp/pest/blob/3.x/src/Functions.php
+ *
+ * The only difference (which needed to be handled) was a change of namespace between v1 and v2+.
  **/
 
 use Pest\Support\Backtrace;
@@ -35,7 +37,7 @@ function test(?string $description = null, ?Closure $closure = null): HigherOrde
         }
 
         if ($closure) {
-            Closure::bind($closure, $this)();
+            $closure->call($this);
         }
     };
 

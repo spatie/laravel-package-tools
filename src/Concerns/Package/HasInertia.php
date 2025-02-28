@@ -13,7 +13,7 @@ trait HasInertia
         $this->hasInertiaComponents = true;
         $this->inertiaNamespace = $namespace;
 
-        $this->inertiaComponentsPath = $this->verifyDirOrNull($this->inertiaComponentsPath);
+        $this->inertiaComponentsPath = $this->verifyRelativeDirOrNull($this->inertiaComponentsPath);
 
         return $this;
     }

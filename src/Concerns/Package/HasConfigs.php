@@ -15,12 +15,12 @@ trait HasConfigs
             $configFileNames = [$this->shortName()];
         }
 
-        $this->configFileNames = array_merge(
+        $this->configFileNames = array_unique(array_merge(
             $this->configFileNames,
             $configFileNames
-        );
+        ));
 
-        $this->configPath = $this->verifyDirOrNull($this->configPath);
+        $this->configPath = $this->verifyRelativeDirOrNull($this->configPath);
 
         return $this;
     }

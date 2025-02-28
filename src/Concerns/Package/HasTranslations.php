@@ -11,7 +11,7 @@ trait HasTranslations
     {
         $this->hasTranslations = true;
         
-        $this->translationsPath = $this->verifyDirOrNull($this->translationsPath);
+        $this->translationsPath = $this->verifyRelativeDirOrNull($this->translationsPath);
 
         return $this;
     }

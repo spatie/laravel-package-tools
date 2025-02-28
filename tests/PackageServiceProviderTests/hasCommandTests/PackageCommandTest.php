@@ -17,7 +17,7 @@ trait PackageCommandTest
 
 uses(PackageCommandTest::class);
 
-it('can execute a registered commands', function () {
+it("can execute a registered commands", function () {
     $this
         ->artisan('test-command')
         ->assertSuccessful();

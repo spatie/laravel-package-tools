@@ -3,11 +3,14 @@
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasMigrationsTests;
 
 use Spatie\LaravelPackageTools\Package;
+use function Spatie\PestPluginTestTime\testTime;
 
-trait PackageDiscoversMigrationsTest
+trait PackageMigrationsDiscoversTest
 {
     public function configurePackage(Package $package)
     {
+        testTime()->freeze('2020-01-01 00:00:00');
+
         $package
             ->name('laravel-package-tools')
             ->discoversMigrations()
@@ -15,7 +18,7 @@ trait PackageDiscoversMigrationsTest
     }
 }
 
-uses(PackageDiscoversMigrationsTest::class);
+uses(PackageMigrationsDiscoversTest::class);
 
 $expectPublished = [
     'create_table_discover_normal',
@@ -46,7 +49,7 @@ $expectNotLoaded = [
     'folder/subfolder_non_migration_text_file',
 ];
 
-it('publishes all migrations', function () use ($expectPublished) {
+it("publishes all migrations", function () use ($expectPublished) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
@@ -54,7 +57,7 @@ it('publishes all migrations', function () use ($expectPublished) {
     expect(true)->toHaveMigrationsPublished($expectPublished);
 });
 
-it('doesn\'t publish non-migration files', function () use ($expectNotPublished) {
+it("doesn't publish non-migration files", function () use ($expectNotPublished) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
@@ -62,7 +65,7 @@ it('doesn\'t publish non-migration files', function () use ($expectNotPublished)
     expect(true)->toHaveMigrationsNotPublished($expectNotPublished);
 });
 
-it('does not overwrite an existing migration', function () {
+it("does not overwrite an existing migration", function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
@@ -80,7 +83,7 @@ it('does not overwrite an existing migration', function () {
     expect($filePath)->toHaveContentsMatching('modified');
 });
 
-it('loads the discovered non-stub migrations for "artisan migrate"', function () use ($expectLoaded) {
+it("loads the discovered non-stub migrations for 'artisan migrate'", function () use ($expectLoaded) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
@@ -88,7 +91,7 @@ it('loads the discovered non-stub migrations for "artisan migrate"', function ()
     expect(__DIR__ . '/../../TestPackage/database/migrations')->toHaveMigrationsLoaded($expectLoaded);
 });
 
-it('doesn\'t load the stub migrations for "artisan migrate"', function () use ($expectNotLoaded) {
+it("doesn't load the stub migrations for 'artisan migrate'", function () use ($expectNotLoaded) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();

@@ -2,8 +2,9 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-use Illuminate\Support\Facades\Blade;
+use PhpToken;
 use ReflectionClass;
+use Illuminate\Support\Facades\Blade;
 
 trait ProcessBlade
 {
@@ -13,6 +14,7 @@ trait ProcessBlade
             ->bootPackageBladeComponentsByClass()
             ->bootPackageBladeComponentsByNamespace()
             ->bootPackageBladeComponentsByPath()
+            ->bootPackageBladeAnonymousComponentsByPath()
             ->bootPackageBladeDirectives()
             ->bootPackageBladeEchos()
             ->bootPackageBladeIfs();
@@ -79,14 +81,14 @@ trait ProcessBlade
 
     protected function bootPackageBladeComponentsByPath(): self
     {
-        if (empty($this->package->bladeComponentPaths)) {
+        if (empty($paths = $this->package->bladeComponentPaths)) {
             return $this;
         }
 
-        foreach ($this->package->bladeComponentPaths as $prefix => $path) {
+        foreach ($paths as $prefix => $path) {
             // Get namespace for directory from the first class file in the directory
             // Load the namespace
-            Blade::componentNamespace(self::getNamespaceOfDirectory($path), $prefix);
+            Blade::componentNamespace($this->getNamespaceOfRelativePath($path), $prefix);
         }
 
         if (! $this->app->runningInConsole()) {
@@ -94,10 +96,37 @@ trait ProcessBlade
         }
 
         $appPath = app_path("View/Components/vendor/{$this->package->shortName()}/");
-        $tag = "{$this->package->shortName()}-components";
-        foreach ($this->package->bladeComponentPaths as $prefix => $path) {
+        $tag = "{$this->package->name}-components";
+        foreach ($paths as $prefix => $path) {
             $this->publishes(
-                [$this->package->basePath($path) => $appPath . basename($path)],
+                [$this->package->basePath($path) => $appPath],
+                $tag
+            );
+        }
+
+        return $this;
+    }
+
+    protected function bootPackageBladeAnonymousComponentsByPath(): self
+    {
+        if (empty($paths = $this->package->bladeAnonymousComponentPaths)) {
+            return $this;
+        }
+
+        foreach ($paths as $prefix => $path) {
+            // Get namespace for directory from the first class file in the directory
+            Blade::anonymousComponentPath($this->package->buildDirectory($path), $prefix);
+        }
+
+        if (! $this->app->runningInConsole()) {
+            return $this;
+        }
+
+        $appPath = resource_path("views/components/vendor/{$this->package->shortName()}/");
+        $tag = "{$this->package->name}-anonymous-components";
+        foreach ($paths as $prefix => $path) {
+            $this->publishes(
+                [$this->package->basePath($path) => $appPath],
                 $tag
             );
         }
@@ -111,7 +140,7 @@ trait ProcessBlade
             return $this;
         }
 
-        foreach ($this->package->bladeEchos as $name => $callable) {
+        foreach ($this->package->bladeEchos as $name=>$callable) {
             Blade::directive($name, $callable);
         }
 
@@ -137,7 +166,7 @@ trait ProcessBlade
             return $this;
         }
 
-        foreach ($this->package->bladeIfs as $name => $callable) {
+        foreach ($this->package->bladeIfs as $name=>$callable) {
             Blade::if($name, $callable);
         }
 

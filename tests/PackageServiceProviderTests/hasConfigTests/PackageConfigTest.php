@@ -16,11 +16,11 @@ trait PackageConfigTest
 
 uses(PackageConfigTest::class);
 
-it('can register the config file', function () {
+it("can register the config file", function () {
     expect(config('package-tools.key'))->toBe('value');
 });
 
-it('can publish the config file', function () {
+it("can publish the config file", function () {
     $file = config_path('package-tools.php');
     expect($file)->not->toBeFileOrDirectory();
 

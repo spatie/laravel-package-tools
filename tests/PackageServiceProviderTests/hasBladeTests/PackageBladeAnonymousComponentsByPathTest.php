@@ -5,31 +5,31 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasBladeC
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Components\TestComponent;
 
-trait PackageBladeComponentsLegacyTest
+trait PackageBladeAnonymousComponentsByPathTest
 {
     public function configurePackage(Package $package)
     {
         $package
             ->name('laravel-package-tools')
             ->hasViews()
-            ->hasViewComponent('abc', TestComponent::class);
+            ->hasBladeAnonymousComponentsByPath('abc');
     }
 }
 
-uses(PackageBladeComponentsLegacyTest::class);
+uses(PackageBladeAnonymousComponentsByPathTest::class);
 
-it('can load the legacy blade components', function () {
-    $content = view('package-tools::component-test')->render();
+it("can load the blade components by path", function () {
+    $content = view('package-tools::component-test-anonymous')->render();
 
     expect($content)->toStartWith('<div>hello world</div>');
 });
 
-it('can publish the legacy blade components', function () {
-    $file = app_path('View/Components/vendor/package-tools/TestComponent.php');
+it("can publish the blade components by path", function () {
+    $file = resource_path('views/components/vendor/package-tools/anonymous-component.blade.php');
     expect($file)->not->toBeFileOrDirectory();
 
     $this
-        ->artisan('vendor:publish --tag=laravel-package-tools-components')
+        ->artisan('vendor:publish --tag=laravel-package-tools-anonymous-components')
         ->assertSuccessful();
 
     expect($file)->toBeFile();

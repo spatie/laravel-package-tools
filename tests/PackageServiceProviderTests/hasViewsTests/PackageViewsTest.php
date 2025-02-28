@@ -16,13 +16,13 @@ trait PackageViewsTest
 
 uses(PackageViewsTest::class);
 
-it('can load the views', function () {
+it("can load the views", function () {
     $content = view('package-tools::test')->render();
 
     expect($content)->toStartWith('This is a blade view');
 });
 
-it('can publish the views', function () {
+it("can publish the views", function () {
     $file = resource_path('views/vendor/package-tools/test.blade.php');
     expect($file)->not->toBeFileOrDirectory();
 

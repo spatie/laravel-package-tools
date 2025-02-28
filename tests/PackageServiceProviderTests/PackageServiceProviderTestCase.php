@@ -2,12 +2,13 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
+//use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestCase;
 use Spatie\LaravelPackageTools\Tests\TestPackage\Src\ServiceProvider;
-use function Spatie\PestPluginTestTime\testTime;
 use Symfony\Component\Finder\SplFileInfo;
 
 abstract class PackageServiceProviderTestCase extends TestCase
@@ -20,6 +21,7 @@ abstract class PackageServiceProviderTestCase extends TestCase
         'database/migrations/',
         'lang/vendor/',
         'public/vendor/',
+        'resources/views/components/',
         'resources/views/livewire/',
         'resources/views/vendor/',
         'resources/js/Pages/',
@@ -50,20 +52,14 @@ abstract class PackageServiceProviderTestCase extends TestCase
             $this->configurePackage($package);
         };
 
-        ServiceProvider::$thrownException = null;
-
         parent::setUp();
-
-        testTime()->freeze('2020-01-01 00:00:00');
-
-        $this->createApplication();
     }
 
     protected function tearDown(): void
     {
         $this
             ->deletePublishedFiles()
-            ->clearServiceProviderStaticLists();
+            ->clearLaravelStaticRegistrations();
 
         parent::tearDown();
     }
@@ -81,37 +77,59 @@ abstract class PackageServiceProviderTestCase extends TestCase
     {
         $basePath = base_path() . '/';
         foreach ($this->cleanPaths as $dir) {
-            if (! is_dir($basePath . $dir)) {
+            $dir = $basePath . $dir;
+            if (! is_dir($dir)) {
                 continue;
             }
-            collect(File::allFiles($basePath . $dir))->each(function (SplFileInfo $file) use ($basePath) {
+            collect(File::allFiles($dir))->each(function (SplFileInfo $file) use ($basePath) {
                 if (! in_array(Str::replace('\\', '/', Str::after($file->getPathname(), $basePath)), $this->cleanExclusions)) {
                     if (! unlink($file->getPathname())) {
                         fwrite(STDERR, "Failed to delete: " . $file->getPathname() . PHP_EOL);
                     }
                 }
             });
+
+            if ($this->is_dir_empty($dir)) {
+                rmdir($dir);
+            }
         }
 
         return $this;
     }
 
-    /* Clear all Laravel ServiceProvider static arrays which are not otherwise cleared between tests */
-    protected function clearServiceProviderStaticLists(): self
+    protected function is_dir_empty($dir): bool
     {
-        ServiceProvider::$publishes = [];
-        ServiceProvider::$publishGroups = [];
-        /* Following don't exist in Laravel 9.x or 10.x */
-        if (property_exists(ServiceProvider::class, 'optimizeCommands')) {
-            ServiceProvider::$optimizeCommands = [];
-            ServiceProvider::$optimizeClearCommands = [];
+        $handle = opendir($dir);
+        while (false !== ($entry = readdir($handle))) {
+            if ($entry != "." && $entry != "..") {
+                closedir($handle);
+                return false;
+            }
+        }
+        closedir($handle);
+        return true;
+    }
 
-            $reflection = new \ReflectionClass(ServiceProvider::class);
-            $property = $reflection->getProperty('publishableMigrationPaths');
-            $property->setAccessible(true);
-            $property->setvalue(ServiceProvider::class, []);
+    /* Clear all Laravel ServiceProvider static arrays which are not otherwise cleared between tests */
+
+    protected function clearLaravelStaticRegistrations(): self
+    {
+        ServiceProvider::reset();
+        Facade::clearResolvedInstances();
+
+        return $this;
+    }
+
+    protected function clearProtectedList(string $class, ... $properties): self
+    {
+        $reflection = new \ReflectionClass($class);
+        foreach (collect($properties)->flatten()->toArray() as $property) {
+            $reflectionProperty = $reflection->getProperty($property);
+            $reflectionProperty->setAccessible(true);
+            $reflectionProperty->setvalue($class, []);
         }
 
         return $this;
     }
 }
+

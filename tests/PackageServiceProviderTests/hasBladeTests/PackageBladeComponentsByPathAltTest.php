@@ -5,26 +5,26 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasBladeC
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Components\TestComponent;
 
-trait PackageBladeComponentsByClassTest
+trait PackageBladeComponentsByPathAltTest
 {
     public function configurePackage(Package $package)
     {
         $package
             ->name('laravel-package-tools')
             ->hasViews()
-            ->hasBladeComponentsByClass('abc', TestComponent::class);
+            ->hasBladeComponentsByPath('abc', "Components_alt");
     }
 }
 
-uses(PackageBladeComponentsByClassTest::class);
+uses(PackageBladeComponentsByPathAltTest::class);
 
-it('can load the blade components by class', function () {
-    $content = view('package-tools::component-test')->render();
+it("can load the blade components by alternate path", function () {
+    $content = view('package-tools::component-test-namespace')->render();
 
     expect($content)->toStartWith('<div>hello world</div>');
 });
 
-it('can publish the blade components by class', function () {
+it("can publish the blade components by alternate path", function () {
     $file = app_path('View/Components/vendor/package-tools/TestComponent.php');
     expect($file)->not->toBeFileOrDirectory();
 

@@ -13,12 +13,12 @@ trait HasMigrations
 
     public function hasMigrationsByName(...$migrationFileNames): self
     {
-        $this->migrationFileNames = array_merge(
+        $this->migrationFileNames = array_unique(array_merge(
             $this->migrationFileNames,
             collect($migrationFileNames)->flatten()->toArray()
-        );
+        ));
 
-        $this->migrationsPath = $this->verifyDirOrNull($this->migrationsPath);
+        $this->migrationsPath = $this->verifyRelativeDirOrNull($this->migrationsPath);
 
         return $this;
     }

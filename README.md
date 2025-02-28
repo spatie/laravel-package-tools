@@ -13,10 +13,10 @@ Whilst the intended use is to assist package developers more easily
 to integrate their package with Laravel,
 this also has all the functionality you need to modularise large applications.
 
-Version x extends the original package functionality to:
+Version 2.0 extends the original package functionality to:
 
 * Provide greater ability to load functions by path (and where appropriate multiple paths)
-so as to mimic the autoload functionality for certain paths in the default Laravel application
+so as to mimic the autoload functionality provided by Laravel for certain paths
 (see [Laravel's Directory Structure](https://laravel.com/docs/structure)).
 
 * Have greater consistency about loading stuff individually by class or name,
@@ -26,7 +26,13 @@ or by path or (where appropriate) namespace.
 
 To provide a consistent API this has required some changes to the method names used,
 however backwards compatibility with previous versions has been maintained so that
-any upgrades should not break your existing `PackageServiceProvider` calls.
+any upgrades should not break your valid existing `PackageServiceProvider` calls.
+
+**Note:** Whilst all method calls are backwardly compatible,
+where your package definition is not strictly valid
+because e.g. a file or path you named is needed but doesn't exist,
+you will now get an Invalid Package exception in non-production environments
+when you previously didn't.
 
 Here's an example of how it can be used.
 
@@ -112,7 +118,33 @@ We publish all received postcards on [our virtual postcard wall](https://spatie.
 
 ## Usage
 
-### Directory structure
+To avoid needing to scroll through to find the right usage section, here is a Table of Contents:
+
+* [Directory Structure](#directory-structure)
+* [Getting Started](#getting-started)
+* [Assets](#assets)
+* [Blade Components](#blade-components)
+* [Blade Anonymous Components](#blade-anonymous-components)
+* [Blade Custom Directives](#blade-custom-directives)
+* [Blade Custom Echo Handlers](#blade-custom-echo-handlers)
+* [Blade Custom Conditionals](#blade-custom-conditionals)
+* [Commands - Callable and Console](#commands-callable-and-console)
+* [Optimize Commands (Laravel v11+)](#optimize-commands)
+* [Config Files](#config-files)
+* [Event Listeners](#event-listeners)
+* [Inertia Components](#inertia-components)
+* [Livewire Views and Components](#livewire-views-and-components)
+* [Database Migrations](#database-migrations)
+* [Routes](#routes)
+* [Publishable Service Providers](#publishable-service-providers)
+* [Translations](#translations)
+* [Views](#views)
+* [View Composers](#view-composers)
+* [Views Global Shared Data](#views-global-shared-data)
+* [Creating and Install Command](#creating-an-install-command)
+* [Lifecycle Hooks](#lifecycle-hooks)
+
+### Directory Structure
 
 This package is opinionated on how you should structure your package,
 and by default expects a structure based on
@@ -149,7 +181,7 @@ and `<package root>/src/ServiceProviders` would be set using  `->setPublishableS
 **Note:** If your primary Service Provider is located in `<package root>/src/Providers` then you can set
 the base path with a call to `setBasePath(__DIR__ . '/../')`.
 
-### Getting started
+### Getting Started
 
 In your package you should let your service provider extend `Spatie\LaravelPackageTools\PackageServiceProvider`.
 
@@ -173,7 +205,7 @@ and the remainder of the name used as a short-name instead when publishing files
 
 And now let's look at all the different Laravel functions this supports...
 
-### Publishing Assets
+### Assets
 
 Assets are usually non-php files that are used by your views e.g. such as graphics
 that you can make publishable by calling `hasAssets()`
@@ -187,13 +219,12 @@ $package
 ```
 
 By default these assets are located in `<package root>/resources/dist`,
-however you can override this with `setAssetPath()`:
+however you can override this by specifying a path with `hasAssets()`:
 
 ```php
 $package
     ->name('your-package-name')
-    ->hasAssets()
-    ->setAssetsPath('/../assets/');
+    ->hasAssets('./assets/');
 ```
 
 Users of your package will be able to publish the assets with this command:
@@ -205,10 +236,7 @@ php artisan vendor:publish --tag=your-package-name-assets
 and this will copy over the assets to the `public/vendor/<your-package-name>` directory
 of the users application.
 
-**Note:** At present only one assets path can be published.
-If there is a need, this can be extended like many other functions to support multiple paths.
-
-### Blade components
+### Blade Components
 
 There are three ways you can register and publish Blade (view) components:
 
@@ -304,7 +332,42 @@ this method only makes these views available and does **not** publish these view
 _See: [Laravel Package Development - Autoloading Package Components](https://laravel.com/docs/packages#autoloading-package-components)
 for underlying details._
 
-### Custom Blade Directives
+### Blade Anonymous Components
+
+Blade Anonymous Components are an alternative way of creating Blade components
+using a combined view / components file (presumably the inspiration for Laravel Volt).
+_See [Laragon Blade - Anonymous Components]
+(https://laravel.com/docs/blade#anonymous-components)._
+
+Your Blade Anonymous Components should be placed by default
+in the `<package root>/resources/views/components` directory,
+and they can be registered and published using `hasBladeAnonymousComponentsByPath()`
+as follows:
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasBladeAnonymousComponentsByPath('spatie');
+```
+
+You can register and publish components in any other directory as follows:
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasBladeAnonymousComponentsByPath('spatie1');
+    ->hasBladeAnonymousComponentsByPath('spatie2', '../resources/views/my_components');
+```
+
+Calling `hasBladeAnonymousComponentsByPath` will also make view components publishable,
+and they will be published to `resources/Views/Components/vendor/your-package-name/`
+in the user's Laravel project with this command:
+
+```bash
+php artisan vendor:publish --tag=your-package-name-anonymous-components
+```
+
+### Blade Custom Directives
 
 Custom Blade directives allow you to add standardised functionality
 (such as variable formatting e.g. `@datetime($var)`) to Blade views.
@@ -325,7 +388,7 @@ and use it as
 @datetime($var)
 ```
 
-### Custom Blade Echo Handlers
+### Blade Custom Echo Handlers
 
 Custom Blade echo handlers are an alternative way to define a default format for variables
 of a specific object class instead of the standard `__toString()` method.
@@ -345,7 +408,7 @@ Once you have done this you can use it in a Blade component or template
 and the value will be automatically formatted
 e.g. use `Cost: {{ $money }}` and the value will automatically be formed as GBP.
 
-### Custom Blade conditionals
+### Blade Custom Conditionals
 
 Custom blade conditionals allow you to add standardised conditional processing to your Blade templates
 (e.g. to display differently depending on a configuration variable).
@@ -377,7 +440,7 @@ and then you can use this as follows:
 @enddisk
 ```
 
-### Callable and Console commands
+### Commands - Callable and Console
 
 Custom Artisan commands can be registered with Laravel, either as:
 
@@ -424,7 +487,7 @@ $package
     ->hasConsoleCommandsByPath('Console/Commands');
 ```
 
-### Optimize/Optimize:Clear commands
+### Optimize commands
 
 In Laravel 11 onwards, you can also define custom `artisan optimize` and `artisan optimize:clear`
 commands that can be set and cleared alongside Laravel's other optimization functionality
@@ -443,7 +506,7 @@ $package
 _See: [Laravel Package Development - Optimize Commands](https://laravel.com/docs/packages#optimize-commands)
 for underlying details._
 
-### Config file(s)
+### Config Files
 
 You can provide either actual config files (`*.php`) or stub config files (`*.php.stub`)
 and by default these should be placed in `<package root>/config`,
@@ -524,7 +587,7 @@ $package
 _See: [Laravel Events - Manually Registering Events](https://laravel.com/docs/events#manually-registering-events)
 for underlying details._
 
-### Inertia components
+### Inertia Components
 
 If you have an Inertia component `<package root>/resources/js/Pages/myComponent.vue`,
 you can publish it and use it like this: `Inertia::render('YourPackageName/myComponent')`.
@@ -569,7 +632,7 @@ Also, the Inertia components are available in a convenient way with your package
 the you may be able to use the [Inertia Page Loader plugin](https://github.com/ycs77/inertia-page-loader)
 that allows you to add paths in your package as a source for Inertia components.
 
-### Livewire views and components
+### Livewire Views and Components
 
 Like Blade, Livewire also consists of views and components,
 (though when using Livewire Volt these can be combined into a single view file).
@@ -704,7 +767,7 @@ $package
     ->hasRoutes(['web', 'admin']);
 ```
 
-### Publishable service providers
+### Publishable Service Providers
 
 Some packages need one or more example service providers to be copied
 into the `app\Providers` directory of the Laravel app.
@@ -850,7 +913,7 @@ $package
 ```
 
 
-### Views shared global data
+### Views Global Shared Data
 
 You can share data with all views using the `sharesDataWithAllViews` method. This will make the shared variable
 available to all views.
@@ -865,11 +928,11 @@ $package
 and you need to take care to avoid name clashes with other e.g. other packages.
 It is recommended that the name of any shared data be prefixed with your package name.
 
-### Install with `artisan your-package-name:install`
+### Creating and Install Command
 
-Instead of instructing your users to run multiple artisan commands to individually publish
-e.g. config files, migrations etc.,
-you can create an artisan `package-name:install` command that can streamline this
+Instead of instructing your users to run multiple artisan commands to
+individually publish e.g. config files, migrations etc.,
+you can create an `artisan package-name:install` command that can streamline this
 by running all the publishes you need using this single command.
 Packages like Laravel Horizon and Livewire already provide such commands,
 and Laravel Package Tools makes it easy for you to do the same.
@@ -958,7 +1021,7 @@ public function configurePackage(Package $package): void
 }
 ```
 
-### Lifecycle hooks
+### Lifecycle Hooks
 
 You can put any custom logic your package needs while starting up in one of these methods:
 

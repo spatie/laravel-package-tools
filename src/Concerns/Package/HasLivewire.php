@@ -14,8 +14,8 @@ trait HasLivewire
         $this->hasLivewire = true;
         $this->livewireNamespace = $namespace;
 
-        $this->livewireComponentsPath = $this->verifyDirOrNull($this->livewireComponentsPath);
-        $this->livewireViewsPath = $this->verifyDirOrNull($this->livewireViewsPath);
+        $this->livewireComponentsPath = $this->verifyRelativeDirOrNull($this->livewireComponentsPath);
+        $this->livewireViewsPath = $this->verifyRelativeDirOrNull($this->livewireViewsPath);
 
         return $this;
     }

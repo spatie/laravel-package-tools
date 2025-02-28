@@ -8,10 +8,10 @@ trait Publishes
 
     public function publish(string ...$tag): self
     {
-        $this->publishes = array_merge(
+        $this->publishes = array_unique(array_merge(
             $this->publishes,
             $tag
-        );
+        ));
 
         return $this;
     }

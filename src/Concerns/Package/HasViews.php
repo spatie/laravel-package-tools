@@ -13,7 +13,7 @@ trait HasViews
         $this->hasViews = true;
         $this->viewNamespace = $namespace;
 
-        $this->viewsPath = $this->verifyDirOrNull($this->viewsPath);
+        $this->viewsPath = $this->verifyRelativeDirOrNull($this->viewsPath);
 
         return $this;
     }

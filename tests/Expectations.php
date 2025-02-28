@@ -59,6 +59,11 @@ expect()->extend('toHaveMigrationsLoaded', function (...$testFiles) {
         }
     }
 
+    if ($failures) {
+        fwrite(STDERR, "Migration(s) not loaded that should have been: " .
+            var_export($failures, true) . PHP_EOL . "Published: " . var_export($loadedFiles, true)
+        );
+    }
     expect($failures)->toBeEmpty(
         "Migration(s) not loaded that should have been: " .
         var_export($failures, true) . PHP_EOL . "Loaded: " . var_export($loadedFiles, true)
@@ -78,6 +83,12 @@ expect()->extend('toHaveMigrationsNotLoaded', function (...$testFiles) {
         if (isFileListed($loadedFiles, $testFile, endsWith: false)) {
             $failures[] = $testFile;
         }
+    }
+
+    if ($failures) {
+        fwrite(STDERR, "Migration(s) loaded that shouldn't have been: " .
+            var_export($failures, true) . PHP_EOL . "Published: " . var_export($loadedFiles, true)
+        );
     }
     expect($failures)->toBeEmpty(
         "Migration(s) loaded that shouldn't have been: " .
@@ -114,6 +125,11 @@ expect()->extend('toHaveMigrationsPublished', function (...$testFiles) {
         }
     }
 
+    if ($failures) {
+        fwrite(STDERR, "Migration(s) not published that should have been: " .
+            var_export($failures, true) . PHP_EOL . "Published: " . var_export($publishedFiles, true)
+        );
+    }
     expect($failures)->toBeEmpty(
         "Migration(s) not published that should have been: " .
         var_export($failures, true) . PHP_EOL . "Published: " . var_export($publishedFiles, true)
@@ -133,6 +149,11 @@ expect()->extend('toHaveMigrationsNotPublished', function (...$testFiles) {
         }
     }
 
+    if ($failures) {
+        fwrite(STDERR, "Migration(s) published that shouldn't have been: " .
+            var_export($failures, true) . PHP_EOL . "Published: " . var_export($publishedFiles, true)
+        );
+    }
     expect($failures)->toBeEmpty(
         "Migration(s) published that shouldn't have been: " .
         var_export($failures, true) . PHP_EOL . "Published: " . var_export($publishedFiles, true)

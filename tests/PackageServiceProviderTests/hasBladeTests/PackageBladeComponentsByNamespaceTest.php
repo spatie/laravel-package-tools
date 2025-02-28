@@ -17,7 +17,7 @@ trait PackageBladeComponentsByNamespaceTest
 
 uses(PackageBladeComponentsByNamespaceTest::class);
 
-it('can load the blade components by namespace', function () {
+it("can load the blade components by namespace", function () {
     $content = view('package-tools::component-test-namespace')->render();
 
     expect($content)->toStartWith('<div>hello world</div>');

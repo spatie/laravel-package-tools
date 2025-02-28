@@ -16,13 +16,13 @@ trait PackageViewsWithCustomNamespaceTest
 
 uses(PackageViewsWithCustomNamespaceTest::class);
 
-it('can load the views with a custom namespace', function () {
+it("can load the views with a custom namespace", function () {
     $content = view('custom-namespace::test')->render();
 
     expect($content)->toStartWith('This is a blade view');
 });
 
-it('can publish the views with a custom namespace', function () {
+it("can publish the views with a custom namespace", function () {
     $file = resource_path('views/vendor/custom-namespace/test.blade.php');
     expect($file)->not->toBeFileOrDirectory();
 

@@ -17,7 +17,7 @@ trait PackageSharedDataTest
 
 uses(PackageSharedDataTest::class);
 
-it('can share data with all views', function () {
+it("can share data with all views", function () {
     $content1 = view('package-tools::shared-data')->render();
     $content2 = view('package-tools::shared-data-2')->render();
 

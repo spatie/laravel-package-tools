@@ -20,7 +20,7 @@ trait InstallConfigFileTest
 
 uses(InstallConfigFileTest::class);
 
-it('can install the config file', function () {
+it("can install the config file", function () {
     $configFile = config_path('package-tools.php');
     expect($configFile)->not->toBeFileOrDirectory();
 

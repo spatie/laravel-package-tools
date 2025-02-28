@@ -22,7 +22,7 @@ trait PackageCommandsTest
 
 uses(PackageCommandsTest::class);
 
-it('can execute registered commands', function () {
+it("can execute registered commands", function () {
     $this
         ->artisan('test-command')
         ->assertSuccessful();

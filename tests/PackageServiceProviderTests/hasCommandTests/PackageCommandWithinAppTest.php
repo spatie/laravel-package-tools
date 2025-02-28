@@ -18,7 +18,7 @@ trait PackageCommandWithinAppTest
 
 uses(PackageCommandWithinAppTest::class);
 
-it('can execute a registered command in the context of the app', function () {
+it("can execute a registered command in the context of the app", function () {
     $response = $this->get('execute-command');
 
     expect($response->baseResponse->getContent())->toContain('output of test command');

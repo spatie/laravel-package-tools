@@ -21,7 +21,7 @@ trait InstallMigrationTest
 
 uses(InstallMigrationTest::class);
 
-it('can install the migrations', function () {
+it("can install the migrations", function () {
     $this
         ->artisan('package-tools:install')
         ->assertSuccessful();

@@ -23,7 +23,7 @@ trait ProcessMigrations
                 );
             }
 
-            $this->package->migrationFileNames = self::convertDiscovers($this->package->migrationsPath());
+            $this->package->migrationFileNames = static::convertDiscovers($this->package->migrationsPath());
         }
 
         if (empty($this->package->migrationFileNames)) {

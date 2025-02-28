@@ -16,7 +16,7 @@ trait PackagePublishableProviderTest
 
 uses(PackagePublishableProviderTest::class);
 
-it('can publish a service provider', function () {
+it("can publish a service provider", function () {
     $providerPath = app_path('Providers/MyPackageServiceProvider.php');
 
     expect($providerPath)->not->toBeFileOrDirectory();

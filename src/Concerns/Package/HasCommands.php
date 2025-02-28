@@ -13,10 +13,10 @@ trait HasCommands
     {
         $this->verifyClassNames(__FUNCTION__, $commandClassNames);
 
-        $this->commands = array_merge(
+        $this->commands = array_unique(array_merge(
             $this->commands,
             collect($commandClassNames)->flatten()->toArray()
-        );
+        ));
 
         return $this;
     }
@@ -25,10 +25,10 @@ trait HasCommands
     {
         $this->verifyClassNames(__FUNCTION__, $commandClassNames);
 
-        $this->consoleCommands = array_merge(
+        $this->consoleCommands = array_unique(array_merge(
             $this->consoleCommands,
             collect($commandClassNames)->flatten()->toArray()
-        );
+        ));
 
         return $this;
     }
@@ -37,22 +37,22 @@ trait HasCommands
     {
         $this->verifyRelativeDirs(__FUNCTION__, $paths);
 
-        $this->commandPaths = array_merge(
+        $this->commandPaths = array_unique(array_unique(array_merge(
             $this->commandPaths,
             collect($paths)->flatten()->toArray()
-        );
+        )));
 
         return $this;
     }
 
-    public function hasConsoleCommandsByPath(...$paths): self
+    public function hasConsoleCommandsByPath(... $paths): self
     {
         $this->verifyRelativeDirs(__FUNCTION__, $paths);
 
-        $this->consoleCommandPaths = array_merge(
+        $this->consoleCommandPaths = array_unique(array_merge(
             $this->consoleCommandPaths,
             collect($paths)->flatten()->toArray()
-        );
+        ));
 
         return $this;
     }

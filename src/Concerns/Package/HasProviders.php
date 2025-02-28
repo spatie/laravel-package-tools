@@ -11,7 +11,7 @@ trait HasProviders
     {
         $this->publishableProviderNames[] = $providerName;
 
-        $this->publishableProviderPath = $this->verifyDirOrNull($this->publishableProviderPath);
+        $this->publishableProviderPath = $this->verifyRelativeDirOrNull($this->publishableProviderPath);
 
         return $this;
     }

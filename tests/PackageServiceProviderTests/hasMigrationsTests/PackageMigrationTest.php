@@ -3,11 +3,14 @@
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasMigrationsTests;
 
 use Spatie\LaravelPackageTools\Package;
+use function Spatie\PestPluginTestTime\testTime;
 
 trait PackageMigrationTest
 {
     public function configurePackage(Package $package)
     {
+        testTime()->freeze('2020-01-01 00:00:00');
+
         $package
             ->name('laravel-package-tools')
             ->hasMigrations('create_table_explicit_normal', 'create_table_explicit_stub')
@@ -49,7 +52,7 @@ $expectNotLoaded = [
 ];
 
 
-it('publishes the explicitly listed migrations', function () use ($expectPublished) {
+it("publishes the explicitly listed migrations", function () use ($expectPublished) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
@@ -57,7 +60,7 @@ it('publishes the explicitly listed migrations', function () use ($expectPublish
     expect(true)->toHaveMigrationsPublished($expectPublished);
 });
 
-it('doesn\'t publish the non-listed migrations', function () use ($expectNotPublished) {
+it("doesn't publish the non-listed migrations", function () use ($expectNotPublished) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
@@ -65,7 +68,7 @@ it('doesn\'t publish the non-listed migrations', function () use ($expectNotPubl
     expect(true)->toHaveMigrationsNotPublished($expectNotPublished);
 });
 
-it('doesn\'t overwrite an existing migration', function () {
+it("doesn't overwrite an existing migration", function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
@@ -83,7 +86,7 @@ it('doesn\'t overwrite an existing migration', function () {
     expect($filePath)->toHaveContentsMatching('modified');
 });
 
-it('does overwrite an existing migration with "artisan migrate --force"', function () {
+it("does overwrite an existing migration with 'artisan migrate --force'", function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
@@ -101,7 +104,7 @@ it('does overwrite an existing migration with "artisan migrate --force"', functi
     expect($filePath)->toHaveContentsMatchingFile(__DIR__.'/../../TestPackage/database/migrations/create_table_explicit_normal.php');
 });
 
-it('loads the explicitly listed non-stub migrations for "artisan migrate"', function () use ($expectLoaded) {
+it("loads the explicitly listed non-stub migrations for 'artisan migrate'", function () use ($expectLoaded) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
@@ -109,7 +112,7 @@ it('loads the explicitly listed non-stub migrations for "artisan migrate"', func
     expect(__DIR__ . '/../../TestPackage/database/migrations')->toHaveMigrationsLoaded($expectLoaded);
 });
 
-it('doesn\'t load the non-listed migrations or stub files for "artisan migrate"', function () use ($expectNotLoaded) {
+it("doesn't load the non-listed migrations or stub files for 'artisan migrate'", function () use ($expectNotLoaded) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();

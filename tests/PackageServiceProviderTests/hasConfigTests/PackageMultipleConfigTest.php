@@ -16,12 +16,12 @@ trait PackageMultipleConfigTest
 
 uses(PackageMultipleConfigTest::class);
 
-it('can register multiple config files', function () {
+it("can register multiple config files", function () {
     expect(config('package-tools.key'))->toBe('value');
     expect(config('alternative-config.alternative_key'))->toBe('alternative_value');
 });
 
-it('can publish multiple config files', function () {
+it("can publish multiple config files", function () {
     $file = config_path('alternative-config.php');
     expect($file)->not->toBeFileOrDirectory();
 

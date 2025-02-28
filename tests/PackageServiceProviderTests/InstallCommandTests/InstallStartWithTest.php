@@ -26,7 +26,7 @@ beforeEach(function () {
     $this->stringFromStart = '';
 });
 
-it('can execute the start with', function () {
+it("can execute the start with", function () {
     $this
         ->artisan('package-tools:install')
         ->assertSuccessful();

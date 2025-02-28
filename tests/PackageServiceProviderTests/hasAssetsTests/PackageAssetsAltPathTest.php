@@ -10,14 +10,13 @@ trait PackageAssetsAltPathTest
     {
         $package
             ->name('laravel-package-tools')
-            ->hasAssets()
-            ->setAssetsPath('/../resources/dist_alt');
+            ->hasAssets('../resources/dist_alt');
     }
 }
 
 uses(PackageAssetsAltPathTest::class);
 
-it('can publish the alternate assets', function () {
+it("can publish the alternate assets", function () {
     $file = public_path('vendor/package-tools/dummy_alt.js');
     expect($file)->not->toBeFileOrDirectory();
 

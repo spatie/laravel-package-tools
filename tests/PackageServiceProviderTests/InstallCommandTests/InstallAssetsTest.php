@@ -20,7 +20,7 @@ trait InstallAssetsTest
 
 uses(InstallAssetsTest::class);
 
-it('can install the assets', function () {
+it("can install the assets", function () {
     $file = public_path('vendor/package-tools/dummy.js');
     expect($file)->not->toBeFileOrDirectory();
 

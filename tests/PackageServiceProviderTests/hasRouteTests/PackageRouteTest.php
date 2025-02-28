@@ -16,13 +16,13 @@ trait PackageRouteTest
 
 uses(PackageRouteTest::class);
 
-it('can load the route', function () {
+it("can load the route", function () {
     $response = $this->get('my-route');
 
     $response->assertSeeText('my response');
 });
 
-it('can load multiple route', function () {
+it("can load multiple route", function () {
     $adminResponse = $this->get('other-route');
 
     $adminResponse->assertSeeText('other response');

@@ -83,11 +83,13 @@ final class Package
         return $basePath . DIRECTORY_SEPARATOR . ltrim($directory, DIRECTORY_SEPARATOR);
     }
 
-    public function verifyClassNames(string $method, ...$classes): void
+    public function verifyClassNames(string $method, ...$classes): array
     {
+        $classes = collect($classes)->flatten()->toArray();
+
         /* Avoid autoloading classes if production */
         if (! env('APP_DEBUG', false)) {
-            return;
+            return $classes;
         }
 
         $classes = collect($classes)->flatten()->toArray();
@@ -100,10 +102,18 @@ final class Package
                 );
             }
         }
+
+        return $classes;
     }
 
     private function verifyFiles(string $method, string ...$files): void
     {
+        // ToDo: Is this actually used? Need to use some sort of path with this.
+        /* Avoid exceptions if production */
+        if (! env('APP_DEBUG', false)) {
+            return;
+        }
+
         foreach (collect($files)->flatten()->toArray() as $file) {
             if (! is_file($this->buildDirectory($file))) {
                 throw InvalidPackage::fileDoesNotExist(
@@ -115,8 +125,13 @@ final class Package
         }
     }
 
-    private function verifyDir(string $method, string $dir): void
+    private function verifyDir(string $method, string $dir): string
     {
+        /* Avoid exceptions if production */
+        if (! env('APP_DEBUG', false)) {
+            return $dir;
+        }
+
         if (! is_dir($dir)) {
             throw InvalidPackage::dirDoesNotExist(
                 $this->name,
@@ -124,11 +139,24 @@ final class Package
                 $dir
             );
         }
+
+        return $dir;
     }
 
     private function verifyRelativeDir(string $method, string $dir): string
     {
-        $this->verifyDir($method, $this->buildDirectory($dir));
+        /* Avoid exceptions if production */
+        if (! env('APP_DEBUG', false)) {
+            return $dir;
+        }
+
+        if (! is_dir($this->basePath($dir))) {
+            throw InvalidPackage::dirDoesNotExist(
+                $this->name,
+                $method,
+                $dir
+            );
+        }
 
         return $dir;
     }
@@ -136,17 +164,18 @@ final class Package
     private function verifyRelativeDirs(string $method, array $dirs): void
     {
         foreach ($dirs as $dir) {
-            $this->verifyDir($method, $this->buildDirectory($dir));
+            $this->verifyDir($method, $this->basePath($dir));
         }
     }
 
-    private function verifyDirOrNull(string $dir): string
+    private function verifyRelativeDirOrNull(string $dir): string
     {
-        return is_dir($this->buildDirectory($dir)) ? $dir : null;
+        return is_dir($this->basePath($dir)) ? $dir : null;
     }
 
     private function verifyPathSet(string $method, string $path, ?string $subpath = null): string
     {
+        // ToDo: Eventually this won't be used
         if (! $path) {
             throw InvalidPackage::defaultPathDoesNotExist(
                 $this->name,
@@ -156,4 +185,5 @@ final class Package
 
         return $this->buildDirectory($path, $subpath);
     }
+
 }

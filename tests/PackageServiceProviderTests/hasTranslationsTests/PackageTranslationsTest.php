@@ -16,11 +16,11 @@ trait PackageTranslationsTest
 
 uses(PackageTranslationsTest::class);
 
-it('can load the translations', function () {
+it("can load the translations", function () {
     $this->assertEquals('translation', trans('package-tools::translations.translatable'));
 });
 
-it('can publish the translations', function () {
+it("can publish the translations", function () {
     $file = lang_path("vendor/package-tools/en/translations.php");
     expect($file)->not->toBeFileOrDirectory();
 
