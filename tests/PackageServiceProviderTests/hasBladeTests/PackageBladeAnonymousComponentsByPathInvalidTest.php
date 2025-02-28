@@ -4,7 +4,6 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasBladeC
 
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Components\TestComponent;
 
 trait PackageBladeAnonymousComponentsByPathInvalidTest
 {
@@ -19,4 +18,4 @@ trait PackageBladeAnonymousComponentsByPathInvalidTest
 uses(PackageBladeAnonymousComponentsByPathInvalidTest::class);
 
 it("will throw an exception when the Blade Anonymous Components path is invalid")
-    ->throws(InvalidPackage::class,"hasBladeAnonymousComponentsByPath: Directory 'Invalid_path' does not exist in package laravel-package-tools");
+    ->throws(InvalidPackage::class, "hasBladeAnonymousComponentsByPath: Directory 'Invalid_path' does not exist in package laravel-package-tools");

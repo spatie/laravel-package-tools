@@ -5,7 +5,6 @@ namespace Spatie\LaravelPackageTools;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use PhpToken;
 use ReflectionClass;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessAssets;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessBlade;
@@ -22,7 +21,6 @@ use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewCompos
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViews;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewSharedData;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
-use Symfony\Component\Finder\SplFileInfo;
 
 abstract class PackageServiceProvider extends ServiceProvider
 {
@@ -154,17 +152,17 @@ abstract class PackageServiceProvider extends ServiceProvider
     // Get namespace for directory from the first class file in the directory
     protected function getNamespaceOfRelativePath($path): string
     {
-            foreach (glob($this->package->buildDirectory($path) . '/*.php') as $file) {
-                if ($namespace = $this->readNamespaceFromFile($file)) {
-                    return $namespace;
-                }
+        foreach (glob($this->package->buildDirectory($path) . '/*.php') as $file) {
+            if ($namespace = $this->readNamespaceFromFile($file)) {
+                return $namespace;
             }
+        }
 
-            throw InvalidPackage::cannotDetermineNamespace(
-                $this->package->name,
-                'hasBladeComponentsByPath',
-                $path
-            );
+        throw InvalidPackage::cannotDetermineNamespace(
+            $this->package->name,
+            'hasBladeComponentsByPath',
+            $path
+        );
     }
 
     protected function readNamespaceFromFile($file): string
@@ -176,10 +174,12 @@ abstract class PackageServiceProvider extends ServiceProvider
                 $parts = explode(' ', trim($line));
                 if ($parts[0] === 'namespace') {
                     $namespace = rtrim(trim($parts[1]), ';');
+
                     break;
                 }
             }
             fclose($handle);
+
             return $namespace;
         }
 

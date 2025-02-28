@@ -60,7 +60,9 @@ expect()->extend('toHaveMigrationsLoaded', function (...$testFiles) {
     }
 
     if ($failures) {
-        fwrite(STDERR, "Migration(s) not loaded that should have been: " .
+        fwrite(
+            STDERR,
+            "Migration(s) not loaded that should have been: " .
             var_export($failures, true) . PHP_EOL . "Published: " . var_export($loadedFiles, true)
         );
     }
@@ -86,7 +88,9 @@ expect()->extend('toHaveMigrationsNotLoaded', function (...$testFiles) {
     }
 
     if ($failures) {
-        fwrite(STDERR, "Migration(s) loaded that shouldn't have been: " .
+        fwrite(
+            STDERR,
+            "Migration(s) loaded that shouldn't have been: " .
             var_export($failures, true) . PHP_EOL . "Published: " . var_export($loadedFiles, true)
         );
     }
@@ -126,7 +130,9 @@ expect()->extend('toHaveMigrationsPublished', function (...$testFiles) {
     }
 
     if ($failures) {
-        fwrite(STDERR, "Migration(s) not published that should have been: " .
+        fwrite(
+            STDERR,
+            "Migration(s) not published that should have been: " .
             var_export($failures, true) . PHP_EOL . "Published: " . var_export($publishedFiles, true)
         );
     }
@@ -150,7 +156,9 @@ expect()->extend('toHaveMigrationsNotPublished', function (...$testFiles) {
     }
 
     if ($failures) {
-        fwrite(STDERR, "Migration(s) published that shouldn't have been: " .
+        fwrite(
+            STDERR,
+            "Migration(s) published that shouldn't have been: " .
             var_export($failures, true) . PHP_EOL . "Published: " . var_export($publishedFiles, true)
         );
     }
