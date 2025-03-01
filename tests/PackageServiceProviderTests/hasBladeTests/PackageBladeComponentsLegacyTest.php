@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasBladeComponentTests;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasBladeTests;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Components\TestComponent;

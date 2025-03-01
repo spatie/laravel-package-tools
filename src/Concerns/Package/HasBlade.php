@@ -2,6 +2,9 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\Package;
 
+use Illuminate\Support\Facades\App;
+use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
+
 trait HasBlade
 {
     private static string $bladeComponentsDefaultPath = "Components";
@@ -27,7 +30,6 @@ trait HasBlade
 
         return $this;
     }
-
     public function hasBladeComponentsByNamespace(string $prefix, string $viewComponentNamespace): self
     {
         $this->bladeComponentNamespaces[$prefix] = $viewComponentNamespace;
@@ -44,6 +46,13 @@ trait HasBlade
 
     public function hasBladeAnonymousComponentsByPath(string $prefix, ?string $path = null): self
     {
+        if (version_compare(App::version(), '9.44.0') < 0) {
+            throw InvalidPackage::anonymousComponentsNotYetImplemented(
+                $this->name,
+                __FUNCTION__
+            );
+        }
+
         $this->bladeAnonymousComponentPaths[$prefix] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$bladeAnonymousComponentsDefaultPath);
 
         return $this;

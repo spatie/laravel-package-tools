@@ -122,6 +122,7 @@ abstract class PackageServiceProviderTestCase extends TestCase
         return $this;
     }
 
+/*
     protected function clearProtectedList(string $class, ...$properties): self
     {
         $reflection = new \ReflectionClass($class);
@@ -133,4 +134,5 @@ abstract class PackageServiceProviderTestCase extends TestCase
 
         return $this;
     }
+*/
 }

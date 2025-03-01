@@ -50,4 +50,9 @@ class InvalidPackage extends Exception
     {
         return new static("$type filename '$filename' is neither .php or .php.stub in package $packageName");
     }
+
+    public static function anonymousComponentsNotYetImplemented(string $packageName, string $method): self
+    {
+        return new static("$method is not supported in this version of Laravel in package $packageName");
+    }
 }
