@@ -122,17 +122,17 @@ abstract class PackageServiceProviderTestCase extends TestCase
         return $this;
     }
 
-/*
-    protected function clearProtectedList(string $class, ...$properties): self
-    {
-        $reflection = new \ReflectionClass($class);
-        foreach (collect($properties)->flatten()->toArray() as $property) {
-            $reflectionProperty = $reflection->getProperty($property);
-            $reflectionProperty->setAccessible(true);
-            $reflectionProperty->setvalue($class, []);
-        }
+    /*
+        protected function clearProtectedList(string $class, ...$properties): self
+        {
+            $reflection = new \ReflectionClass($class);
+            foreach (collect($properties)->flatten()->toArray() as $property) {
+                $reflectionProperty = $reflection->getProperty($property);
+                $reflectionProperty->setAccessible(true);
+                $reflectionProperty->setvalue($class, []);
+            }
 
-        return $this;
-    }
-*/
+            return $this;
+        }
+    */
 }
