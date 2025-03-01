@@ -3,7 +3,6 @@
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasBladeComponentTests;
 
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Components\TestComponent;
 
 trait PackageBladeComponentsByPathAltTest
 {

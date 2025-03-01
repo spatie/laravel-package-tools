@@ -2,9 +2,8 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-use PhpToken;
-use ReflectionClass;
 use Illuminate\Support\Facades\Blade;
+use ReflectionClass;
 
 trait ProcessBlade
 {
@@ -140,7 +139,7 @@ trait ProcessBlade
             return $this;
         }
 
-        foreach ($this->package->bladeEchos as $name=>$callable) {
+        foreach ($this->package->bladeEchos as $name => $callable) {
             Blade::directive($name, $callable);
         }
 
@@ -166,7 +165,7 @@ trait ProcessBlade
             return $this;
         }
 
-        foreach ($this->package->bladeIfs as $name=>$callable) {
+        foreach ($this->package->bladeIfs as $name => $callable) {
             Blade::if($name, $callable);
         }
 

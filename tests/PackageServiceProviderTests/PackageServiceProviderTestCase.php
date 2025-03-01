@@ -103,10 +103,12 @@ abstract class PackageServiceProviderTestCase extends TestCase
         while (false !== ($entry = readdir($handle))) {
             if ($entry != "." && $entry != "..") {
                 closedir($handle);
+
                 return false;
             }
         }
         closedir($handle);
+
         return true;
     }
 
@@ -120,7 +122,7 @@ abstract class PackageServiceProviderTestCase extends TestCase
         return $this;
     }
 
-    protected function clearProtectedList(string $class, ... $properties): self
+    protected function clearProtectedList(string $class, ...$properties): self
     {
         $reflection = new \ReflectionClass($class);
         foreach (collect($properties)->flatten()->toArray() as $property) {
@@ -132,4 +134,3 @@ abstract class PackageServiceProviderTestCase extends TestCase
         return $this;
     }
 }
-

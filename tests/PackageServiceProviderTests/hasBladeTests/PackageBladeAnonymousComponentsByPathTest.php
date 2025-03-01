@@ -4,7 +4,6 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasBladeC
 
 use Illuminate\Support\Facades\App;
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Components\TestComponent;
 
 trait PackageBladeAnonymousComponentsByPathTest
 {
