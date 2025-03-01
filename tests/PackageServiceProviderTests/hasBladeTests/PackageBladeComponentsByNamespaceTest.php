@@ -21,4 +21,4 @@ it("can load the blade components by namespace", function () {
     $content = view('package-tools::component-test-namespace')->render();
 
     expect($content)->toStartWith('<div>hello world</div>');
-});
+})->group('blade');

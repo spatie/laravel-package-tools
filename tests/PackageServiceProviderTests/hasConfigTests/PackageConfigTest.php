@@ -18,7 +18,7 @@ uses(PackageConfigTest::class);
 
 it("can register the config file", function () {
     expect(config('package-tools.key'))->toBe('value');
-});
+})->group('config');
 
 it("can publish the config file", function () {
     $file = config_path('package-tools.php');
@@ -29,4 +29,4 @@ it("can publish the config file", function () {
         ->assertSuccessful();
 
     expect($file)->toBeFile();
-});
+})->group('config');

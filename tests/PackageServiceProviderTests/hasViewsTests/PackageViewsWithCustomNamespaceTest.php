@@ -20,7 +20,7 @@ it("can load the views with a custom namespace", function () {
     $content = view('custom-namespace::test')->render();
 
     expect($content)->toStartWith('This is a blade view');
-});
+})->group('views');
 
 it("can publish the views with a custom namespace", function () {
     $file = resource_path('views/vendor/custom-namespace/test.blade.php');
@@ -31,4 +31,4 @@ it("can publish the views with a custom namespace", function () {
         ->assertSuccessful();
 
     expect($file)->toBeFile();
-});
+})->group('views');

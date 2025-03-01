@@ -22,4 +22,4 @@ it("can execute a registered command in the context of the app", function () {
     $response = $this->get('execute-command');
 
     expect($response->baseResponse->getContent())->toContain('output of test command');
-});
+})->group('commands');

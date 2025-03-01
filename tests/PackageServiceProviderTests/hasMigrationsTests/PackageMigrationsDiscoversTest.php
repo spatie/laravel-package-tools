@@ -55,7 +55,7 @@ it("publishes all migrations", function () use ($expectPublished) {
         ->assertSuccessful();
 
     expect(true)->toHaveMigrationsPublished($expectPublished);
-});
+})->group('migrations');
 
 it("doesn't publish non-migration files", function () use ($expectNotPublished) {
     $this
@@ -63,7 +63,7 @@ it("doesn't publish non-migration files", function () use ($expectNotPublished) 
         ->assertSuccessful();
 
     expect(true)->toHaveMigrationsNotPublished($expectNotPublished);
-});
+})->group('migrations');
 
 it("does not overwrite an existing migration", function () {
     $this
@@ -81,7 +81,7 @@ it("does not overwrite an existing migration", function () {
         ->assertSuccessful();
 
     expect($filePath)->toHaveContentsMatching('modified');
-});
+})->group('migrations');
 
 it("loads the discovered non-stub migrations for 'artisan migrate'", function () use ($expectLoaded) {
     $this
@@ -89,7 +89,7 @@ it("loads the discovered non-stub migrations for 'artisan migrate'", function ()
         ->assertSuccessful();
 
     expect(__DIR__ . '/../../TestPackage/database/migrations')->toHaveMigrationsLoaded($expectLoaded);
-});
+})->group('migrations');
 
 it("doesn't load the stub migrations for 'artisan migrate'", function () use ($expectNotLoaded) {
     $this
@@ -97,4 +97,4 @@ it("doesn't load the stub migrations for 'artisan migrate'", function () use ($e
         ->assertSuccessful();
 
     expect(__DIR__ . '/../../TestPackage/database/migrations')->toHaveMigrationsNotLoaded($expectNotLoaded);
-});
+})->group('migrations');

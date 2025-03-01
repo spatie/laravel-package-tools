@@ -23,4 +23,4 @@ it("can share data with all views", function () {
 
     expect($content1)->toStartWith('hello_world');
     expect($content2)->toStartWith('hello_world');
-});
+})->group('shareddata');

@@ -16,4 +16,5 @@ trait PackageNameNotProvidedTest
 uses(PackageNameNotProvidedTest::class);
 
 it("will throw an exception when a name is NOT set")
+    ->group('base')
     ->throws(InvalidPackage::class, 'This package does not have a name. You can set one with `$package->name("yourName")`');

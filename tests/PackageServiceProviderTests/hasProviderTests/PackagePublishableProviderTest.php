@@ -26,4 +26,4 @@ it("can publish a service provider", function () {
         ->assertSuccessful();
 
     expect($providerPath)->toBeFile();
-});
+})->group('providers');

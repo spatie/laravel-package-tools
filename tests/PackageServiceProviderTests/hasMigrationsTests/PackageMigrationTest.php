@@ -58,7 +58,7 @@ it("publishes the explicitly listed migrations", function () use ($expectPublish
         ->assertSuccessful();
 
     expect(true)->toHaveMigrationsPublished($expectPublished);
-});
+})->group('migrations');
 
 it("doesn't publish the non-listed migrations", function () use ($expectNotPublished) {
     $this
@@ -66,7 +66,7 @@ it("doesn't publish the non-listed migrations", function () use ($expectNotPubli
         ->assertSuccessful();
 
     expect(true)->toHaveMigrationsNotPublished($expectNotPublished);
-});
+})->group('migrations');
 
 it("doesn't overwrite an existing migration", function () {
     $this
@@ -84,7 +84,7 @@ it("doesn't overwrite an existing migration", function () {
         ->assertSuccessful();
 
     expect($filePath)->toHaveContentsMatching('modified');
-});
+})->group('migrations');
 
 it("does overwrite an existing migration with 'artisan migrate --force'", function () {
     $this
@@ -102,7 +102,7 @@ it("does overwrite an existing migration with 'artisan migrate --force'", functi
         ->assertSuccessful();
 
     expect($filePath)->toHaveContentsMatchingFile(__DIR__.'/../../TestPackage/database/migrations/create_table_explicit_normal.php');
-});
+})->group('migrations');
 
 it("loads the explicitly listed non-stub migrations for 'artisan migrate'", function () use ($expectLoaded) {
     $this
@@ -110,7 +110,7 @@ it("loads the explicitly listed non-stub migrations for 'artisan migrate'", func
         ->assertSuccessful();
 
     expect(__DIR__ . '/../../TestPackage/database/migrations')->toHaveMigrationsLoaded($expectLoaded);
-});
+})->group('migrations');
 
 it("doesn't load the non-listed migrations or stub files for 'artisan migrate'", function () use ($expectNotLoaded) {
     $this
@@ -118,4 +118,4 @@ it("doesn't load the non-listed migrations or stub files for 'artisan migrate'",
         ->assertSuccessful();
 
     expect(__DIR__ . '/../../TestPackage/database/migrations')->toHaveMigrationsNotLoaded($expectNotLoaded);
-});
+})->group('migrations');

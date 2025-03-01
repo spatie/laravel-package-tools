@@ -27,4 +27,4 @@ it("can install the migrations", function () {
         ->assertSuccessful();
 
     expect(true)->toHaveMigrationsPublished('create_table_explicit_normal');
-});
+})->group('installer');

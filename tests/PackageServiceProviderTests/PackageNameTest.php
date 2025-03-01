@@ -16,4 +16,4 @@ uses(PackageNameTest::class);
 
 it("will not blow up when a name is set", function () {
     expect(true)->toBeTrue();
-});
+})->group('base');

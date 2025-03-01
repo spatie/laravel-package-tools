@@ -18,7 +18,7 @@ uses(PackageTranslationsTest::class);
 
 it("can load the translations", function () {
     $this->assertEquals('translation', trans('package-tools::translations.translatable'));
-});
+})->group('translations');
 
 it("can publish the translations", function () {
     $file = lang_path("vendor/package-tools/en/translations.php");
@@ -29,4 +29,4 @@ it("can publish the translations", function () {
         ->assertSuccessful();
 
     expect($file)->toBeFile();
-});
+})->group('translations');

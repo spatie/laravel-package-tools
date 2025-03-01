@@ -23,4 +23,4 @@ it("can load the view composer and render shared data", function () {
     $content = view('package-tools::shared-data')->render();
 
     expect($content)->toStartWith('hello world');
-});
+})->group('viewcomposer');

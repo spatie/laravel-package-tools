@@ -25,4 +25,4 @@ it("can publish the assets", function () {
         ->assertSuccessful();
 
     expect($file)->toBeFile();
-});
+})->group('assets');

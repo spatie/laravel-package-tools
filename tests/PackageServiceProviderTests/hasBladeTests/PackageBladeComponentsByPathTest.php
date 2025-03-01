@@ -22,7 +22,7 @@ it("can load the blade components by path", function () {
     $content = view('package-tools::component-test-namespace')->render();
 
     expect($content)->toStartWith('<div>hello world</div>');
-});
+})->group('blade');
 
 it("can publish the blade components by path", function () {
     $file = app_path('View/Components/vendor/package-tools/TestComponent.php');
@@ -33,4 +33,4 @@ it("can publish the blade components by path", function () {
         ->assertSuccessful();
 
     expect($file)->toBeFile();
-});
+})->group('blade');

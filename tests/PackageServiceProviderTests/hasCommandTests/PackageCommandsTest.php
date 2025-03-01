@@ -30,4 +30,4 @@ it("can execute registered commands", function () {
     $this
         ->artisan('other-test-command')
         ->assertSuccessful();
-});
+})->group('commands');

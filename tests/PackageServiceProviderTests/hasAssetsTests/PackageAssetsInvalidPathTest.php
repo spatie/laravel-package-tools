@@ -18,4 +18,5 @@ trait PackageAssetsInvalidPathTest
 uses(PackageAssetsInvalidPathTest::class);
 
 it("will throw an exception when the Assets path doesn't exist")
-    ->throws(InvalidPackage::class, "hasAssets: Directory '../invalid_path' does not exist in package laravel-package-tools");
+        ->group('assets')
+        ->throws(InvalidPackage::class, "hasAssets: Directory '../invalid_path' does not exist in package laravel-package-tools");

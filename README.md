@@ -1072,6 +1072,21 @@ class YourPackageServiceProvider extends PackageServiceProvider
 composer test
 ```
 
+**Note:** `InvalidPackage` exceptions thrown during Laravel application bootup are reported by Pest,
+but because the occur before the start of a test case
+Pest by default does not allow you intentionally to test for them being thrown.
+The tests in this package now include checks for intentional `InvalidPackage` exceptions being thrown
+by catching and saving such exceptions in the Testing ServiceProvider,
+and then rethrowing the exception at the very start of a Pest test case,
+and this is achieved by load a modified version of the Pest `test()` function
+before anything else is loaded.
+Whilst this is done for you if you run `composer test`,
+if you want to run `vendor/bin/pest` directly you now need to run it like this:
+
+```bash
+php -d auto_prepend_file=tests/Prepend.php vendor/bin/pest
+```
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.

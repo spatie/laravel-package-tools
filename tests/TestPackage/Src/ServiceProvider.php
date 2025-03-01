@@ -4,13 +4,13 @@
 namespace Spatie\LaravelPackageTools\Tests\TestPackage\Src;
 
 use Closure;
-use Exception;
+use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class ServiceProvider extends PackageServiceProvider
 {
-    public static ?Exception $thrownException = null;
+    public static ?InvalidPackage $thrownException = null;
     public static ?Closure $configurePackageUsing = null;
 
     public function configurePackage(Package $package): void
@@ -32,7 +32,7 @@ class ServiceProvider extends PackageServiceProvider
 
         try {
             parent::register();
-        } catch (Exception $e) {
+        } catch (InvalidPackage $e) {
             static::$thrownException = $e;
         }
 
@@ -48,7 +48,7 @@ class ServiceProvider extends PackageServiceProvider
 
         try {
             parent::boot();
-        } catch (Exception $e) {
+        } catch (InvalidPackage $e) {
             static::$thrownException = $e;
         }
 

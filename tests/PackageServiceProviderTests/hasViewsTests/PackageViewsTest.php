@@ -20,7 +20,7 @@ it("can load the views", function () {
     $content = view('package-tools::test')->render();
 
     expect($content)->toStartWith('This is a blade view');
-});
+})->group('views');
 
 it("can publish the views", function () {
     $file = resource_path('views/vendor/package-tools/test.blade.php');
@@ -31,4 +31,4 @@ it("can publish the views", function () {
         ->assertSuccessful();
 
     expect($file)->toBeFile();
-});
+})->group('views');

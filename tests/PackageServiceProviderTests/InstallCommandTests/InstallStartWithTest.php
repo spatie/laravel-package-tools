@@ -32,4 +32,4 @@ it("can execute the start with", function () {
         ->assertSuccessful();
 
     expect($this->stringFromStart)->toBe('set by package-tools:install');
-});
+})->group('installer');

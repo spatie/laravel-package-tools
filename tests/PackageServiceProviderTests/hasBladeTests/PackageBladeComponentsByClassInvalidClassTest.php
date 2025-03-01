@@ -19,4 +19,5 @@ trait PackageBladeComponentsByClassInvalidTest
 uses(PackageBladeComponentsByClassInvalidTest::class);
 
 it("will throw an exception when the Blade Component class is invalid")
+    ->group('blade')
     ->throws(InvalidPackage::class,"hasBladeComponentsByClass: Class 'InvalidClass' does not exist in package laravel-package-tools");

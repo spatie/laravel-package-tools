@@ -29,4 +29,4 @@ it("can install the config file", function () {
         ->assertSuccessful();
 
     expect($configFile)->toBeFile();
-});
+})->group('installer');

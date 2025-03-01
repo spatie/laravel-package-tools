@@ -20,10 +20,10 @@ it("can load the route", function () {
     $response = $this->get('my-route');
 
     $response->assertSeeText('my response');
-});
+})->group('routes');
 
 it("can load multiple route", function () {
     $adminResponse = $this->get('other-route');
 
     $adminResponse->assertSeeText('other response');
-});
+})->group('routes');

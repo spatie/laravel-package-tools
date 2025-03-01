@@ -25,4 +25,4 @@ it("can propose to star the repo", function () {
         ->artisan('package-tools:install')
         ->assertSuccessful()
         ->expectsConfirmation('Would you like to star our repo on GitHub?');
-});
+})->group('installer');
