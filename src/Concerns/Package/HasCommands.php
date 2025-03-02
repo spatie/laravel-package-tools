@@ -72,8 +72,8 @@ trait HasCommands
         $optimizeClearCommand = $this->optimizeDefault($optimizeClearCommand, "clear-optimizations");
 
         $this->optimizeCommands[] = [
-            "optimize" =>   $optimizeCommand,
-            "clear" =>      $optimizeClearCommand
+            "optimize" => $optimizeCommand,
+            "clear" => $optimizeClearCommand,
         ];
 
         return $this;
@@ -82,14 +82,13 @@ trait HasCommands
     private function optimizeDefault(string $cmd, string $defaultSubcmd): ?string
     {
         if (! $cmd) {
-            return $this-shortName() . ":" . $defaultSubcmd;
+            return $this - shortName() . ":" . $defaultSubcmd;
         } elseif (strpos($cmd, ':') === false) {
-            return $this-shortName() . ":" . $cmd;
+            return $this - shortName() . ":" . $cmd;
         } else {
             return $cmd;
         }
     }
-
 
     /* Legacy backwards compatibility */
     public function hasCommand(...$commandClassNames): self
