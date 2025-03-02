@@ -82,9 +82,9 @@ trait HasCommands
     private function optimizeDefault(string $cmd, string $defaultSubcmd): ?string
     {
         if (! $cmd) {
-            return $this - shortName() . ":" . $defaultSubcmd;
+            return $this->shortName() . ":" . $defaultSubcmd;
         } elseif (strpos($cmd, ':') === false) {
-            return $this - shortName() . ":" . $cmd;
+            return $this->shortName() . ":" . $cmd;
         } else {
             return $cmd;
         }
