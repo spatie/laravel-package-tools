@@ -1,6 +1,14 @@
 name: Check & fix styling
 
-on: [push]
+on:
+  push:
+    paths:
+      - '**.php'
+      - '/.github/workflows/php-cs-fixer.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   php-cs-fixer:
