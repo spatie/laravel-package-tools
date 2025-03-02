@@ -48,9 +48,10 @@ trait HasBlade
     public function hasBladeAnonymousComponentsByPath(string $prefix, ?string $path = null): self
     {
         if (version_compare(App::version(), '9.44.0') < 0) {
-            throw InvalidPackage::anonymousComponentsNotYetImplemented(
+            throw InvalidPackage::laravelFunctionalityNotYetImplemented(
                 $this->name,
-                __FUNCTION__
+                __FUNCTION__,
+                '9.44.0'
             );
         }
 

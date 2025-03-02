@@ -489,19 +489,35 @@ $package
 
 ### Optimize commands
 
-In Laravel 11 onwards, you can also define custom `artisan optimize` and `artisan optimize:clear`
-commands that can be set and cleared alongside Laravel's other optimization functionality
-(i.e. configuration, events, routes, and views),
+From Laravel 11.27.1 onwards,
+you can also define `short-package-name:optimize` and `short-package-name:clear-optimizations` commands
+that alongside Laravel's other optimizations (i.e. configuration, events, routes, and views)
+can be set with `artisan optimize` and cleared with `artisan optimize:clear`,
 and these can be specified using the `hasOptimizeCommands()` as follows:
 
 ```php
 $package
     ->name('your-package-name')
-    ->hasOptimizeCommands(
-        YourCoolPackageOptimizeCommand::class,
-        YourCoolPackageOptimizeClearCommand::class,
-    );
+    ->hasConsoleCommands(Optimize::class, OptimizeClear::class)
+    ->hasOptimizeCommands();
 ```
+to use the above defaults or
+```php
+$package
+    ->name('your-package-name')
+    ->hasConsoleCommands(Optimize::class, OptimizeClear::class)
+    ->hasOptimizeCommands('set-optimize', 'clear-optimize');
+```
+or to use different verbs or
+```php
+$package
+    ->name('your-package-name')
+    ->hasConsoleCommands(Optimize::class, OptimizeClear::class)
+    ->hasOptimizeCommands('my-package:set-optimize', 'my-package:clear-optimize');
+```
+to explicitly define the full commands.
+These commands can then be run normally as individual commands,
+or will be also called as part fo a group with `artisan optimize`.
 
 _See: [Laravel Package Development - Optimize Commands](https://laravel.com/docs/packages#optimize-commands)
 for underlying details._

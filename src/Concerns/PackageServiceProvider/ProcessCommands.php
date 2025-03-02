@@ -2,6 +2,9 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
+use Illuminate\Support\Facades\File;
+use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
+
 trait ProcessCommands
 {
     protected function bootPackageCommands(): self
@@ -10,7 +13,8 @@ trait ProcessCommands
             ->bootPackageCommandsByClass()
             ->bootPackageCommandsByPath()
             ->bootPackageConsoleCommandsByClass()
-            ->bootPackageConsoleCommandsByPath();
+            ->bootPackageConsoleCommandsByPath()
+            ->bootPackageOptimizeCommands();
 
         return $this;
     }
@@ -55,6 +59,19 @@ trait ProcessCommands
         }
 
         $this->commands($this->getClassesInPaths('hasConsoleCommandsByPath', $this->package->consoleCommandPaths));
+
+        return $this;
+    }
+
+    protected function bootPackageOptimizeCommands(): self
+    {
+        if (empty($this->package->optimizeCommands) || ! $this->app->runningInConsole()) {
+            return $this;
+        }
+
+        foreach ($this->package->optimizeCommands as $commandPair) {
+            $this->optimizes($commandPair);
+        }
 
         return $this;
     }

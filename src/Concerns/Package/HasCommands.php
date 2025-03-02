@@ -8,6 +8,7 @@ trait HasCommands
     public array $commandPaths = [];
     public array $consoleCommands = [];
     public array $consoleCommandPaths = [];
+    public array $optimizeCommands = [];
 
     public function hasCommandsByClass(...$commandClassNames): self
     {
@@ -56,6 +57,39 @@ trait HasCommands
 
         return $this;
     }
+
+    public function hasOptimizeCommands(?string $optimizeCommand = null, ?string $optimizeClearCommand = null): self
+    {
+        if (version_compare(app()->version(), '11.27.1') < 0) {
+            throw InvalidPackage::laravelFunctionalityNotYetImplemented(
+                $this->name,
+                __FUNCTION__,
+                '11.27.1'
+            );
+        }
+
+        $optimizeCommand = $this->optimizeDefault($optimizeCommand, "optimize");
+        $optimizeClearCommand = $this->optimizeDefault($optimizeClearCommand, "clear-optimizations");
+
+        $this->optimizeCommands[] = [
+            "optimize" =>   $optimizeCommand,
+            "clear" =>      $optimizeClearCommand
+        ];
+
+        return $this;
+    }
+
+    private function optimizeDefault(string $cmd, string $defaultSubcmd): ?string
+    {
+        if (! $cmd) {
+            return $this-shortName() . ":" . $defaultSubcmd;
+        } elseif (strpos($cmd, ':') === false) {
+            return $this-shortName() . ":" . $cmd;
+        } else {
+            return $cmd;
+        }
+    }
+
 
     /* Legacy backwards compatibility */
     public function hasCommand(...$commandClassNames): self

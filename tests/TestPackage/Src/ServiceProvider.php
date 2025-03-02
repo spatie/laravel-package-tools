@@ -61,10 +61,12 @@ class ServiceProvider extends PackageServiceProvider
         static::$publishes = [];
         static::$publishGroups = [];
 
-        /* Following don't exist in Laravel 9.x or 10.x */
-        if (version_compare(app()->version(), '11') >= 0) {
+        if (version_compare(app()->version(), '11.27.1') >= 0) {
             static::$optimizeCommands = [];
             static::$optimizeClearCommands = [];
+        }
+
+        if (version_compare(app()->version(), '11') >= 0) {
             static::$publishableMigrationPaths = [];
         }
     }
