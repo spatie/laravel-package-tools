@@ -22,11 +22,11 @@ it("registers only the default config file by legacy", function () {
 
 it("publishes only the default config file by legacy", function () {
     $publishedFiles = [
-        config_path('package-tools.php')
+        config_path('package-tools.php'),
     ];
     $nonPublishedFiles = [
         config_path('alternative-config.php'),
-        config_path('config-stub.php')
+        config_path('config-stub.php'),
     ];
     expect($publishedFiles)->each->not->toBeFileOrDirectory();
     expect($nonPublishedFiles)->each->not->toBeFileOrDirectory();

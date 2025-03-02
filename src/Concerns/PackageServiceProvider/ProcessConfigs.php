@@ -2,7 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 

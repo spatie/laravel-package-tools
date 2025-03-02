@@ -33,7 +33,7 @@ it("publishes config files by path", function () {
         config_path('alternative-config.php'),
         config_path('config-stub.php'),
         config_path('unpublished-config.php'),
-        config_path('unpublished-stub.php')
+        config_path('unpublished-stub.php'),
     ];
     expect($publishedFiles)->each->not->toBeFileOrDirectory();
 
