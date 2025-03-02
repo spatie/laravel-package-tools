@@ -6,7 +6,7 @@ trait HasRoutes
 {
     public array $routeFileNames = [];
     public bool $discoversRoutes = false;
-    protected ?string $routesPath = '/../routes';
+    protected ?string $routesPath = '../routes';
 
     public function hasRoutesByName(...$routeFileNames): self
     {

@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasAssets
 {
-    private static string $assetsDefaultPath = '/../resources/dist';
+    private static string $assetsDefaultPath = '../resources/dist';
 
     public bool $hasAssets = false;
     public ?string $assetsPath = null;

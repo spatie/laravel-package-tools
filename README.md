@@ -537,7 +537,7 @@ So if your package name is `laravel-cool-package`, the config file should be nam
 Both actual and stub config files will be made publishable.
 Actual config files will also be loaded and / or merged with published versions.
 
-To make your config file publishable and if an actual file merge it with any published version, call `hasConfigFiles()`:
+To make your config file publishable and if a .php file merge it with any published version, call `hasConfigFiles()`:
 
 ```php
 $package
@@ -551,7 +551,7 @@ or pass their names as an array to `hasConfigFiles`.
 ```php
 $package
     ->name('your-package-name')
-    ->hasConfigFiles([
+    ->hasConfigByName([
         'my-config-file',
         'another-config-file'
     ]);
@@ -563,7 +563,7 @@ however you can override this with `setConfigPath()`:
 ```php
 $package
     ->name('your-package-name')
-    ->hasConfigFiles()
+    ->hasConfigByName()
     ->setConfigPath('../configfiles/');
 ```
 
@@ -574,7 +574,25 @@ and users of your package can publish the config file with this command.
 php artisan vendor:publish --tag=your-package-name-config
 ```
 
-**Note:** For backwards compatibility, `hasConfigFile` can still be used instead of `hasConfigFiles`.
+**Note:** For backwards compatibility, `hasConfigFile` and `hasConfigFiles`
+can still be used instead of `hasConfigByName`.
+
+Alternatively you can merge / publish all the configuration files in the `<package root>/config`
+directory without specifying them individually by name as follows:
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasConfigByPath();
+```
+
+and override the default path as follows:
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasConfigByPath('../configfiles/');
+```
 
 _See: [Laravel Package Development - Default Package Configuration](https://laravel.com/docs/packages#default-package-configuration)
 for underlying details._

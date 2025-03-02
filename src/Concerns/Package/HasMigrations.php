@@ -9,7 +9,7 @@ trait HasMigrations
     public bool $loadMigrations = false;
     public bool $discoversMigrations = false;
     public array $migrationPaths = [];
-    protected ?string $migrationsPath = '/../database/migrations';
+    protected ?string $migrationsPath = '../database/migrations';
 
     public function hasMigrationsByName(...$migrationFileNames): self
     {

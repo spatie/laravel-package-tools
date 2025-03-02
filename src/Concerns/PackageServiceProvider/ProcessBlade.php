@@ -9,7 +9,7 @@ trait ProcessBlade
 {
     protected function bootPackageBlade(): self
     {
-        $this
+        return $this
             ->bootPackageBladeComponentsByClass()
             ->bootPackageBladeComponentsByNamespace()
             ->bootPackageBladeComponentsByPath()
@@ -17,8 +17,6 @@ trait ProcessBlade
             ->bootPackageBladeDirectives()
             ->bootPackageBladeEchos()
             ->bootPackageBladeIfs();
-
-        return $this;
     }
 
     protected function bootPackageBladeComponentsByClass(): self

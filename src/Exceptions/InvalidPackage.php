@@ -46,9 +46,9 @@ class InvalidPackage extends Exception
         return new static("$method: Path '$path' does not contain any classes in package $packageName");
     }
 
-    public static function filenameNeitherPhpNorStub(string $packageName, string $type, string $filename): self
+    public static function filenameNeitherPhpNorStub(string $packageName, string $type, string $method, string $filename): self
     {
-        return new static("$type filename '$filename' is neither .php or .php.stub in package $packageName");
+        return new static("$method: $type filename '$filename' is neither .php or .php.stub in package $packageName");
     }
 
     public static function laravelFunctionalityNotYetImplemented(string $packageName, string $method, string $version): self

@@ -6,14 +6,12 @@ trait ProcessCommands
 {
     protected function bootPackageCommands(): self
     {
-        $this
+        return $this
             ->bootPackageCommandsByClass()
             ->bootPackageCommandsByPath()
             ->bootPackageConsoleCommandsByClass()
             ->bootPackageConsoleCommandsByPath()
             ->bootPackageOptimizeCommands();
-
-        return $this;
     }
 
     protected function bootPackageCommandsByClass(): self

@@ -5,7 +5,7 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 trait HasTranslations
 {
     public bool $hasTranslations = false;
-    protected ?string $translationsPath = '/../resources/lang';
+    protected ?string $translationsPath = '../resources/lang';
 
     public function hasTranslations(): self
     {

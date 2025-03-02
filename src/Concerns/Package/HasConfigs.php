@@ -4,20 +4,23 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasConfigs
 {
-    public array $configFileNames = [];
-    protected ?string $configPath = '/../config';
+    private static string $configDefaultPath = "../config";
 
-    public function hasConfigFiles(...$configFileNames): self
+    public array $configFilenames = [];
+    public array $configPaths = [];
+    protected ?string $configPath = '../config';
+
+    public function hasConfigByName(...$configFilenames): self
     {
-        $configFileNames = collect($configFileNames)->flatten()->toArray();
+        $configFilenames = collect($configFilenames)->flatten()->toArray();
 
-        if (! $configFileNames) {
-            $configFileNames = [$this->shortName()];
+        if (! $configFilenames) {
+            $configFilenames = [$this->shortName()];
         }
 
-        $this->configFileNames = array_unique(array_merge(
-            $this->configFileNames,
-            $configFileNames
+        $this->configFilenames = array_unique(array_merge(
+            $this->configFilenames,
+            $configFilenames
         ));
 
         $this->configPath = $this->verifyRelativeDirOrNull($this->configPath);
@@ -37,9 +40,21 @@ trait HasConfigs
         return $this;
     }
 
-    /* Legacy backwards compatibility */
-    public function hasConfigFile(...$configFileNames): self
+    public function hasConfigByPath(?string $path = null): self
     {
-        return $this->hasConfigFiles(...$configFileNames);
+        $this->configPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$configDefaultPath);
+
+        return $this;
+    }
+
+    /* Legacy backwards compatibility */
+    public function hasConfigFile(...$configFilenames): self
+    {
+        return $this->hasConfigByName(...$configFilenames);
+    }
+
+    public function hasConfigFiles(...$configFilenames): self
+    {
+        return $this->hasConfigByName(...$configFilenames);
     }
 }

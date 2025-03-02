@@ -7,7 +7,7 @@ trait HasLivewire
     public bool $hasLivewire = false;
     protected ?string $livewireNamespace = null;
     protected ?string $livewireComponentsPath = '/Livewire';
-    protected ?string $livewireViewsPath = '/../resources/views/livewire';
+    protected ?string $livewireViewsPath = '../resources/views/livewire';
 
     public function hasLivewire(?string $namespace = null): self
     {

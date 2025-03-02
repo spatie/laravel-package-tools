@@ -6,7 +6,7 @@ trait HasInertia
 {
     public bool $hasInertiaComponents = false;
     protected ?string $inertiaNamespace = null;
-    protected ?string $inertiaComponentsPath = '/../resources/js/Pages';
+    protected ?string $inertiaComponentsPath = '../resources/js/Pages';
 
     public function hasInertiaComponents(?string $namespace = null): self
     {

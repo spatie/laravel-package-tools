@@ -5,7 +5,7 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 trait HasProviders
 {
     public array $publishableProviderNames = [];
-    protected ?string $publishableProviderPath = '/../resources/stubs';
+    protected ?string $publishableProviderPath = '../resources/stubs';
 
     public function publishesServiceProvider(string $providerName): self
     {

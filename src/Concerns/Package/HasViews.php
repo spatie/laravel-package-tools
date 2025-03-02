@@ -6,7 +6,7 @@ trait HasViews
 {
     public bool $hasViews = false;
     protected ?string $viewNamespace = null;
-    protected string $viewsPath = '/../resources/views';
+    protected string $viewsPath = '../resources/views';
 
     public function hasViews(?string $namespace = null): self
     {
