@@ -21,7 +21,7 @@ uses(PackageBladeAnonymousComponentsByPathInvalidTest::class);
 it("will throw an exception when the Laravel version is before 9.44.0")
     ->group('blade')
     ->skip(fn () => ! is_before_laravel_9_44_0(App::version()), "This function can only be tested on Laravel < 9.44.0")
-    ->throws(InvalidPackage::class, "hasBladeAnonymousComponentsByPath is not supported in this version of Laravel in package laravel-package-tools");
+    ->throws(InvalidPackage::class, "hasBladeAnonymousComponentsByPath is not supported in this version of Laravel (< 9.44.0) in package laravel-package-tools");
 
 it("will throw an exception when the Blade Anonymous Components path is invalid")
     ->group('blade')
