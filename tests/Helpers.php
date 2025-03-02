@@ -6,12 +6,12 @@
 |--------------------------------------------------------------------------
 */
 
-function is_before_laravel_9_44_0(string $version): bool
+function is_before_laravel_version(string $actualVersion, string $minVersion): bool
 {
-    return version_compare($version, '9.44.0') < 0;
+    return version_compare($actualVersion, $minVersion) < 0;
 }
 
-function message_before_laravel_9_44_0(): string
+function message_before_laravel_version(string $minVersion): string
 {
-    return 'Anonymous components not available until Laravel v9.44.0';
+    return 'Anonymous components not available until Laravel v' . $minVersion;
 }

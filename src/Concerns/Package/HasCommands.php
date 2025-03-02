@@ -2,8 +2,12 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\Package;
 
+use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
+
 trait HasCommands
 {
+    private static string $commandsDefaultPath = "Commands";
+
     public array $commands = [];
     public array $commandPaths = [];
     public array $consoleCommands = [];
@@ -12,11 +16,9 @@ trait HasCommands
 
     public function hasCommandsByClass(...$commandClassNames): self
     {
-        $this->verifyClassNames(__FUNCTION__, $commandClassNames);
-
         $this->commands = array_unique(array_merge(
             $this->commands,
-            collect($commandClassNames)->flatten()->toArray()
+            $this->verifyClassNames(__FUNCTION__, $commandClassNames)
         ));
 
         return $this;
@@ -24,36 +26,24 @@ trait HasCommands
 
     public function hasConsoleCommandsByClass(...$commandClassNames): self
     {
-        $this->verifyClassNames(__FUNCTION__, $commandClassNames);
-
         $this->consoleCommands = array_unique(array_merge(
             $this->consoleCommands,
-            collect($commandClassNames)->flatten()->toArray()
+            $this->verifyClassNames(__FUNCTION__, $commandClassNames)
         ));
 
         return $this;
     }
 
-    public function hasCommandsByPath(...$paths): self
+    public function hasCommandsByPath(?string $path = null): self
     {
-        $this->verifyRelativeDirs(__FUNCTION__, $paths);
-
-        $this->commandPaths = array_unique(array_unique(array_merge(
-            $this->commandPaths,
-            collect($paths)->flatten()->toArray()
-        )));
+        $this->commandPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$commandsDefaultPath);
 
         return $this;
     }
 
-    public function hasConsoleCommandsByPath(...$paths): self
+    public function hasConsoleCommandsByPath(?string $path = null): self
     {
-        $this->verifyRelativeDirs(__FUNCTION__, $paths);
-
-        $this->consoleCommandPaths = array_unique(array_merge(
-            $this->consoleCommandPaths,
-            collect($paths)->flatten()->toArray()
-        ));
+        $this->consoleCommandPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$commandsDefaultPath);
 
         return $this;
     }
@@ -79,7 +69,7 @@ trait HasCommands
         return $this;
     }
 
-    private function optimizeDefault(string $cmd, string $defaultSubcmd): ?string
+    private function optimizeDefault(string $cmd, string $defaultSubcmd): string
     {
         if (! $cmd) {
             return $this->shortName() . ":" . $defaultSubcmd;

@@ -40,7 +40,7 @@ trait ProcessCommands
 
     protected function bootPackageCommandsByPath(): self
     {
-        if (empty($this->package->consoleCommandPaths)) {
+        if (empty($this->package->commandPaths)) {
             return $this;
         }
 
@@ -67,7 +67,7 @@ trait ProcessCommands
         }
 
         foreach ($this->package->optimizeCommands as $commandPair) {
-            $this->optimizes($commandPair);
+            $this->optimizes(...$commandPair);
         }
 
         return $this;

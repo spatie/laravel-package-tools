@@ -1,12 +1,12 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\TestPackage\Src\Console\Commands;
+namespace Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands;
 
 use Illuminate\Console\Command;
 
 class ThirdTestCommand extends Command
 {
-    public $name = 'third-test-command';
+    public $name = 'package-tools:third-test-command';
 
     public function handle()
     {

@@ -44,7 +44,6 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     abstract public function configurePackage(Package $package): void;
 
-    /** @throws InvalidPackage */
     public function register(): self
     {
         $this->registeringPackage();
@@ -152,7 +151,13 @@ abstract class PackageServiceProvider extends ServiceProvider
     // Get namespace for directory from the first class file in the directory
     protected function getNamespaceOfRelativePath($path): string
     {
-        foreach (glob($this->package->buildDirectory($path) . '/*.php') as $file) {
+        return $this->getNamespaceOfPath($this->package->buildDirectory($path));
+    }
+
+    // Get namespace for directory from the first class file in the directory
+    protected function getNamespaceOfPath($path): string
+    {
+        foreach (glob($path . '/*.php') as $file) {
             if ($namespace = $this->readNamespaceFromFile($file)) {
                 return $namespace;
             }
@@ -190,15 +195,15 @@ abstract class PackageServiceProvider extends ServiceProvider
     {
         $classes = [];
         foreach (collect($paths)->flatten()->toArray() as $path) {
-            $namespace = $this->getNamespaceOfRelativePath($path) . "\\";
+            $path = $this->package->buildDirectory($path);
+            $namespace = $this->getNamespaceOfPath($path);
             $pathClasses = [];
 
-            foreach (File::allfiles($this->package->buildDirectory($path)) as $file) {
+            foreach (File::allfiles($path) as $file) {
                 if (! str_ends_with($filename = $file->getPathname(), '.php')) {
                     continue;
                 }
-
-                $commandClasses[] = $namespace . str_replace(
+                $pathClasses[] = $namespace . str_replace(
                     ['/', '.php'],
                     ['\\', ''],
                     Str::after($filename, $path)
@@ -207,7 +212,7 @@ abstract class PackageServiceProvider extends ServiceProvider
 
             if (empty($pathClasses)) {
                 throw InvalidPackage::pathDoesNotContainClasses(
-                    $this->name,
+                    $this->package->name,
                     $method,
                     $path
                 );
@@ -216,7 +221,7 @@ abstract class PackageServiceProvider extends ServiceProvider
             $classes = array_unique(array_merge($classes, $pathClasses));
         }
 
-        $this->package->verifyClassNames($method, $commandClasses);
+        $this->package->verifyClassNames($method, $classes);
 
         return $classes;
     }

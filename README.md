@@ -378,7 +378,7 @@ You can register Blade Directives using `hasBladeCustomDirective()` as follows:
 ```php
 $package
     ->name('your-package-name')
-    ->hasBladeCustomDirective('datetime', function ($expression) {
+    ->hasBladeCustomDirective('datetime', function ($expression): string {
         return "<?php echo ($expression)->format('m/d/Y H:i'); ?>";
     });
 ```
@@ -399,7 +399,7 @@ You can register Blade Echo Handlers using `hasBladeCustomEchoHandler()` as foll
 ```php
 $package
     ->name('your-package-name')
-    ->hasBladeCustomEchoHandler(function (Money $money) {
+    ->hasBladeCustomEchoHandler(function (Money $money): string {
         return $money->formatTo('en_GB');
     });
 ```
@@ -419,7 +419,7 @@ You can register Blade conditionals using `hasBladeCustomIf()` as follows:
 ```php
 $package
     ->name('your-package-name')
-    ->hasBladeCustomIf('disk', function ($value) {
+    ->hasBladeCustomIf('disk', function ($value): bool {
         return config('filesystems.default') === $value;
     });
 ```

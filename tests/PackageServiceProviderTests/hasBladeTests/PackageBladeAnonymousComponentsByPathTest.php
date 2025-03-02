@@ -12,7 +12,7 @@ trait PackageBladeAnonymousComponentsByPathTest
         $package
             ->name('laravel-package-tools');
 
-        if (! is_before_laravel_9_44_0(App::version())) {
+        if (! is_before_laravel_version(App::version(), '9.44.0')) {
             $package
                 ->hasViews()
                 ->hasBladeAnonymousComponentsByPath('abc');
@@ -28,7 +28,7 @@ it("can load the blade components by path", function () {
     expect($content)->toStartWith('<div>hello world</div>');
 })
     ->group('blade')
-    ->skip(fn () => is_before_laravel_9_44_0(App::version()), message_before_laravel_9_44_0());
+    ->skip(fn () => is_before_laravel_version(App::version(), '9.44.0'), message_before_laravel_version('9.44.0'));
 
 it("can publish the blade components by path", function () {
     $file = resource_path('views/components/vendor/package-tools/anonymous-component.blade.php');
@@ -41,4 +41,4 @@ it("can publish the blade components by path", function () {
     expect($file)->toBeFile();
 })
     ->group('blade')
-    ->skip(fn () => is_before_laravel_9_44_0(App::version()), message_before_laravel_9_44_0());
+    ->skip(fn () => is_before_laravel_version(App::version(), '9.44.0'), message_before_laravel_version('9.44.0'));

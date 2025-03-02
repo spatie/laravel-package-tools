@@ -53,6 +53,6 @@ class InvalidPackage extends Exception
 
     public static function laravelFunctionalityNotYetImplemented(string $packageName, string $method, string $version): self
     {
-        return new static("$method is not supported in this version of Laravel (< $version) in package $packageName");
+        return new static("$method requires functionality first implemented in Laravel v$version in package $packageName");
     }
 }

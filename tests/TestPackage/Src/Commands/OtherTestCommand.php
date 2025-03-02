@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\TestPackage\Src\Console\Commands;
+namespace Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands;
 
 use Illuminate\Console\Command;
 

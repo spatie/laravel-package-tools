@@ -139,7 +139,7 @@ trait ProcessBlade
             return $this;
         }
 
-        foreach ($this->package->bladeEchos as $name => $callable) {
+        foreach ($this->package->bladeDirectives as $name => $callable) {
             Blade::directive($name, $callable);
         }
 
