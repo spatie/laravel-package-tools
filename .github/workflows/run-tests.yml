@@ -56,7 +56,7 @@ jobs:
 
     env:
       php-extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
-      key: ${{ runner.os }}_Laravel${{ matrix.laravel }}_${{ matrix.stability }}_Php${{ matrix.php }}
+      key: ${{ matrix.os }}_Laravel${{ matrix.laravel }}_${{ matrix.stability }}_Php${{ matrix.php }}
 
     steps:
       - name: Checkout code
