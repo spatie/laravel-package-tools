@@ -3,10 +3,6 @@
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasCommandsTests;
 
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\FourthTestCommand;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\OtherTestCommand;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\TestCommand;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\ThirdTestCommand;
 
 trait PackageConsoleCommandsByPathTest
 {
@@ -16,7 +12,7 @@ trait PackageConsoleCommandsByPathTest
             ->name('laravel-package-tools')
             ->hasRoutes('web')
             ->hasConsoleCommandsByPath();
-   }
+    }
 }
 
 uses(PackageConsoleCommandsByPathTest::class);

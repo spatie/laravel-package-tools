@@ -3,7 +3,6 @@
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasBladeTests;
 
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Components\TestComponent;
 
 trait PackageBladeCustomDirectiveTest
 {
@@ -26,4 +25,3 @@ it("can load and use the blade custom directive", function () {
 
     expect($content)->toStartWith('<div>hello world</div>');
 })->group('blade');
-

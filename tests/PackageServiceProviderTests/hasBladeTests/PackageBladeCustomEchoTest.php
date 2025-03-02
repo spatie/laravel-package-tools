@@ -4,7 +4,6 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasBladeT
 
 use Illuminate\Support\Stringable;
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Components\TestComponent;
 
 trait PackageBladeCustomEchoTest
 {
@@ -27,4 +26,3 @@ it("can load and use the blade custom echo handler", function () {
 
     expect($content)->toStartWith('Stringable: HELLO WORLD');
 })->group('blade');
-
