@@ -131,7 +131,7 @@ To avoid needing to scroll through to find the right usage section, here is a Ta
 * [Commands - Callable and Console](#commands-callable-and-console)
 * [Optimize Commands (Laravel v11+)](#optimize-commands)
 * [Config Files](#config-files)
-* [Event Listeners](#event-listeners)
+* [Events & Listeners](#events-and-listeners)
 * [Inertia Components](#inertia-components)
 * [Livewire Views and Components](#livewire-views-and-components)
 * [Database Migrations](#database-migrations)
@@ -597,29 +597,129 @@ $package
 _See: [Laravel Package Development - Default Package Configuration](https://laravel.com/docs/packages#default-package-configuration)
 for underlying details._
 
-### Event Listeners
+### Events and Listeners
+
+Whilst Events & Listeners are less common in packages,
+for Laravel applications large enough to need modules they are highly likely.
+
+The normal locations in your package for Events classes would be `<package root>/src/Events` and
+Listener classes in `<package root>/src/Listeners` but since you refer to these by Class name (i.e. `Listener::class`)
+their location is a little less important than other files.
+
+Event Listeners can be registered using Laravel Package Tools in several different ways:
+
+* Using **Subscribers** - an Event Subscriber allows you to combine several Listeners
+into a single Subscriber class, whose listeners can be automatically registered,
+and which can handle them directly or farm them out to other classes.
+These would seem to be most suitable for large modules.
+* By **Event &Listener classes** - again this registers Listeners in other classes
+* Several alternative ways to use anonymous Closure functions -
+these are defined in the ServiceProvider rather than separate classes
+and so seem suitable only for minor event/listener use.
+    * Normal anonymous listeners
+    * Queued anonymous listeners
+    * Wildcard anonymous listeners - for anything significant use Subscribers instead.
+
+#### Subscribers
+
+Event subscribers are classes that may subscribe to multiple events from within the subscriber class itself,
+allowing you to define several event handlers within a single class.
+
+You can register Subscrber classes in your PackageServiceProvider as follows:
+```php
+$package
+    ->name('your-package-name')
+    ->hasEventSubscribers(SubscriberClass1::class)
+    ->hasEventSubscribers(SubscriberClass2::class, SubscriberClass3::class);
+```
+
+_See: [Laravel docs - Event Subscribers](https://laravel.com/docs/events#event-subscribers)._
 
 Event listeners can be registered either by class using `hasEventListenerByClass`
-or anonymous callable i.e. function using `hasEventListenerAnonymous`
-or with an inline queueable anonymous callable using `hasEventListenerQueueable`:
+
+#### Event & Listener classes
 
 ```php
 $package
     ->name('your-package-name')
-    ->hasEventListenerByClass(
+    ->hasEventListenerByName(
         EventClass::class,
         [ListenerClass::class, "method"]
     )
+    ->hasEventListenerByName(
+        EventClass::class,
+        ListenerClass::class . "@method"
+    );
+```
+
+The listener method can be omitted altogether if you use the standard "handle" method.
+
+_See: [Laravel docs - Manually Registering Events & Listeners](https://laravel.com/docs/events#manually-registering-events)._
+
+#### Anonymous Listeners & Queueable Anonymous Listeners
+
+These are closures inside your Service Provider
+and so should probably only be used for minor event handling
+in order not to polute the ServiceProvider with functionality that should belong elsewhere
+(e.g. in a Subscriber listener object).
+
+```php
+$package
+    ->name('your-package-name')
     ->hasEventListenerAnonymous(function (EventClass $event) {
         //
     })
-    ->hasEventListenerQueueable(function (EventClass $event) {
+    ->hasEventListenerQueueableAnonymous(function (EventClass $event) {
         //
     });
 ```
 
-_See: [Laravel Events - Manually Registering Events](https://laravel.com/docs/events#manually-registering-events)
+_See: [Laravel Events - Closure Listeners](https://laravel.com/docs/events#closure-listeners)
 for underlying details._
+
+#### Wildcard Anonymous Listeners
+
+Normal Events are defined using an Event Object,
+and events are dispatched by `EventObject::dispatch(<payload>)`
+and are sent to Listeners which use the fully qualified Event Object name
+(e.g. `EventObject::class`).
+Under the covers `EventObject::dispatch(<payload>)` is converted to
+`Event::dispatch(EventObject::class, new EventObject(<payload>))`.
+
+However, Listeners do NOT need to be associated with Event Objects;
+they can be associated with any string name,
+and typically dot notation e.g. `user.login` is used for these names
+(and indeed this format is still used for Broadcasting in order to use
+the same name at the other end of the Broadcast where
+PHP/Laravel Event Object names would make much less sense - see `BroadcastAs`).
+
+And this is where wildcard listeners come in...
+
+When you do `Event::dispatch(name, <payload>)`
+this can be matched to a Listener using a wildcard string.
+So a Listener that uses the wildcard string (e.g. `user.*`)
+will match `Event::dispatch('user.login')` etc.
+but it could also use a partially-qualified Event Object names
+(e.g. `Spatie\Package\Events\User*` or `App\Domain\*\Events\UserLogin`)
+which would then be matched by `Spatie\Package\Events\UserLogin::dispatch()`
+or `App\Domain\Profile\Events\UserLogin::dispatch()`.
+
+And this is where Wildcard Anonymous Listeners come in -
+they are exactly like normal listeners,
+except that the full event name is passed
+as an additional first parameter before the payload.
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasEventListenerWildcardByClosure('user.*', function (string $eventName, ...$payload) {
+        //
+    })
+    ->hasEventListenerWildcardByClass('user.*', [WildcardListener::class, 'wildcardHandle']);
+```
+
+_See: [Laravel Events - Wildcard Listeners](https://laravel.com/docs/events#wildcard-event-listeners)
+for underlying details (though the Laravel documentation in less explanatory than above)._
 
 ### Inertia Components
 
@@ -962,7 +1062,7 @@ $package
 and you need to take care to avoid name clashes with other e.g. other packages.
 It is recommended that the name of any shared data be prefixed with your package name.
 
-### Creating and Install Command
+### Creating an Install Command
 
 Instead of instructing your users to run multiple artisan commands to
 individually publish e.g. config files, migrations etc.,

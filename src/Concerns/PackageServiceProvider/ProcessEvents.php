@@ -2,42 +2,62 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-use function Illuminate\Events\queueable;
 use Illuminate\Support\Facades\Event;
+use function Illuminate\Events\queueable;
 
 trait ProcessEvents
 {
-    public function bootPackageEvents(): self
-    {
-        $this
-            ->bootPackageEventsByClass()
-            ->bootPackageEventsAnonymous()
-            ->bootPackageEventsQueueable();
+    /**
+     * The subscriber classes to register.
+     * https://laravel.com/docs/events#registering-event-subscribers
+     **/
+    protected $subscribe = [];
 
-        return $this;
+    protected function bootPackageEvents(): self
+    {
+        return $this
+            ->bootPackageEventsByClass()
+            ->bootPackageEventsByName()
+            ->bootPackageEventsAnonymous()
+            ->bootPackageEventsQueueable()
+            ->bootPackageEventsWildcardsByClass()
+            ->bootPackageEventsWildcardsAnonymous()
+            ->bootPackageEventsSubscribers();
     }
 
     protected function bootPackageEventsByClass(): self
     {
-        if (empty($this->package->eventsByClass)) {
-            return $this;
-        }
+        return $this->listenByName($this->package->eventListenersByClass);
+    }
 
-        foreach ($this->package->eventsByClass as $eventClass => $listener) {
-            Event::listen($eventClass, $listener);
-        }
-
-        return $this;
+    protected function bootPackageEventsByName(): self
+    {
+        return $this->listenByName($this->package->eventListenersByName);
     }
 
     protected function bootPackageEventsAnonymous(): self
     {
-        if (empty($this->package->eventsAnonymous)) {
+        return $this->listenByName($this->package->eventListenersAnonymous);
+    }
+
+    protected function bootPackageEventsWildcardsByClass(): self
+    {
+        return $this->listenByName($this->package->eventListenersWildcardsByClass);
+    }
+
+    protected function bootPackageEventsWildcardsAnonymous(): self
+    {
+        return $this->listenByName($this->package->eventListenersWildcardsAnonymous);
+    }
+
+    protected function listenByName(array $listeners): self
+    {
+        if (empty($listeners)) {
             return $this;
         }
 
-        foreach ($this->package->eventsAnonymous as $listener) {
-            Event::listen($listener);
+        foreach ($listeners as $listener) {
+            Event::listen(...(array) $listener);
         }
 
         return $this;
@@ -45,12 +65,25 @@ trait ProcessEvents
 
     protected function bootPackageEventsQueueable(): self
     {
-        if (empty($this->package->eventsQueueable)) {
+        if (empty($this->package->eventListenersQueueable)) {
             return $this;
         }
 
-        foreach ($this->package->eventsQueueable as $listener) {
+        foreach ($this->package->eventListenersQueueable as $listener) {
             Event::listen(queueable($listener));
+        }
+
+        return $this;
+    }
+
+    protected function bootPackageEventsSubscribers(): self
+    {
+        if (empty($this->package->eventSubscribers)) {
+            return $this;
+        }
+
+        foreach ($this->package->eventSubscribers as $subscriber) {
+            Event::subscribe($subscriber);
         }
 
         return $this;

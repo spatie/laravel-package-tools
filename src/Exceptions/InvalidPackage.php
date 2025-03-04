@@ -31,6 +31,11 @@ class InvalidPackage extends Exception
         return new static("$method: Class '$class' does not exist in package $packageName");
     }
 
+    public static function classMethodDoesNotExist(string $packageName, string $method, string $type, string $class, string $classMethod): self
+    {
+        return new static("$method: $type '$class' does not have method '$classMethod' in package $packageName");
+    }
+
     public static function cannotDetermineNamespace(string $packageName, string $method, string $path): self
     {
         return new static("$method: Unable to determine namespace from files for '$path' in package $packageName");
@@ -49,6 +54,11 @@ class InvalidPackage extends Exception
     public static function filenameNeitherPhpNorStub(string $packageName, string $type, string $method, string $filename): self
     {
         return new static("$method: $type filename '$filename' is neither .php or .php.stub in package $packageName");
+    }
+
+    public static function noEventListenerSpecified(string $packageName, string $method, string $class): self
+    {
+        return new static("$method requires a Listener class for Event '$class' in package $packageName");
     }
 
     public static function laravelFunctionalityNotYetImplemented(string $packageName, string $method, string $version): self

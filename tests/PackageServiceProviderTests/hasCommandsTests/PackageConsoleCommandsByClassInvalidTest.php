@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasConsoleCommandsTests;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasCommandsTests;
 
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 use Spatie\LaravelPackageTools\Package;

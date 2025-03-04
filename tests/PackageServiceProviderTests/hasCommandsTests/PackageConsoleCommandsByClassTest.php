@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasConsoleCommandsTests;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasCommandsTests;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\FourthTestCommand;

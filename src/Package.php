@@ -92,7 +92,6 @@ final class Package
             return $classes;
         }
 
-        $classes = collect($classes)->flatten()->toArray();
         foreach ($classes as $class) {
             if (! class_exists($class)) {
                 throw InvalidPackage::classDoesNotExist(
@@ -104,6 +103,21 @@ final class Package
         }
 
         return $classes;
+    }
+
+    public function verifyClassMethod(string $method, $class, $classMethod): string
+    {
+        if (method_exists($class, $classMethod) || method_exists($class, "__invoke")) {
+            return $classMethod;
+        }
+
+        throw InvalidPackage::classMethodDoesNotExist(
+            $this->name,
+            $method,
+            'Listener',
+            Str::afterLast($class, "\\"),
+            $classMethod
+        );
     }
 
     private function verifyFiles(string $method, string ...$files): void
@@ -185,4 +199,5 @@ final class Package
 
         return $this->buildDirectory($path, $subpath);
     }
+
 }

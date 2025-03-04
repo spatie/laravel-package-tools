@@ -2,12 +2,13 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests;
 
-//use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestCase;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Events\TestEvent;
 use Spatie\LaravelPackageTools\Tests\TestPackage\Src\ServiceProvider;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -53,6 +54,8 @@ abstract class PackageServiceProviderTestCase extends TestCase
         };
 
         parent::setUp();
+
+        Event::fake();
     }
 
     protected function tearDown(): void
