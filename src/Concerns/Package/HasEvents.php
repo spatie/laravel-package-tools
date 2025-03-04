@@ -3,7 +3,6 @@
 namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 use Illuminate\Support\Str;
-use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
 trait HasEvents
 {
@@ -79,8 +78,7 @@ trait HasEvents
         string $listenerClass,
         ?string $listenerMethod,
         string $defaultMethod
-    ): array|string
-    {
+    ): array|string {
         if (Str::contains($listenerClass, '@')) {
             $listener = $listenerClass;
             $this->verifyClassNames($method, explode('@', $listenerClass, 2)[0]);

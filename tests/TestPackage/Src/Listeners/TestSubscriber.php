@@ -10,7 +10,9 @@ class TestSubscriber
     /**
      * Handle user login events.
      */
-    public function handleTestEvent(TestEvent $event): void {}
+    public function handleTestEvent(TestEvent $event): void
+    {
+    }
 
     /**
      * Register the listeners for the subscriber.
@@ -23,5 +25,5 @@ class TestSubscriber
             TestEvent::class,
             [static::class, 'handleTestEvent']
         );
-     }
+    }
 }

@@ -3,8 +3,8 @@
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasEventsTests;
 
 use Illuminate\Support\Facades\Event;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Events\TestEvent;
 use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Events\TestEvent;
 
 trait PackageEventListenerNoneTest
 {

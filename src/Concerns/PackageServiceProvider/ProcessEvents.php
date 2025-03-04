@@ -2,8 +2,8 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-use Illuminate\Support\Facades\Event;
 use function Illuminate\Events\queueable;
+use Illuminate\Support\Facades\Event;
 
 trait ProcessEvents
 {

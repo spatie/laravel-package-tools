@@ -3,8 +3,8 @@
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasEventsTests;
 
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Listeners\TestListener;
 use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Listeners\TestListener;
 
 trait PackageEventListenerByNameInvalidListenerMethodTest
 {

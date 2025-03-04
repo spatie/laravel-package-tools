@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestCase;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Events\TestEvent;
 use Spatie\LaravelPackageTools\Tests\TestPackage\Src\ServiceProvider;
 use Symfony\Component\Finder\SplFileInfo;
 

@@ -199,5 +199,4 @@ final class Package
 
         return $this->buildDirectory($path, $subpath);
     }
-
 }
