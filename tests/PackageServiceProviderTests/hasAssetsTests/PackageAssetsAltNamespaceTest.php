@@ -4,20 +4,20 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasAssets
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageAssetsAltPathTest
+trait PackageAssetsAltNamespaceTest
 {
     public function configurePackage(Package $package)
     {
         $package
             ->name('laravel-package-tools')
-            ->hasAssets(path: '../resources/dist_alt');
+            ->hasAssets('myassets');
     }
 }
 
-uses(PackageAssetsAltPathTest::class);
+uses(PackageAssetsAltNamespaceTest::class);
 
 it("can publish the alternate assets", function () {
-    $file = public_path('vendor/package-tools/dummy_alt.js');
+    $file = public_path('vendor/myassets/dummy.js');
     expect($file)->not->toBeFileOrDirectory();
 
     $this

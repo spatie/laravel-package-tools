@@ -6,33 +6,27 @@ trait ProcessLivewire
 {
     protected function bootPackageLivewire(): self
     {
-        if (! $this->package->hasLivewire) {
+        if (! $this->package->livewirePaths || ! $this->app->runningInConsole()) {
             return $this;
         }
 
-        if (! $this->app->runningInConsole()) {
-            return $this;
+        $tag = "{$this->package->shortName()}-livewire-components";
+        foreach ($this->package->livewirePaths as $namespace => [$viewsPath, $componentsPath]) {
+            $this->publishes(
+                [$this->basePath($viewsPath) => resource_path("views/livewire/{$namespace}")],
+                $tag
+            );
+
+            /* Volt components have only a views file */
+            if (! is_dir($livewireComponentsDir)) {
+                return $this;
+            }
+
+            $this->publishes(
+                [$this->basePath($componentsPath) => app_path("Livewire/{$namespace}")],
+                $tag
+            );
         }
-
-        $livewireViewsDir = $this->package->livewireViewsPath();
-        $packageDirectoryName = Str::of($this->package->livewireNamespace())->studly()->remove('-')->value();
-
-        $this->publishes(
-            [$livewireViewsDir => resource_path("views/livewire/{$packageDirectoryName}")],
-            "{$this->package->livewireNamespace()}-livewire-components"
-        );
-
-        $livewireComponentsDir = $this->package->livewireComponentsPath();
-
-        /* Volt components have only a views file */
-        if (! is_dir($livewireComponentsDir)) {
-            return $this;
-        }
-
-        $this->publishes(
-            [$livewireComponentsDir => app_path("Livewire/{$packageDirectoryName}")],
-            "{$this->package->livewireNamespace()}-livewire-components"
-        );
 
         return $this;
     }

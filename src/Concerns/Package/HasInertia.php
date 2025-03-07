@@ -4,33 +4,18 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasInertia
 {
-    public bool $hasInertiaComponents = false;
-    protected ?string $inertiaNamespace = null;
-    protected ?string $inertiaComponentsPath = '../resources/js/Pages';
+    private static string $inertiaComponentsDefaultPath = '../resources/js/Pages';
 
-    public function hasInertiaComponents(?string $namespace = null): self
+    public array $inertiaComponentsPaths = [];
+
+    public function hasInertiaComponents(?string $namespace = null, ?string $path = null): self
     {
-        $this->hasInertiaComponents = true;
-        $this->inertiaNamespace = $namespace;
 
-        $this->inertiaComponentsPath = $this->verifyRelativeDirOrNull($this->inertiaComponentsPath);
+        $namespace = $this->studlyCase($namespace ?? $this->shortName());
+        $this->verifyUniqueKey(__FUNCTION__, 'namespace', $this->inertiaComponentsPaths, $namespace);
 
-        return $this;
-    }
-
-    public function inertiaNamespace(): string
-    {
-        return $this->inertiaNamespace ?? $this->shortName();
-    }
-
-    public function inertiaComponentsPath(?string $directory = null): string
-    {
-        return $this->verifyPathSet(__FUNCTION__, $this->inertiaComponentsPath, $directory);
-    }
-
-    public function setInertiaComponentsPath(string $path): self
-    {
-        $this->inertiaComponentsPath = $this->verifyRelativeDir(__FUNCTION__, $path);
+        $this->inertiaComponentsPaths[$namespace] =
+            $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$inertiaComponentsDefaultPath);
 
         return $this;
     }

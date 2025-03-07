@@ -2,24 +2,22 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\Package;
 
+use Illuminate\Support\Str;
+
 trait HasAssets
 {
     private static string $assetsDefaultPath = '../resources/dist';
 
-    public bool $hasAssets = false;
-    public ?string $assetsPath = null;
+    public array $assetsPaths = [];
 
-    public function hasAssets(?string $path = null): self
+    public function hasAssets(?string $namespace = null, ?string $path = null): self
     {
-        $this->hasAssets = true;
+        $namespace = $namespace ?? $this->shortName();
+        $this->verifyUniqueKey(__FUNCTION__, 'namespace', $this->assetsPaths, $namespace);
 
-        $this->assetsPath = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$assetsDefaultPath);
+        $this->assetsPaths[$namespace] =
+            $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$assetsDefaultPath);
 
         return $this;
-    }
-
-    public function assetsPath(?string $directory = null): string
-    {
-        return $this->buildDirectory($this->assetsPath, $directory);
     }
 }

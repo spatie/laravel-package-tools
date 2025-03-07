@@ -193,10 +193,29 @@ final class Package
         if (! $path) {
             throw InvalidPackage::defaultPathDoesNotExist(
                 $this->name,
-                __FUNCTION__
+                $method
             );
         }
 
         return $this->buildDirectory($path, $subpath);
+    }
+
+    private function verifyUniqueKey(string $method, string $type, array $currentArray, string $proposedKey): string
+    {
+        if (array_key_exists($proposedKey, $currentArray)) {
+            throw InvalidPackage::duplicateNamespace(
+                $this->name,
+                $method,
+                $type,
+                $proposedKey
+            );
+        }
+
+        return $proposedKey;
+    }
+
+    public function studlyCase(string $text): string
+    {
+        return Str::of($text)->studly()->remove('-')->value();
     }
 }

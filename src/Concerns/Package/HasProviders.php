@@ -4,14 +4,16 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasProviders
 {
-    public array $publishableProviderNames = [];
-    protected ?string $publishableProviderPath = '../resources/stubs';
+    private static string $publishableProviderDefaultPath = '../resources/stubs';
 
-    public function publishesServiceProvider(string $providerName): self
+    public array $publishableProviderNames = [];
+    protected ?string $publishableProviderPath = null;
+
+    public function publishesServiceProvider(string $providerName, string $path = null): self
     {
         $this->publishableProviderNames[] = $providerName;
 
-        $this->publishableProviderPath = $this->verifyRelativeDirOrNull($this->publishableProviderPath);
+        $this->publishableProviderPath = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$publishableProviderDefaultPath);
 
         return $this;
     }
@@ -19,12 +21,5 @@ trait HasProviders
     public function publishableProviderPath(?string $directory = null): string
     {
         return $this->verifyPathSet(__FUNCTION__, $this->publishableProviderPath, $directory);
-    }
-
-    public function setPublishableProviderPath(string $path): self
-    {
-        $this->publishableProviderPath = $this->verifyRelativeDir(__FUNCTION__, $path);
-
-        return $this;
     }
 }

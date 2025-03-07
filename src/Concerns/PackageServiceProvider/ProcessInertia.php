@@ -2,20 +2,23 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
+use Illuminate\Support\Str;
+
 trait ProcessInertia
 {
     protected function bootPackageInertia(): self
     {
-        if (! $this->package->hasInertiaComponents || ! $this->app->runningInConsole()) {
+        if (! $this->package->inertiaComponentsPaths || ! $this->app->runningInConsole()) {
             return $this;
         }
 
-        $namespace = $this->package->inertiaNamespace();
-        $directoryName = Str::of($namespace)->studly()->remove('-')->value();
-        $this->publishes(
-            [$this->package->inertiaComponentsPath() => resource_path("js/Pages/{$directoryName}")],
-            "{$namespace}-inertia-components"
-        );
+        $tag = "{$this->package->shortName()}-inertia-components";
+        foreach ($this->package->inertiaComponentsPaths as $namespace => $path) {
+            $this->publishes(
+                [$this->package->basePath($path) => resource_path("js/Pages/{$namespace}")],
+                $tag
+            );
+        }
 
         return $this;
     }

@@ -33,6 +33,7 @@ trait HasBlade
 
     public function hasBladeComponentsByNamespace(string $prefix, string $viewComponentNamespace): self
     {
+        $this->verifyUniqueKey(__FUNCTION__, 'prefix', $this->bladeComponentNamespaces, $prefix);
         $this->bladeComponentNamespaces[$prefix] = $viewComponentNamespace;
 
         return $this;
@@ -40,6 +41,7 @@ trait HasBlade
 
     public function hasBladeComponentsByPath(string $prefix, ?string $path = null): self
     {
+        $this->verifyUniqueKey(__FUNCTION__, 'prefix', $this->bladeComponentPaths, $prefix);
         $this->bladeComponentPaths[$prefix] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$bladeComponentsDefaultPath);
 
         return $this;
@@ -55,6 +57,7 @@ trait HasBlade
             );
         }
 
+        $this->verifyUniqueKey(__FUNCTION__, 'prefix', $this->bladeAnonymousComponentPaths, $prefix);
         $this->bladeAnonymousComponentPaths[$prefix] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$bladeAnonymousComponentsDefaultPath);
 
         return $this;
@@ -62,6 +65,7 @@ trait HasBlade
 
     public function hasBladeCustomDirective(string $name, callable $callable): self
     {
+        $this->verifyUniqueKey(__FUNCTION__, 'custom directive', $this->bladeDirectives, $name);
         $this->bladeDirectives[$name] = $callable;
 
         return $this;
@@ -76,6 +80,7 @@ trait HasBlade
 
     public function hasBladeCustomIf(string $name, callable $callable): self
     {
+        $this->verifyUniqueKey(__FUNCTION__, 'custom If', $this->bladeIfs, $name);
         $this->bladeIfs[$name] = $callable;
 
         return $this;

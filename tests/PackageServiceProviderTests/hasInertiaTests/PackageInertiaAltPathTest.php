@@ -4,25 +4,25 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasAssets
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageAssetsAltPathTest
+trait PackageInertiaAltPathTest
 {
     public function configurePackage(Package $package)
     {
         $package
             ->name('laravel-package-tools')
-            ->hasAssets(path: '../resources/dist_alt');
+            ->hasInertiaComponents(path: '../resources/js_alt/Pages');
     }
 }
 
-uses(PackageAssetsAltPathTest::class);
+uses(PackageInertiaAltPathTest::class);
 
-it("can publish the alternate assets", function () {
-    $file = public_path('vendor/package-tools/dummy_alt.js');
+it("can publish the alternate inertia components", function () {
+    $file = resource_path("js/Pages/PackageTools/dummy_alt.js");
     expect($file)->not->toBeFileOrDirectory();
 
     $this
-        ->artisan('vendor:publish --tag=package-tools-assets')
+        ->artisan('vendor:publish --tag=package-tools-inertia-components')
         ->assertSuccessful();
 
     expect($file)->toBeFile();
-})->group('assets');
+})->group('inertia');

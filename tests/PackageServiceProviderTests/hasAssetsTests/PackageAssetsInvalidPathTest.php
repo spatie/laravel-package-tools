@@ -11,7 +11,7 @@ trait PackageAssetsInvalidPathTest
     {
         $package
             ->name('laravel-package-tools')
-            ->hasAssets('../invalid_path');
+            ->hasAssets(path: '../invalid_path');
     }
 }
 

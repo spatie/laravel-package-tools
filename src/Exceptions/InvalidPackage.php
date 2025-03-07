@@ -56,6 +56,11 @@ class InvalidPackage extends Exception
         return new static("$method: $type filename '$filename' is neither .php or .php.stub in package $packageName");
     }
 
+    public static function duplicateNamespace(string $packageName, string $method, string $type, string $key): self
+    {
+        return new static("$method cannot use $type '$key' more than once in package $packageName");
+    }
+
     public static function noEventListenerSpecified(string $packageName, string $method, string $class): self
     {
         return new static("$method requires a Listener class for Event '$class' in package $packageName");

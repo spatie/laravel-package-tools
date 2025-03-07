@@ -13,5 +13,5 @@ function is_before_laravel_version(string $actualVersion, string $minVersion): b
 
 function message_before_laravel_version(string $minVersion): string
 {
-    return 'Anonymous components not available until Laravel v' . $minVersion;
+    return 'LaravelPackageTools Functionality not available until Laravel v' . $minVersion;
 }
