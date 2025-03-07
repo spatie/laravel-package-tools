@@ -2,8 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\Package;
 
-use Illuminate\Support\Str;
-
 trait HasAssets
 {
     private static string $assetsDefaultPath = '../resources/dist';

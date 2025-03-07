@@ -2,8 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
-use Illuminate\Support\Str;
-
 trait ProcessInertia
 {
     protected function bootPackageInertia(): self

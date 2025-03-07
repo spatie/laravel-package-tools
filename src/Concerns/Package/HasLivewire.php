@@ -13,14 +13,13 @@ trait HasLivewire
         ?string $namespace = null,
         ?string $livewireViewsPath = null,
         ?string $livewireComponentsPath = null
-    ): self
-    {
+    ): self {
         $namespace = $this->studlyCase($namespace ?? $this->shortName());
         $this->verifyUniqueKey(__FUNCTION__, 'namespace', $this->inertiaComponentsPaths, $namespace);
 
         $this->livewirePaths[$namespace] = [
             $this->verifyRelativeDir($livewireViewsPath ?? static::livewireViewsDefaultPath),
-            $this->verifyRelativeDirOrNull($livewireComponentsPath ?? static::livewireComponentsDefaultPath)
+            $this->verifyRelativeDirOrNull($livewireComponentsPath ?? static::livewireComponentsDefaultPath),
         ];
 
         return $this;

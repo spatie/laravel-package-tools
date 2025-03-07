@@ -13,7 +13,7 @@ trait PackageInertiaInvalidDuplicateNamespaceTest
             ->name('laravel-package-tools')
             ->hasInertiaComponents()
             ->hasInertiaComponents(path: '../resources/js_alt/Pages');
-   }
+    }
 }
 
 uses(PackageInertiaInvalidDuplicateNamespaceTest::class);
