@@ -4,20 +4,20 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasProvid
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackagePublishableProviderTest
+trait PackagePublishableProviderLegacyTest
 {
     public function configurePackage(Package $package)
     {
         $package
             ->name('laravel-package-tools')
-            ->publishesServiceProvider();
+            ->publishesServiceProvider('MyPackageServiceProvider');
     }
 }
 
-uses(PackagePublishableProviderTest::class);
+uses(PackagePublishableProviderLegacyTest::class);
 
 it("can publish a service provider", function () {
-    $providerPath = app_path('Providers/PackageToolsServiceProvider.php');
+    $providerPath = app_path('Providers/MyPackageServiceProvider.php');
 
     expect($providerPath)->not->toBeFileOrDirectory();
 

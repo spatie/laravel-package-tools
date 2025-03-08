@@ -4,26 +4,26 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasViewsT
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageViewsTest
+trait PackageViewsAltPathTest
 {
     public function configurePackage(Package $package)
     {
         $package
             ->name('laravel-package-tools')
-            ->hasViews();
+            ->hasViews(path: '../resources/views_alt');
     }
 }
 
-uses(PackageViewsTest::class);
+uses(PackageViewsAltPathTest::class);
 
-it("can load default views", function () {
-    $content = view('package-tools::test')->render();
+it("can load the views with a custom path", function () {
+    $content = view('package-tools::test-alt')->render();
 
     expect($content)->toStartWith('This is a blade view');
 })->group('views');
 
-it("can publish default views", function () {
-    $file = resource_path('views/vendor/package-tools/test.blade.php');
+it("can publish the views with a custom path", function () {
+    $file = resource_path('views/vendor/package-tools/test-alt.blade.php');
     expect($file)->not->toBeFileOrDirectory();
 
     $this

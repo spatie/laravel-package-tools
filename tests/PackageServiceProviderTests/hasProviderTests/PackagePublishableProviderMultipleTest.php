@@ -10,7 +10,7 @@ trait PackagePublishableProviderMultipleTest
     {
         $package
             ->name('laravel-package-tools')
-            ->publishesServiceProvider('MyPackageServiceProvider')
+            ->publishesServiceProvider()
             ->publishesServiceProvider('../resources/stubs_alt/MyAltPackageServiceProvider');
     }
 }
@@ -18,7 +18,7 @@ trait PackagePublishableProviderMultipleTest
 uses(PackagePublishableProviderMultipleTest::class);
 
 it("can publish multiple service providers", function () {
-    $providerPath1 = app_path('Providers/MyPackageServiceProvider.php');
+    $providerPath1 = app_path('Providers/PackageToolsServiceProvider.php');
     $providerPath2 = app_path('Providers/MyAltPackageServiceProvider.php');
     expect($providerPath1)->not->toBeFileOrDirectory();
     expect($providerPath2)->not->toBeFileOrDirectory();

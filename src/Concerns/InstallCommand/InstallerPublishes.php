@@ -2,7 +2,7 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\InstallCommand;
 
-trait Publishes
+trait InstallerPublishes
 {
     protected array $publishes = [];
 

@@ -20,4 +20,4 @@ uses(PackageInertiaInvalidDuplicateNamespaceTest::class);
 
 it("will throw an exception when the same namespace is used twice")
         ->group('inertia')
-        ->throws(InvalidPackage::class, "hasInertiaComponents cannot use namespace 'PackageTools' more than once in package laravel-package-tools");
+        ->throws(InvalidPackage::class, "hasInertiaComponents cannot use namespace 'package-tools' more than once in package laravel-package-tools");

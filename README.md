@@ -173,7 +173,8 @@ The structure for a package expected by default looks like this:
 
 However most of these default paths can be changed if necessary using a `setXXXXPath("path")` call.
 
-Note: When overriding paths the path given is relative to the location of your primary Service Provider
+Note: When using paths in any Package method,
+the path given is relative to the location of your primary Service Provider
 i.e. relative to `<package root>/src`
 so `<package root>/ConfigFiles` would be set using `->setConfigsPath("../ConfigFiles")`
 and `<package root>/src/ServiceProviders` would be set using  `->setPublishableServiceProvidersPath("ServiceProviders")`.

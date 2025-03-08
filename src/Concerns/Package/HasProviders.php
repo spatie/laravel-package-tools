@@ -14,7 +14,7 @@ trait HasProviders
     {
         $providerName =
             (Str::contains($providerName, '/') ? '' : static::$publishableProviderDefaultPath) .
-            ($providerName ?? $this->studlyCase($this->shortName())) . '.php.stub';
+            ($providerName ?? $this->studlyCase($this->shortName()) . 'ServiceProvider') . '.php.stub';
 
         $this->publishableProviderNames[] = $this->verifyRelativeFile(__FUNCTION__, $providerName);
 

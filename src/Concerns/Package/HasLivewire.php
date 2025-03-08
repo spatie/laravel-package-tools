@@ -14,7 +14,7 @@ trait HasLivewire
         ?string $livewireViewsPath = null,
         ?string $livewireComponentsPath = null
     ): self {
-        $namespace = $this->studlyCase($namespace ?? $this->shortName());
+        $namespace = $namespace ?? $this->shortName();
         $this->verifyUniqueKey(__FUNCTION__, 'namespace', $this->inertiaComponentsPaths, $namespace);
 
         $this->livewirePaths[$namespace] = [

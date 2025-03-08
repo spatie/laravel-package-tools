@@ -4,20 +4,20 @@ namespace Spatie\LaravelPackageTools\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
-use Spatie\LaravelPackageTools\Concerns\InstallCommand\AskToRunMigrations;
-use Spatie\LaravelPackageTools\Concerns\InstallCommand\AskToStarRepoOnGitHub;
-use Spatie\LaravelPackageTools\Concerns\InstallCommand\Publishes;
-use Spatie\LaravelPackageTools\Concerns\InstallCommand\ServiceProviderInApp;
-use Spatie\LaravelPackageTools\Concerns\InstallCommand\StartWithEndWith;
+use Spatie\LaravelPackageTools\Concerns\InstallCommand\InstallerAskToRunMigrations;
+use Spatie\LaravelPackageTools\Concerns\InstallCommand\InstallerAskToStarRepoOnGitHub;
+use Spatie\LaravelPackageTools\Concerns\InstallCommand\InstallerPublishes;
+use Spatie\LaravelPackageTools\Concerns\InstallCommand\InstallerServiceProviderInApp;
+use Spatie\LaravelPackageTools\Concerns\InstallCommand\InstallerStartWithEndWith;
 use Spatie\LaravelPackageTools\Package;
 
 class InstallCommand extends Command
 {
-    use AskToRunMigrations;
-    use AskToStarRepoOnGitHub;
-    use Publishes;
-    use ServiceProviderInApp;
-    use StartWithEndWith;
+    use InstallerAskToRunMigrations;
+    use InstallerAskToStarRepoOnGitHub;
+    use InstallerPublishes;
+    use InstallerServiceProviderInApp;
+    use InstallerStartWithEndWith;
 
     protected Package $package;
 

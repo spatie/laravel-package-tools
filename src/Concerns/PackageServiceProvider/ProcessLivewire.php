@@ -13,7 +13,7 @@ trait ProcessLivewire
         $tag = "{$this->package->shortName()}-livewire-components";
         foreach ($this->package->livewirePaths as $namespace => [$viewsPath, $componentsPath]) {
             $this->publishes(
-                [$this->basePath($viewsPath) => resource_path("views/livewire/{$namespace}")],
+                [$this->basePath($viewsPath) => resource_path("views/livewire/{$this->package->studlyCase($namespace)}")],
                 $tag
             );
 
@@ -23,7 +23,7 @@ trait ProcessLivewire
             }
 
             $this->publishes(
-                [$this->basePath($componentsPath) => app_path("Livewire/{$namespace}")],
+                [$this->basePath($componentsPath) => app_path("Livewire/{$this->package->studlyCase($namespace)}")],
                 $tag
             );
         }

@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasViewsT
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageViewsWithCustomNamespaceTest
+trait PackageViewsAltNamespaceTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,7 +14,7 @@ trait PackageViewsWithCustomNamespaceTest
     }
 }
 
-uses(PackageViewsWithCustomNamespaceTest::class);
+uses(PackageViewsAltNamespaceTest::class);
 
 it("can load the views with a custom namespace", function () {
     $content = view('custom-namespace::test')->render();
@@ -22,12 +22,23 @@ it("can load the views with a custom namespace", function () {
     expect($content)->toStartWith('This is a blade view');
 })->group('views');
 
-it("can publish the views with a custom namespace", function () {
+it("can publish the views with a custom namespace and tag", function () {
     $file = resource_path('views/vendor/custom-namespace/test.blade.php');
     expect($file)->not->toBeFileOrDirectory();
 
     $this
         ->artisan('vendor:publish --tag=custom-namespace-views')
+        ->assertSuccessful();
+
+    expect($file)->toBeFile();
+})->group('views');
+
+it("can publish the views with a custom namespace", function () {
+    $file = resource_path('views/vendor/custom-namespace/test.blade.php');
+    expect($file)->not->toBeFileOrDirectory();
+
+    $this
+        ->artisan('vendor:publish --tag=package-tools-views')
         ->assertSuccessful();
 
     expect($file)->toBeFile();

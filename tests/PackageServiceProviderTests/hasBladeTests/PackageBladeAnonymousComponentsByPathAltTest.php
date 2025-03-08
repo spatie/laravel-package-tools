@@ -35,7 +35,7 @@ it("can publish the blade anonymous components by alternate path", function () {
     expect($file)->not->toBeFileOrDirectory();
 
     $this
-        ->artisan('vendor:publish --tag=laravel-package-tools-anonymous-components')
+        ->artisan('vendor:publish --tag=package-tools-anonymous-components')
         ->assertSuccessful();
 
     expect($file)->toBeFile();

@@ -10,12 +10,20 @@ trait ProcessInertia
             return $this;
         }
 
-        $tag = "{$this->package->shortName()}-inertia-components";
+        /* Publish under two tags for legacy reasons */
+        $shortName = $this->package->shortName();
+        $tag = "{$shortName}-inertia-components";
         foreach ($this->package->inertiaComponentsPaths as $namespace => $path) {
             $this->publishes(
-                [$this->package->basePath($path) => resource_path("js/Pages/{$namespace}")],
+                [$this->package->basePath($path) => resource_path("js/Pages/{$this->package->studlyCase($namespace)}")],
                 $tag
             );
+            if ($namespace !== $shortName) {
+                $this->publishes(
+                    [$this->package->basePath($path) => resource_path("js/Pages/{$this->package->studlyCase($namespace)}")],
+                    "{$namespace}-inertia-components"
+                );
+            }
         }
 
         return $this;

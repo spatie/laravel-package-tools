@@ -239,6 +239,6 @@ final class Package
 
     public function studlyCase(string $text): string
     {
-        return Str::of($text)->studly()->remove('-')->value();
+        return Str::of($text)->studly()->value();
     }
 }

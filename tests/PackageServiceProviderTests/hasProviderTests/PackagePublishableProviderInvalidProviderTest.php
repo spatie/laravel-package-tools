@@ -5,7 +5,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasProvid
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 use Spatie\LaravelPackageTools\Package;
 
-trait PackagePublishableProviderDefaultTest
+trait PackagePublishableProviderInvalidProviderTest
 {
     public function configurePackage(Package $package)
     {
@@ -15,7 +15,7 @@ trait PackagePublishableProviderDefaultTest
     }
 }
 
-uses(PackagePublishableProviderDefaultTest::class);
+uses(PackagePublishableProviderInvalidProviderTest::class);
 
 it("throws an exception on an serviceprovider without a matching file")
     ->group('provider')

@@ -39,14 +39,19 @@ trait ProcessBlade
          * Blade components can also now be loaded and published by path using `hasBladeComponentPath`
          **/
         $appPath = app_path("View/Components/vendor/{$this->package->shortName()}/");
-        $tag = "{$this->package->name}-components";
 
-        foreach (collect($this->package->bladeComponents)->flatten()->toArray() as $componentClass) {
-            $filename = (new ReflectionClass($componentClass))->getFileName();
-            $this->publishes(
-                [$filename => $appPath . basename($filename)],
-                $tag
-            );
+        /* Legacy fix - publish as both standardised {$this->package->name} and legacy {$this->package->name} */
+        foreach ([
+            "{$this->package->shortName()}-components",
+            "{$this->package->name}-components"
+        ] as $tag) {
+            foreach (collect($this->package->bladeComponents)->flatten()->toArray() as $componentClass) {
+                $filename = (new ReflectionClass($componentClass))->getFileName();
+                $this->publishes(
+                    [$filename => $appPath . basename($filename)],
+                    $tag
+                );
+            }
         }
 
         return $this;
@@ -93,7 +98,7 @@ trait ProcessBlade
         }
 
         $appPath = app_path("View/Components/vendor/{$this->package->shortName()}/");
-        $tag = "{$this->package->name}-components";
+        $tag = "{$this->package->shortName()}-components";
         foreach ($paths as $prefix => $path) {
             $this->publishes(
                 [$this->package->basePath($path) => $appPath],
@@ -120,7 +125,7 @@ trait ProcessBlade
         }
 
         $appPath = resource_path("views/components/vendor/{$this->package->shortName()}/");
-        $tag = "{$this->package->name}-anonymous-components";
+        $tag = "{$this->package->shortName()}-anonymous-components";
         foreach ($paths as $prefix => $path) {
             $this->publishes(
                 [$this->package->basePath($path) => $appPath],
