@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasAssetsTests;
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasInertiaTests;
 
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 use Spatie\LaravelPackageTools\Package;

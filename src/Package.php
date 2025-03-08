@@ -120,6 +120,29 @@ final class Package
         );
     }
 
+    private function verifyRelativeFile(string $method, string $file): string
+    {
+        return $this->verifyFile($method, $this->buildDirectory($file), $file);
+    }
+
+    private function verifyFile(string $method, string $file, string $relativeFile = null): string
+    {
+        /* Avoid exceptions if production */
+        if (! env('APP_DEBUG', false)) {
+            return $file;
+        }
+
+        if (! is_file($file)) {
+            throw InvalidPackage::fileDoesNotExist(
+                $this->name,
+                $method,
+                $relativeFile ?? $file
+            );
+        }
+
+        return $file;
+    }
+
     private function verifyFiles(string $method, string ...$files): void
     {
         // ToDo: Is this actually used? Need to use some sort of path with this.

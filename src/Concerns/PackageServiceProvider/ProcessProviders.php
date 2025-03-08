@@ -10,12 +10,12 @@ trait ProcessProviders
             return $this;
         }
 
-        $vendorPath = $this->package->publishableProviderPath();
         $appPath = app_path("Providers");
         $tag = "{$this->package->shortName()}-provider";
         foreach ($this->package->publishableProviderNames as $providerName) {
+            $targetFile = basename($providerName, '.php.stub') . '.php';
             $this->publishes(
-                ["{$vendorPath}/{$providerName}.php.stub" => "{$appPath}/{$providerName}.php"],
+                [$providerName => "{$appPath}/{$targetFile}"],
                 $tag
             );
         }

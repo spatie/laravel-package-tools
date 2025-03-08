@@ -13,18 +13,22 @@ use Symfony\Component\Finder\SplFileInfo;
 
 abstract class PackageServiceProviderTestCase extends TestCase
 {
-    protected array $cleanPaths = [
+    protected array $cleanPathsFull = [
         'app/Providers/',
         'app/Livewire/',
         'app/View/Components/vendor/',
-        'config/',
-        'database/migrations/',
         'lang/vendor/',
         'public/vendor/',
+        'resources/dist/',
+        'resources/js/Pages/',
         'resources/views/components/',
         'resources/views/livewire/',
         'resources/views/vendor/',
-        'resources/js/Pages/',
+    ];
+
+    protected array $cleanPathsPartial = [
+        'config/',
+        'database/migrations/',
         'storage/framework/views/',
     ];
 
@@ -60,7 +64,8 @@ abstract class PackageServiceProviderTestCase extends TestCase
     protected function tearDown(): void
     {
         $this
-            ->deletePublishedFiles()
+            ->deletePublishedDirectoriesFull()
+            ->deletePublishedDirectoriesPartial()
             ->clearLaravelStaticRegistrations();
 
         parent::tearDown();
@@ -75,10 +80,19 @@ abstract class PackageServiceProviderTestCase extends TestCase
         ];
     }
 
-    protected function deletePublishedFiles(): self
+    protected function deletePublishedDirectoriesFull(): self
+    {
+        foreach ($this->cleanPathsFull as $dir) {
+            File::deleteDirectory(base_path($dir));
+        }
+
+        return $this;
+    }
+
+    protected function deletePublishedDirectoriesPartial(): self
     {
         $basePath = base_path() . '/';
-        foreach ($this->cleanPaths as $dir) {
+        foreach ($this->cleanPathsPartial as $dir) {
             $dir = $basePath . $dir;
             if (! is_dir($dir)) {
                 continue;
@@ -90,10 +104,6 @@ abstract class PackageServiceProviderTestCase extends TestCase
                     }
                 }
             });
-
-            if ($this->is_dir_empty($dir)) {
-                rmdir($dir);
-            }
         }
 
         return $this;

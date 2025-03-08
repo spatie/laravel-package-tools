@@ -19,7 +19,7 @@ uses(PackageAssetsMultipleTest::class);
 
 it("can publish both default and alternate assets", function () {
     $file1 = public_path('vendor/myassets/dummy_alt.js');
-    $file2 = public_path('vendor/package-Tools/dummy.js');
+    $file2 = public_path('vendor/package-tools/dummy.js');
     expect($file1)->not->toBeFileOrDirectory();
     expect($file2)->not->toBeFileOrDirectory();
 
