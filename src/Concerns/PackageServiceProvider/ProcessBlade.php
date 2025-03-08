@@ -43,7 +43,7 @@ trait ProcessBlade
         /* Legacy fix - publish as both standardised {$this->package->name} and legacy {$this->package->name} */
         foreach ([
             "{$this->package->shortName()}-components",
-            "{$this->package->name}-components"
+            "{$this->package->name}-components",
         ] as $tag) {
             foreach (collect($this->package->bladeComponents)->flatten()->toArray() as $componentClass) {
                 $filename = (new ReflectionClass($componentClass))->getFileName();
