@@ -49,6 +49,7 @@ trait ServiceProviderInApp
         $namespace = Str::replaceLast('\\', '', $this->laravel->getNamespace());
 
         foreach ($providerNames as $providerName) {
+            $providerName = basename($providerName, '.php.stub');
             $class = '\\Providers\\' . Str::replace('/', '\\', $providerName) . '::class';
 
             if (Str::contains($appConfig, $namespace . $class)) {
