@@ -94,7 +94,7 @@ trait ProcessConfigs
             return $this;
         }
 
-        $tag = $this->package->shortName(). '-config';
+        $tag = $this->package->shortName() . '-config';
         foreach ($this->package->configPaths as $path) {
             foreach (glob($this->package->buildDirectory($path) . '/*') as $file) {
                 if (Str::endsWith($file, ['.php.stub', '.php']) && is_file($file)) {

@@ -28,16 +28,16 @@ trait HasConfigs
         return $this;
     }
 
-    public function configPath(?string $directory = null): string
-    {
-        return $this->verifyPathSet(__FUNCTION__, $this->configPath, $directory);
-    }
-
-    public function setConfigPath(string $path): self
+    public function setConfigByNamePath(string $path): self
     {
         $this->configPath = $this->verifyRelativeDir(__FUNCTION__, $path);
 
         return $this;
+    }
+
+    public function configPath(?string $directory = null): string
+    {
+        return $this->verifyPathSet(__FUNCTION__, $this->configPath, $directory);
     }
 
     public function hasConfigByPath(?string $path = null): self

@@ -29,6 +29,7 @@ abstract class PackageServiceProviderTestCase extends TestCase
     protected array $cleanPathsPartial = [
         'config/',
         'database/migrations/',
+        'routes/',
         'storage/framework/views/',
     ];
 

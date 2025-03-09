@@ -5,9 +5,7 @@ namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
-
 use Symfony\Component\Finder\SplFileInfo;
 
 trait ProcessMigrations

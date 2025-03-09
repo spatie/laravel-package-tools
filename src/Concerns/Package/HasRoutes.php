@@ -4,18 +4,27 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasRoutes
 {
-    public array $routeFileNames = [];
-    public bool $discoversRoutes = false;
-    protected ?string $routesPath = '../routes';
+    private static string $routesDefaultPath = '../routes';
 
-    public function hasRoutesByName(...$routeFileNames): self
+    public array $routeFilenames = [];
+    public array $routesPaths = [];
+    protected string $routesPath = '../routes';
+
+    public function hasRoutesByName(...$routeFilenames): self
     {
-        $this->routeFileNames = array_unique(array_merge(
-            $this->routeFileNames,
-            collect($routeFileNames)->flatten()->toArray()
+        $this->routeFilenames = array_unique(array_merge(
+            $this->routeFilenames,
+            collect($routeFilenames)->flatten()->toArray()
         ));
 
         $this->routesPath = $this->verifyRelativeDirOrNull($this->routesPath);
+
+        return $this;
+    }
+
+    public function setRoutesByNamePath(string $path): self
+    {
+        $this->routesPath = $this->verifyRelativeDir(__FUNCTION__, $path);
 
         return $this;
     }
@@ -25,21 +34,21 @@ trait HasRoutes
         return $this->verifyPathSet(__FUNCTION__, $this->routesPath, $directory);
     }
 
-    public function setRoutesPath(string $path): self
+    public function hasRoutesByPath(?string $path = null): self
     {
-        $this->routesPath = $this->verifyRelativeDir(__FUNCTION__, $path);
+        $this->routesPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$routesDefaultPath);
 
         return $this;
     }
 
     /* Legacy backwards compatibility */
-    public function hasRoute(...$routeFileNames): self
+    public function hasRoute(...$routeFilenames): self
     {
-        return $this->hasRoutesByName(...$routeFileNames);
+        return $this->hasRoutesByName(...$routeFilenames);
     }
 
-    public function hasRoutes(...$routeFileNames): self
+    public function hasRoutes(...$routeFilenames): self
     {
-        return $this->hasRoutesByName(...$routeFileNames);
+        return $this->hasRoutesByName(...$routeFilenames);
     }
 }

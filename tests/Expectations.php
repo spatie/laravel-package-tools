@@ -174,7 +174,7 @@ function getPublishedMigrations(): array
 {
     $databasePath = realpath(database_path("migrations")) . DIRECTORY_SEPARATOR;
 
-    return collect(File::allfiles($databasePath))
+    return collect(File::allFiles($databasePath))
         ->map(function (SplFileInfo $file) use ($databasePath): string {
             return Str::replace('\\', '/', Str::after(realpath($file->getPathname()), $databasePath));
         })

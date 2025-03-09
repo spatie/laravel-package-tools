@@ -4,26 +4,26 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasRouteT
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageRoutesTest
+trait PackageRouteLegacyTest
 {
     public function configurePackage(Package $package)
     {
         $package
             ->name('laravel-package-tools')
-            ->hasRoutes('web', 'other');
+            ->hasRoute(['web', 'other']);
     }
 }
 
-uses(PackageRoutesTest::class);
+uses(PackageRouteLegacyTest::class);
 
-it("can load the route", function () {
+it("can load the legacy route", function () {
     $response = $this->get('my-route');
 
     $response->assertSeeText('my response');
 })->group('routes');
 
-it("can load multiple route", function () {
+it("can load multiple legacy routes", function () {
     $adminResponse = $this->get('other-route');
 
     $adminResponse->assertSeeText('other response');
-});
+})->group('routes');
