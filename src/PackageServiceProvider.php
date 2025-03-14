@@ -12,6 +12,8 @@ use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
 abstract class PackageServiceProvider extends ServiceProvider
 {
+    const TIMESTAMP_PATTERN = '/^\d{4}_\d{2}_\d{2}_\d{6}_/';
+
     protected Package $package;
 
     abstract public function configurePackage(Package $package): void;
@@ -373,9 +375,15 @@ abstract class PackageServiceProvider extends ServiceProvider
             }
         }
 
+        $migrationFileName = self::stripTimestampPrefix($migrationFileName);
         $timestamp = $now->format('Y_m_d_His');
-        $migrationFileName = Str::of($migrationFileName)->snake()->finish('.php');
+        $formattedFileName = Str::of($migrationFileName)->snake()->finish('.php');
 
-        return database_path($migrationsPath . $timestamp . '_' . $migrationFileName);
+        return database_path("{$migrationsPath}{$timestamp}_{$formattedFileName}");
+    }
+
+    private static function stripTimestampPrefix(string $filename): string
+    {
+        return preg_replace(self::TIMESTAMP_PATTERN, '', $filename);
     }
 }
