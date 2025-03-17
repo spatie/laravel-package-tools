@@ -79,7 +79,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.php-extensions }}
-          coverage: none
+          coverage: pcov
 
       - name: Setup problem matchers
         run: |
