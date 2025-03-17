@@ -36,7 +36,7 @@
         }
     },
     "scripts": {
-        "test": "php -d auto_prepend_file=tests/Prepend.php vendor/bin/pest",
+        "test": "php -d auto_prepend_file=tests/Prepend.php vendor/bin/pest --colors=always",
         "test-coverage": "vendor/bin/pest --coverage",
         "test-dirty": "vendor/bin/pest --dirty --compact"
     },
