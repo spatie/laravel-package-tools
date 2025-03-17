@@ -3,7 +3,6 @@
 /.php_cs
 /.php-cs-fixer.cache
 /.phpunit.cache
-/.phpunit.result.cache
 /build
 /composer.json
 /composer.lock

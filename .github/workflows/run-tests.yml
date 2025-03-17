@@ -47,7 +47,7 @@ jobs:
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
     env:
-      php-extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
+      php-extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo, pcov
       key: ${{ matrix.os }}_Laravel${{ matrix.laravel }}_${{ matrix.stability }}_Php${{ matrix.php }}
 
     steps:
@@ -86,7 +86,7 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-      - name: Fix dependencies
+      - name: Fix carbon dependency for L9
         if: ${{ startsWith(matrix.laravel, '9') }}
         run: |
           composer require "nesbot/carbon:^2.72.6" --no-interaction --no-update
@@ -97,4 +97,4 @@ jobs:
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: Execute tests
-        run: composer test
+        run: composer test-coverage
