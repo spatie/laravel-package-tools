@@ -38,7 +38,7 @@ it("can publish the blade components by path", function () {
     expect($file)->not->toBeFileOrDirectory();
 
     $this
-        ->artisan('vendor:publish --tag=package-tools-anonymous-components')
+        ->artisan('vendor:publish --tag=package-tools-views')
         ->assertSuccessful();
 
     expect($file)->toBeFile();
