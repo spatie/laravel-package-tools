@@ -34,7 +34,7 @@ it("can load the blade anonymous components by alternate path", function () {
     );
 
 it("can publish the blade anonymous components by alternate path", function () {
-    $file = resource_path('views/vendor/package-tools/components/vendor/package-tools/anonymous-component.blade.php');
+    $file = resource_path('views/vendor/package-tools/components/anonymous-component.blade.php');
     expect($file)->not->toBeFileOrDirectory();
 
     $this
