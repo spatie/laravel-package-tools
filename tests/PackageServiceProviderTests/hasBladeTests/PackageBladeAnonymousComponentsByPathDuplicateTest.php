@@ -26,5 +26,8 @@ it("will throw an exception with hasBladeAnonymousComponentsByPath when the Lara
 
 it("will throw an exception when the hasBladeAnonymousComponents prefix is duplicated")
     ->group('blade')
-    ->skip(fn () => is_before_laravel_version(App::version(), '9.44.0'), message_before_laravel_version('9.44.0'))
+    ->skip(
+        fn () => is_before_laravel_version(App::version(), '9.44.0'),
+        message_before_laravel_version('9.44.0', 'hasAnonymousComponentsByPath')
+    )
     ->throws(InvalidPackage::class, "hasBladeAnonymousComponentsByPath cannot use prefix 'abc' more than once in package laravel-package-tools");

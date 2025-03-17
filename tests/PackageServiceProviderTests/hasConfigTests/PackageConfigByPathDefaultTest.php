@@ -10,7 +10,7 @@ trait PackageConfigByPathDefaultTest
     {
         $package
             ->name('laravel-package-tools')
-            ->hasConfigByPath();
+            ->hasConfigsByPath();
     }
 }
 

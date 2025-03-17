@@ -28,7 +28,10 @@ it("can load the blade anonymous components by alternate path", function () {
     expect($content)->toStartWith('<div>hello world</div>');
 })
     ->group('blade')
-    ->skip(fn () => is_before_laravel_version(App::version(), '9.44.0'), message_before_laravel_version('9.44.0'));
+    ->skip(
+        fn () => is_before_laravel_version(App::version(), '9.44.0'),
+        message_before_laravel_version('9.44.0', 'hasAnonymousComponentsByPath')
+    );
 
 it("can publish the blade anonymous components by alternate path", function () {
     $file = resource_path('views/components/vendor/package-tools/anonymous-component.blade.php');
@@ -41,4 +44,7 @@ it("can publish the blade anonymous components by alternate path", function () {
     expect($file)->toBeFile();
 })
     ->group('blade')
-    ->skip(fn () => is_before_laravel_version(App::version(), '9.44.0'), message_before_laravel_version('9.44.0'));
+    ->skip(
+        fn () => is_before_laravel_version(App::version(), '9.44.0'),
+        message_before_laravel_version('9.44.0', 'hasAnonymousComponentsByPath')
+    );

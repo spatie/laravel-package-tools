@@ -32,4 +32,4 @@ it("can register and execute legacy Console Commands loaded by class name", func
         ->artisan('package-tools:other-test-command')
         ->assertSuccessful()
         ->expectsOutput('output of other test command');
-})->group('commands');
+})->group('commands', 'legacy');

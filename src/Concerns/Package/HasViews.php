@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasViews
 {
-    private static string $viewsDefaultPath = '../resources/views';
+    private const viewsDefaultPath = '../resources/views';
 
     public array $viewsPaths = [];
 
@@ -14,7 +14,7 @@ trait HasViews
         $this->verifyUniqueKey(__FUNCTION__, 'namespace', $this->viewsPaths, $namespace);
 
         $this->viewsPaths[$namespace] =
-            $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$viewsDefaultPath);
+            $this->verifyRelativeDir(__FUNCTION__, $path ?? static::viewsDefaultPath);
 
         return $this;
     }

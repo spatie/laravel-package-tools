@@ -7,8 +7,9 @@ use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
 trait HasBlade
 {
-    private static string $bladeComponentsDefaultPath = "Components";
-    private static string $bladeAnonymousComponentsDefaultPath = "../resources/views/components";
+    private const bladeComponentsDefaultPath = "Components";
+    public const bladeAnonymousComponentsDefaultPrefix = "[null]";
+    private const bladeAnonymousComponentsDefaultPath = "../resources/views/components";
 
     public array $bladeComponents = [];
     public array $bladeComponentNamespaces = [];
@@ -18,36 +19,45 @@ trait HasBlade
     public array $bladeEchos = [];
     public array $bladeIfs = [];
 
-    public function hasBladeComponentsByClass(string $prefix, ...$bladeComponentNames): self
+    public function hasBladeComponentsByClass(string $prefix, ...$classes): self
     {
-        $bladeComponentNames = $this->verifyClassNames(__FUNCTION__, collect($bladeComponentNames)->flatten()->toArray());
+        $classes = $this->verifyClassNames(__FUNCTION__, collect($classes)->flatten()->toArray());
+
+        if (empty($classes)) {
+            throw InvalidPackage::emptyParameter(
+                $this->name,
+                __FUNCTION__,
+                'classes'
+            );
+        }
 
         if (array_key_exists($prefix, $this->bladeComponents)) {
-            $this->bladeComponents[$prefix] = array_unique(array_merge($this->bladeComponents[$prefix], $bladeComponentNames));
+            $this->bladeComponents[$prefix] = array_unique(array_merge($this->bladeComponents[$prefix], $classes));
         } else {
-            $this->bladeComponents[$prefix] = $bladeComponentNames;
+            $this->bladeComponents[$prefix] = $classes;
         }
 
         return $this;
     }
 
-    public function hasBladeComponentsByNamespace(string $prefix, string $viewComponentNamespace): self
+    public function hasBladeComponentsByNamespace(string $prefix, string $namespace): self
     {
         $this->verifyUniqueKey(__FUNCTION__, 'prefix', $this->bladeComponentNamespaces, $prefix);
-        $this->bladeComponentNamespaces[$prefix] = $viewComponentNamespace;
+        $this->bladeComponentNamespaces[$prefix] = $namespace;
 
         return $this;
     }
 
-    public function hasBladeComponentsByPath(string $prefix, ?string $path = null): self
+    public function hasBladeComponentsByPath(?string $prefix = null, ?string $path = null): self
     {
+        $prefix ??= $this->shortName();
         $this->verifyUniqueKey(__FUNCTION__, 'prefix', $this->bladeComponentPaths, $prefix);
-        $this->bladeComponentPaths[$prefix] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$bladeComponentsDefaultPath);
+        $this->bladeComponentPaths[$prefix] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::bladeComponentsDefaultPath);
 
         return $this;
     }
 
-    public function hasBladeAnonymousComponentsByPath(string $prefix, ?string $path = null): self
+    public function hasBladeAnonymousComponentsByPath(?string $prefix = null, ?string $path = "[shortname]"): self
     {
         if (version_compare(App::version(), '9.44.0') < 0) {
             throw InvalidPackage::laravelFunctionalityNotYetImplemented(
@@ -57,8 +67,13 @@ trait HasBlade
             );
         }
 
+        if ($prefix === "[shortname]") {
+            $prefix = $this->shortName();
+        } else {
+            $prefix ??= static::bladeAnonymousComponentsDefaultPrefix;
+        }
         $this->verifyUniqueKey(__FUNCTION__, 'prefix', $this->bladeAnonymousComponentPaths, $prefix);
-        $this->bladeAnonymousComponentPaths[$prefix] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$bladeAnonymousComponentsDefaultPath);
+        $this->bladeAnonymousComponentPaths[$prefix] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::bladeAnonymousComponentsDefaultPath);
 
         return $this;
     }

@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasConfig
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageConfigLegacyMultipleTest
+trait PackageConfigMultipleLegacyTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,16 +14,16 @@ trait PackageConfigLegacyMultipleTest
     }
 }
 
-uses(PackageConfigLegacyMultipleTest::class);
+uses(PackageConfigMultipleLegacyTest::class);
 
 it("registers multiple config files by legacy", function () {
     expect(config('package-tools.key'))->toBe('value');
     expect(config('alternative-config.alternative_key'))->toBe('alternative_value');
-})->group('config');
+})->group('config', 'legacy');
 
 it("doesn't register stub config files by legacy", function () {
     expect(config('config-stub.stub_key'))->toBe(null);
-})->group('config');
+})->group('config', 'legacy');
 
 it("publishes multiple config files by legacy", function () {
     $publishedFiles = [
@@ -44,4 +44,4 @@ it("publishes multiple config files by legacy", function () {
 
     expect($publishedFiles)->each->toBeFile();
     expect($nonPublishedFiles)->each->not->toBeFileOrDirectory();
-})->group('config');
+})->group('config', 'legacy');

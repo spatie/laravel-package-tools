@@ -5,7 +5,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasMigrat
 use Spatie\LaravelPackageTools\Package;
 use function Spatie\PestPluginTestTime\testTime;
 
-trait PackageMigrationsDiscoversTest
+trait PackageMigrationLegacyTest
 {
     public function configurePackage(Package $package)
     {
@@ -13,66 +13,69 @@ trait PackageMigrationsDiscoversTest
 
         $package
             ->name('laravel-package-tools')
-            ->discoversMigrations()
+            ->hasMigrations('create_table_explicit_normal', 'create_table_explicit_stub')
+            ->hasMigration('folder/create_table_subfolder_explicit_stub')
+            ->hasMigration('folder/create_table_subfolder_explicit_normal')
             ->runsMigrations();
     }
 }
 
-uses(PackageMigrationsDiscoversTest::class);
+uses(PackageMigrationLegacyTest::class);
 
 $expectPublished = [
-    'create_table_discover_normal',
-    'create_table_discover_stub',
     'create_table_explicit_normal',
     'create_table_explicit_stub',
     'folder/create_table_subfolder_explicit_normal',
     'folder/create_table_subfolder_explicit_stub',
-    'folder/create_table_subfolder_discover_normal',
-    'folder/create_table_subfolder_discover_stub',
 ];
 $expectNotPublished = [
+    'create_table_discover_normal',
+    'create_table_discover_stub',
     'non_migration_text_file',
+    'folder/create_table_subfolder_discover_normal',
+    'folder/create_table_subfolder_discover_stub',
     'folder/subfolder_non_migration_text_file',
 ];
 $expectLoaded = [
     'create_table_explicit_normal',
-    'create_table_discover_normal',
     'folder/create_table_subfolder_explicit_normal',
-    'folder/create_table_subfolder_discover_normal',
 ];
 $expectNotLoaded = [
     'create_table_explicit_stub',
+    'create_table_discover_normal',
     'create_table_discover_stub',
     'non_migration_text_file',
     'folder/create_table_subfolder_explicit_stub',
+    'folder/create_table_subfolder_discover_normal',
     'folder/create_table_subfolder_discover_stub',
     'folder/subfolder_non_migration_text_file',
 ];
 
-it("publishes all migrations", function () use ($expectPublished) {
+
+it("publishes the explicitly listed migrations", function () use ($expectPublished) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
 
     expect(true)->toHaveMigrationsPublished($expectPublished);
-})->group('migrations');
+})->group('migrations', 'legacy');
 
-it("doesn't publish non-migration files", function () use ($expectNotPublished) {
+it("doesn't publish the non-listed migrations", function () use ($expectNotPublished) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
 
     expect(true)->toHaveMigrationsNotPublished($expectNotPublished);
-})->group('migrations');
+})->group('migrations', 'legacy');
 
-it("does not overwrite an existing migration", function () {
+it("doesn't overwrite an existing migration", function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
 
-    expect(true)->toHaveMigrationsPublished('2020_01_01_000001_create_table_discover_normal');
+    $filePath = database_path('migrations/2020_01_01_000001_create_table_explicit_normal.php');
 
-    $filePath = database_path('migrations/2020_01_01_000001_create_table_discover_normal.php');
+    expect(true)->toHaveMigrationsPublished('2020_01_01_000001_create_table_explicit_normal');
 
     file_put_contents($filePath, 'modified');
 
@@ -81,20 +84,38 @@ it("does not overwrite an existing migration", function () {
         ->assertSuccessful();
 
     expect($filePath)->toHaveContentsMatching('modified');
-})->group('migrations');
+})->group('migrations', 'legacy');
 
-it("loads the discovered non-stub migrations for 'artisan migrate'", function () use ($expectLoaded) {
+it("does overwrite an existing migration with 'artisan migrate --force'", function () {
+    $this
+        ->artisan('vendor:publish --tag=package-tools-migrations')
+        ->assertSuccessful();
+
+    expect(true)->toHaveMigrationsPublished('2020_01_01_000001_create_table_explicit_normal');
+
+    $filePath = database_path('migrations/2020_01_01_000001_create_table_explicit_normal.php');
+
+    file_put_contents($filePath, 'overwritten');
+
+    $this
+        ->artisan('vendor:publish --tag=package-tools-migrations  --force')
+        ->assertSuccessful();
+
+    expect($filePath)->toHaveContentsMatchingFile(__DIR__.'/../../TestPackage/database/migrations/create_table_explicit_normal.php');
+})->group('migrations', 'legacy');
+
+it("loads the explicitly listed non-stub migrations for 'artisan migrate'", function () use ($expectLoaded) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
 
     expect(__DIR__ . '/../../TestPackage/database/migrations')->toHaveMigrationsLoaded($expectLoaded);
-})->group('migrations');
+})->group('migrations', 'legacy');
 
-it("doesn't load the stub migrations for 'artisan migrate'", function () use ($expectNotLoaded) {
+it("doesn't load the non-listed migrations or stub files for 'artisan migrate'", function () use ($expectNotLoaded) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
 
     expect(__DIR__ . '/../../TestPackage/database/migrations')->toHaveMigrationsNotLoaded($expectNotLoaded);
-})->group('migrations');
+})->group('migrations', 'legacy');

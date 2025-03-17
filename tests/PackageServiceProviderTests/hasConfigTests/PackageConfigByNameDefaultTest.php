@@ -10,7 +10,7 @@ trait PackageConfigByNameDefaultTest
     {
         $package
             ->name('laravel-package-tools')
-            ->hasConfigByName();
+            ->hasConfigsByName();
     }
 }
 

@@ -70,4 +70,9 @@ class InvalidPackage extends Exception
     {
         return new static("$method requires functionality first implemented in Laravel v$version in package $packageName");
     }
+
+    public static function emptyParameter(string $packageName, string $method, string $param): self
+    {
+        return new static("$method requires parameter '$param' to be specified in package $packageName");
+    }
 }

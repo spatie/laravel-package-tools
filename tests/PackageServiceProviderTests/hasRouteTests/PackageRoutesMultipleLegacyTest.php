@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasRouteT
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageRoutesLegacyMultipleTest
+trait PackageRoutesMultipleLegacyTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,7 +14,7 @@ trait PackageRoutesLegacyMultipleTest
     }
 }
 
-uses(PackageRoutesLegacyMultipleTest::class);
+uses(PackageRoutesMultipleLegacyTest::class);
 
 it("can load the legacy multiple routes", function () {
     $response = $this->get('my-route');
@@ -22,4 +22,4 @@ it("can load the legacy multiple routes", function () {
 
     $adminResponse = $this->get('other-route');
     $adminResponse->assertSeeText('other response');
-});
+})->group('routes', 'legacy');

@@ -25,4 +25,4 @@ it("can ask to run the migrations", function () {
         ->artisan('package-tools:install')
         ->assertSuccessful()
         ->expectsConfirmation('Would you like to run the migrations now?');
-})->group('installer');
+})->group('installer', 'legacy');

@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\basicTest
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageNameTest
+trait PackageNameLegacyTest
 {
     public function configurePackage(Package $package)
     {
@@ -12,8 +12,8 @@ trait PackageNameTest
     }
 }
 
-uses(PackageNameTest::class);
+uses(PackageNameLegacyTest::class);
 
 it("will not blow up when a name is set", function () {
     expect(true)->toBeTrue();
-})->group('base');
+})->group('base', 'legacy');

@@ -32,4 +32,4 @@ it("can execute the end with", function () {
         ->assertSuccessful();
 
     expect($this->stringFromEnd)->toBe('set by package-tools:install');
-})->group('installer');
+})->group('installer', 'legacy');

@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasConfig
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageConfigLegacyDefaultTest
+trait PackageConfigDefaultLegacyTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,11 +14,11 @@ trait PackageConfigLegacyDefaultTest
     }
 }
 
-uses(PackageConfigLegacyDefaultTest::class);
+uses(PackageConfigDefaultLegacyTest::class);
 
 it("registers only the default config file by legacy", function () {
     expect(config('package-tools.key'))->toBe('value');
-})->group('config');
+})->group('config', 'legacy');
 
 it("publishes only the default config file by legacy", function () {
     $publishedFiles = [
@@ -37,4 +37,4 @@ it("publishes only the default config file by legacy", function () {
 
     expect($publishedFiles)->each->toBeFile();
     expect($nonPublishedFiles)->each->not->toBeFileOrDirectory();
-})->group('config');
+})->group('config', 'legacy');

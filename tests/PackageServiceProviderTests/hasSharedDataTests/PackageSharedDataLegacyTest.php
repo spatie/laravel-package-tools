@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasShared
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageSharedDataTest
+trait PackageSharedDataLegacyTest
 {
     public function configurePackage(Package $package)
     {
@@ -15,7 +15,7 @@ trait PackageSharedDataTest
     }
 }
 
-uses(PackageSharedDataTest::class);
+uses(PackageSharedDataLegacyTest::class);
 
 it("can share data with all views", function () {
     $content1 = view('package-tools::shared-data')->render();
@@ -23,4 +23,4 @@ it("can share data with all views", function () {
 
     expect($content1)->toStartWith('hello_world');
     expect($content2)->toStartWith('hello_world');
-})->group('shareddata');
+})->group('shareddata', 'legacy');

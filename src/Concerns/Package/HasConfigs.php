@@ -4,57 +4,57 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasConfigs
 {
-    private static string $configDefaultPath = "../config";
+    private const configDefaultPath = "../config";
 
-    public array $configFilenames = [];
+    public array $configsByNameFiles = [];
     public array $configPaths = [];
-    protected ?string $configPath = '../config';
+    protected ?string $configsByNamePath = '../config';
 
-    public function hasConfigByName(...$configFilenames): self
+    public function hasConfigsByName(...$configsByNameFiles): self
     {
-        $configFilenames = collect($configFilenames)->flatten()->toArray();
+        $configsByNameFiles = collect($configsByNameFiles)->flatten()->toArray();
 
-        if (! $configFilenames) {
-            $configFilenames = [$this->shortName()];
+        if (! $configsByNameFiles) {
+            $configsByNameFiles = [$this->shortName()];
         }
 
-        $this->configFilenames = array_unique(array_merge(
-            $this->configFilenames,
-            $configFilenames
+        $this->configsByNameFiles = array_unique(array_merge(
+            $this->configsByNameFiles,
+            $configsByNameFiles
         ));
 
-        $this->configPath = $this->verifyRelativeDirOrNull($this->configPath);
+        $this->configsByNamePath = $this->verifyRelativeDirOrNull($this->configsByNamePath);
 
         return $this;
     }
 
-    public function setConfigByNamePath(string $path): self
+    public function setConfigsByNamePath(string $path): self
     {
-        $this->configPath = $this->verifyRelativeDir(__FUNCTION__, $path);
+        $this->configsByNamePath = $this->verifyRelativeDir(__FUNCTION__, $path);
 
         return $this;
     }
 
-    public function configPath(?string $directory = null): string
+    public function configsByNamePath(?string $directory = null): string
     {
-        return $this->verifyPathSet(__FUNCTION__, $this->configPath, $directory);
+        return $this->verifyPathSet(__FUNCTION__, $this->configsByNamePath, $directory);
     }
 
-    public function hasConfigByPath(?string $path = null): self
+    public function hasConfigsByPath(?string $path = null): self
     {
-        $this->configPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$configDefaultPath);
+        $this->configPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::configDefaultPath);
 
         return $this;
     }
 
     /* Legacy backwards compatibility */
-    public function hasConfigFile(...$configFilenames): self
+    public function hasConfigFile(...$configsByNameFiles): self
     {
-        return $this->hasConfigByName(...$configFilenames);
+        return $this->hasConfigsByName(...$configsByNameFiles);
     }
 
-    public function hasConfigFiles(...$configFilenames): self
+    public function hasConfigFiles(...$configsByNameFiles): self
     {
-        return $this->hasConfigByName(...$configFilenames);
+        return $this->hasConfigsByName(...$configsByNameFiles);
     }
 }

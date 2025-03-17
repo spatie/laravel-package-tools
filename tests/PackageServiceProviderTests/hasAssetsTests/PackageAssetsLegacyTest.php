@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasAssets
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageAssetsTest
+trait PackageAssetsLegacyTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,7 +14,7 @@ trait PackageAssetsTest
     }
 }
 
-uses(PackageAssetsTest::class);
+uses(PackageAssetsLegacyTest::class);
 
 it("can publish the assets", function () {
     $file = public_path('vendor/package-tools/dummy.js');
@@ -25,4 +25,4 @@ it("can publish the assets", function () {
         ->assertSuccessful();
 
     expect($file)->toBeFile();
-})->group('assets');
+})->group('assets', 'legacy');

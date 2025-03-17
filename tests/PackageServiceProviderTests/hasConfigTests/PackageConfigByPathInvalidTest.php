@@ -11,7 +11,7 @@ trait PackageConfigByPathInvalidTest
     {
         $package
             ->name('laravel-package-tools')
-            ->hasConfigByPath("InvalidPath");
+            ->hasConfigsByPath("InvalidPath");
     }
 }
 
@@ -19,4 +19,4 @@ uses(PackageConfigByPathInvalidTest::class);
 
 it("will throw an exception when the Config path is invalid")
     ->group('config')
-    ->throws(InvalidPackage::class, "hasConfigByPath: Directory 'InvalidPath' does not exist in package laravel-package-tools");
+    ->throws(InvalidPackage::class, "hasConfigsByPath: Directory 'InvalidPath' does not exist in package laravel-package-tools");

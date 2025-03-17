@@ -7,7 +7,7 @@ All notable changes to `laravel-package-tools` will be documented in this file.
 * Major improvements by @Sophist-UK in https://github.com/spatie/laravel-package-tools/pull/158
 - Extend the restructing/readability/extendability approach started in #157
 - Extend support to Events and Livewire
-- Extend defining hasX by paths rather than individual file names or classes (cf. discoverMigrations).
+- Extend defining hasX by paths rather than individual file names or classes (cf. discoversMigrations).
   This avoids the need to list each item individually,
   allowing you to simply specify a path from which all files will be loaded/published.
 - Allow setting alternative paths to standard ones for all hasX.

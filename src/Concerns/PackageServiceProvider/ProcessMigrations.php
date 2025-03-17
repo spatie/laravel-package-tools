@@ -13,7 +13,7 @@ trait ProcessMigrations
     protected function bootPackageMigrations(): self
     {
         if ($this->package->discoversMigrations) {
-            if (! empty($this->package->migrationFileNames)) {
+            if (! empty($this->package->migrationNames)) {
                 throw InvalidPackage::conflictingMethods(
                     $this->package->name,
                     'hasMigrations',
@@ -21,16 +21,16 @@ trait ProcessMigrations
                 );
             }
 
-            $this->package->migrationFileNames = static::convertDiscovers($this->package->migrationsPath());
+            $this->package->migrationNames = static::convertDiscovers($this->package->migrationsByNamePath());
         }
 
-        if (empty($this->package->migrationFileNames)) {
+        if (empty($this->package->migrationNames)) {
             return $this;
         }
 
         $now = Carbon::now();
-        $vendorPath = $this->package->migrationsPath();
-        foreach ($this->package->migrationFileNames as $migrationFileName) {
+        $vendorPath = $this->package->migrationsByNamePath();
+        foreach ($this->package->migrationNames as $migrationFileName) {
             $vendorMigration = $this->phpOrStub("{$vendorPath}/{$migrationFileName}");
             if (! $vendorMigration) {
                 continue;
@@ -49,7 +49,7 @@ trait ProcessMigrations
              * Laravel will only load files ending in .php so we cannot load .stub files for migration
              * https://github.com/laravel/framework/blob/11.x/src/Illuminate/Database/Migrations/Migrator.php#L540
              **/
-            if ($this->package->loadMigrations && str_ends_with($vendorMigration, '.php')) {
+            if ($this->package->loadsMigrations && str_ends_with($vendorMigration, '.php')) {
                 $this->loadMigrationsFrom($vendorMigration);
             }
         }

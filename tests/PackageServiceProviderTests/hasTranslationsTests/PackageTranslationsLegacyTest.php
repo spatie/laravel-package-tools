@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasTransl
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageTranslationsTest
+trait PackageTranslationsLegacyTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,11 +14,11 @@ trait PackageTranslationsTest
     }
 }
 
-uses(PackageTranslationsTest::class);
+uses(PackageTranslationsLegacyTest::class);
 
 it("can load the translations", function () {
     $this->assertEquals('translation', trans('package-tools::translations.translatable'));
-})->group('translations');
+})->group('translations', 'legacy');
 
 it("can publish the translations", function () {
     $file = lang_path("vendor/package-tools/en/translations.php");
@@ -29,4 +29,4 @@ it("can publish the translations", function () {
         ->assertSuccessful();
 
     expect($file)->toBeFile();
-})->group('translations');
+})->group('translations', 'legacy');

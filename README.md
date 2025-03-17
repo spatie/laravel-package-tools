@@ -88,21 +88,18 @@ class YourPackageServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('module-name')
-            ->isModule()
             ->hasAssets()
-            ->hasConfigFiles()
+            ->hasConfigsByName()
             ->hasBladeComponentsByClass('spatie', Alert::class)
             ->hasBladeComposerByClass('*', MyViewComposer::class)
             ->hasCommandsbyClass(YourCoolPackageCommand::class)
-            ->hasMigrations('create_package_tables')
-            ->hasRoutes('web')
+            ->hasMigrationsByName('create_package_tables')
+            ->hasRoutesByName('web')
             ->hasTranslations()
             ->hasViews();
     }
 }
 ```
-
-At present the `isModule` method simply prevents anything being published.
 
 ## Support us
 
@@ -225,7 +222,15 @@ however you can override this by specifying a path with `hasAssets()`:
 ```php
 $package
     ->name('your-package-name')
-    ->hasAssets('./assets/');
+    ->hasAssets(path: './assets/');
+```
+
+You can change the directory name it will be published to bu using a namespace i.e. to publish to `public/vendor/my-package` use:
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasAssets('my-package');
 ```
 
 Users of your package will be able to publish the assets with this command:
@@ -249,6 +254,13 @@ In each case, you need to provide a component prefix which will be used in a vie
 to load the component.
 
 Your Blade components should be placed by default in the `<package root>/src/Components` directory.
+And if you describe them by Class or Path (but not Namepace),
+they can be published to `app/Views/Components/vendor/<package name>`
+in the user's Laravel project with this command:
+
+```bash
+php artisan vendor:publish --tag=your-package-name-components
+```
 
 #### Registering and publishing Blade Components individually by class
 
@@ -274,14 +286,6 @@ and they can then be referenced in Blade views as e.g. `<x-spatie-alert />`,
 where `spatie` is the prefix you provided during registration,
 and `alert` is the lower-case version of the class name.
 
-Calling `hasBladeComponentsByClass` will also make view components publishable,
-and they will be published to `app/Views/Components/vendor/<package name>`
-in the user's Laravel project with this command:
-
-```bash
-php artisan vendor:publish --tag=your-package-name-components
-```
-
 **Note:** For backwards compatibility, `hasViewComponents` & `hasViewComponents`
 can still be used instead of `hasBladeComponentsByClass`.
 
@@ -302,15 +306,10 @@ $package
 For each path, this will determine the namespace
 by evaluating the first php file in the path,
 and then register the namespace with Laravel (like `hasBladeComponentsByNamespace`),
-and they can then be referenced in Blade views as e.g. `<x-spatie::alert />`
+and they can then be referenced in Blade views as e.g. `<x-spatie::alert />`.
 
-Calling `hasBladeComponentsByPath` will also make view components publishable,
-and they will be published to `app/Views/Components/vendor/your-package-name/`
-in the user's Laravel project with this command:
-
-```bash
-php artisan vendor:publish --tag=your-package-name-components
-```
+If you omit parameters, the default prefix is your short package name,
+and the default path is `Components`.
 
 #### Registering Blade Components by Namespace
 
@@ -328,7 +327,7 @@ This will register the individual Blade component namespaces with Laravel,
 and they can then be referenced in Blade views as e.g. `<x-spatie::alert />`
 
 **Note:** Because it is tricky to determine the path associated with a namespace,
-this method only makes these views available and does **not** publish these views.
+this method only makes these views available and does **not** make these views publishable.
 
 _See: [Laravel Package Development - Autoloading Package Components](https://laravel.com/docs/packages#autoloading-package-components)
 for underlying details._
@@ -336,20 +335,25 @@ for underlying details._
 ### Blade Anonymous Components
 
 Blade Anonymous Components are an alternative way of creating Blade components
-using a combined view / components file (presumably the inspiration for Laravel Volt).
+by combining the Blade component into the matching Blade view file
+(in the same way that Livewire Volt combines the Livewire component into the Livewire view file).
 _See [Laragon Blade - Anonymous Components]
 (https://laravel.com/docs/blade#anonymous-components)._
 
 Your Blade Anonymous Components should be placed by default
-in the `<package root>/resources/views/components` directory,
-and they can be registered and published using `hasBladeAnonymousComponentsByPath()`
-as follows:
+in the `<package root>/resources/views/components` directory.
+Since they live in a subdirectory of `resources/views`
+you can make them publishable them using `hasViews`,
+however if you wish to register them for use as part of the package,
+then call `hasBladeAnonymousComponentsByPath` as follows:
 
 ```php
 $package
     ->name('your-package-name')
     ->hasBladeAnonymousComponentsByPath('spatie');
 ```
+
+and then the components can be used in Blade views as: `<x-spatie::my-component>`.
 
 You can register and publish components in any other directory as follows:
 
@@ -360,12 +364,20 @@ $package
     ->hasBladeAnonymousComponentsByPath('spatie2', '../resources/views/my_components');
 ```
 
-Calling `hasBladeAnonymousComponentsByPath` will also make view components publishable,
-and they will be published to `resources/Views/Components/vendor/your-package-name/`
-in the user's Laravel project with this command:
+and then the use them in Blade views as: `<x-spatie1::my-component>` and `<x-spatie2::my-other-component>`.
 
-```bash
-php artisan vendor:publish --tag=your-package-name-anonymous-components
+If you omit parameters, the default prefix is your short package name,
+and / or the default path is `../resources/views/components`.
+
+Although it is perhaps best practice to define a package-specific prefix
+in order to avoid naming clashes, you can use a null prefix in a package
+so as to define a global component that can be used as `<x-my-component>`
+as follows:
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasBladeAnonymousComponentsByPath(null);
 ```
 
 ### Blade Custom Directives
@@ -488,13 +500,17 @@ $package
     ->hasConsoleCommandsByPath('Console/Commands');
 ```
 
+If you omit the path, the default path is `Commands`.
+
 ### Optimize commands
 
 From Laravel 11.27.1 onwards,
 you can also define `short-package-name:optimize` and `short-package-name:clear-optimizations` commands
-that alongside Laravel's other optimizations (i.e. configuration, events, routes, and views)
-can be set with `artisan optimize` and cleared with `artisan optimize:clear`,
-and these can be specified using the `hasOptimizeCommands()` as follows:
+that can be run alongside Laravel's other optimizations (i.e. configuration, events, routes, and views)
+when the user runs `artisan optimize` or `artisan optimize:clear`.
+
+Assuming that you have already written and registered your two commands,
+these can be registered for `artisan optimize` using the `hasOptimizeCommands()` as follows:
 
 ```php
 $package
@@ -517,6 +533,7 @@ $package
     ->hasOptimizeCommands('my-package:set-optimize', 'my-package:clear-optimize');
 ```
 to explicitly define the full commands.
+
 These commands can then be run normally as individual commands,
 or will be also called as part fo a group with `artisan optimize`.
 
@@ -525,9 +542,15 @@ for underlying details._
 
 ### Config Files
 
-You can provide either actual config files (`*.php`) or stub config files (`*.php.stub`)
-and by default these should be placed in `<package root>/config`,
-though the location of this can be changed by calling `setConfigPath`.
+You can provide either actual config files (`*.php`) or stub config files (`*.php.stub`).
+Actual config files will be both registered & if necessary merged
+with any matching file created by the user,
+and both actual and stub config files will be made publishable.
+
+Your package's config files can be either loaded/published individually by name
+or you can load/publish all the config files in your configuration file directory.
+
+#### Config files individually by name
 
 To register a config file, you should create a php file with your package name in the `config` directory of your
 package. In this example it should be at `<package root>/config/your-package-name.php`.
@@ -535,10 +558,7 @@ package. In this example it should be at `<package root>/config/your-package-nam
 Note: If your package name starts with `laravel-`, this prefix should be omitted from your config file name.
 So if your package name is `laravel-cool-package`, the config file should be named `cool-package.php`.
 
-Both actual and stub config files will be made publishable.
-Actual config files will also be loaded and / or merged with published versions.
-
-To make your config file publishable and if a .php file merge it with any published version, call `hasConfigFiles()`:
+To make your config file publishable and if a .php file merge it with any published version, call `hasConfigByName()`:
 
 ```php
 $package
@@ -546,8 +566,8 @@ $package
     ->hasConfigFiles();
 ```
 
-Should your package have multiple config files, you can either call `hasConfigFiles` multiple times
-or pass their names as an array to `hasConfigFiles`.
+Should your package have multiple config files, you can either call `hasConfigByName` multiple times
+or pass their names as multiple arguments or an array to `hasConfigByName`.
 
 ```php
 $package
@@ -568,15 +588,28 @@ $package
     ->setConfigPath('../configfiles/');
 ```
 
-The `hasConfigFiles` method will also make the config file(s) publishable,
+The `hasConfigByName` method will also make the config file(s) publishable,
 and users of your package can publish the config file with this command.
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-config
 ```
 
+By default, both *.php and *.php.stub files will be made publishable,
+but if you have a mixture of these files and you want only the stub files to be published,
+then please add a call to `publishOnlyStubs` as follows:
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasConfigByName('my-config-file', 'my-config-stub')
+    ->publishOnlyStubs();
+```
+
 **Note:** For backwards compatibility, `hasConfigFile` and `hasConfigFiles`
 can still be used instead of `hasConfigByName`.
+
+#### Config files individually by path
 
 Alternatively you can merge / publish all the configuration files in the `<package root>/config`
 directory without specifying them individually by name as follows:
@@ -646,10 +679,6 @@ $package
     ->hasEventListenerByName(
         EventClass::class,
         [ListenerClass::class, "method"]
-    )
-    ->hasEventListenerByName(
-        EventClass::class,
-        ListenerClass::class . "@method"
     );
 ```
 
@@ -735,31 +764,37 @@ $package
 ```
 
 Your `.vue` or `.jsx` files should be placed by default in the `<package root>/resources/js/Pages` directory,
-or you can override this with another path by calling `setInertiaPath`.
+or you can override this with another path by:
 
 ```php
 $package
     ->name('your-package-name')
-    ->hasInertiaComponents()
-    ->setInertiaPath('../resources/js/Inertia');
+    ->hasInertiaComponents(path: '../resources/js/Inertia');
 ```
 
-By default your Inertia components will be published
+You can also use multiple paths with separate tag namespaces:
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasInertiaComponents(path: '../resources/js/Inertia')
+    ->hasInertiaComponents('more', '../resources/js/MoreInertia');
+```
+
+Your Inertia components will be published
 using the short-name of your package as a tag namespace.
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-inertia-components
 ```
+and use them as: `Inertia::render('MyInertiaNamespace/myComponent')`.
 
-Alternatively you can define an alternative namespace
-by calling `hasInertiaComponents('my-inertia-namespace')`
-and then the user can publish them using:
+For backwards compatibility reasons, if you use an alternative namespace,
+the user can also publish them using:
 
 ```bash
 php artisan vendor:publish --tag=my-inertia-namespace-inertia-components
 ```
-
-and use them as: `Inertia::render('MyInertiaNamespace/myComponent')`.
 
 Also, the Inertia components are available in a convenient way with your package [installer-command](#installer-command).
 
@@ -770,63 +805,75 @@ that allows you to add paths in your package as a source for Inertia components.
 ### Livewire Views and Components
 
 Like Blade, Livewire also consists of views and components,
-(though when using Livewire Volt these can be combined into a single view file).
+and like Blade when using Livewire Volt the Livewire component can be included in the matching view file.
+
+If you are **not** using Livewire Volt,
+your Livewire components should be placed by default in the `<package root>/src/Livewire` directory,
+and they can be made publishable to `app/Livewire/vendor/your-package-name` by using `hasLivewireComponents()`:
 
 ```php
 $package
     ->name('your-package-name')
+    ->hasViews()
     ->hasLivewireComponents();
 ```
 
-Your Livewire views should be placed by default in the `<package root>/resources/views/livewire` directory,
-or you can override this with another path by calling `setLivewireViewsPath`.
-Your Livewire components should be placed by default in the `<package root>/src/Livewire` directory,
-or you can override this with another path by calling `setLivewireComponentsPath`.
+You can override this with another path with:
 
 ```php
 $package
     ->name('your-package-name')
-    ->hasLivewireComponents()
-    ->setLivewireViewsPath('../resources/views/LivewireViews')
-    ->setLivewireComponentsPath('LivewireComponents');
+    ->hasViews()
+    ->hasLivewireComponents(path: 'LivewireComponents');
 ```
 
-By default your Inertia components will be published using the short-name of your package as a tag namespace.
+and you can specify several paths with:
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasViews()
+    ->hasLivewireComponents()
+    ->hasLivewireComponents('my-livewire', 'LivewireComponents');
+```
+
+Your Livewire components can be published using:
 
 ```bash
 php artisan vendor:publish --tag=your-package-name-livewire-components
 ```
 
-Alternatively you can define an alternative namespace
-by calling `hasLivewireComponents('my-livewire-namespace')`
-and then the user can publish them using:
-
-```bash
-php artisan vendor:publish --tag=my-livewire-namespace-livewire-components
-```
-
 ### Database Migrations
 
-You can provide either actual migration files (`*.php`) or stubs (`*.php.stub`)
-and by default these should be placed in `<package root>/database/migrations`,
-though the location of this can be changed by calling `setMigrationsPath`.
-
-Both `*.php` and `*.php.stub` migration files will be published (as `.php` files),
+You can provide either actual migration files (`*.php`) or stub migration files (`*.php.stub`),
 and for `*.php` files if you call `loadMigrations` they will also be loaded
 so that if the user runs `artisan migrate` these migrations will be run.
+Both actual and stub migration files will be made publishable.
 
-To add your migration file, you should pass its name without the extension to the `hasMigrations` method.
+Your package's migration files can be either loaded/published individually by name
+or you can load/publish all the migration files in your migrations directory.
+
+### Database migrations by name
+To register a migration file for running as-is,
+you should create a php file in the `../database/migrations` directory
+of your package.
+In this example it should be
+e.g. `<package root>/database/migrations/create_my_package_table.php`.
+or `<package root>/database/migrations/create_my_package_table.php.stub`,
+though the location of this can be changed by calling `setMigrationsPath`.
+
+To add your migration file, you should pass its name without the extension to the `hasMigrationsByName` method.
 If your migration file is called `create_my_package_tables.php` or `create_my_package_tables.php.stub`
 you add it to your package like this:
 
 ```php
 $package
     ->name('your-package-name')
-    ->hasMigrations('create_my_package_tables');
+    ->hasMigrationsByName('create_my_package_table');
 ```
 
 Should your package contain multiple migration files,
-you can call `hasMigrations` multiple times or
+you can call `hasMigrationsByName` multiple times or
 pass multiple arguments or an array of filenames in one call.
 
 ```php
@@ -873,33 +920,60 @@ $package
     ->loadsMigrations();
 ```
 
-**Note:** For backwards compatibility, `hasMigration` can still be used instead of `hasMigrations`,
-and `runMigrations` instead of `loadMigrations`.
+By default, both *.php and *.php.stub files will be made publishable,
+but if you have a mixture of these files and you want only the stub files to be published,
+then please add a call to `publishOnlyStubs` as follows:
+
+```php
+$package
+    ->name('your-package-name')
+    ->hasMigrationByName('my-config-file', 'my-config-stub')
+    ->publishOnlyStubs();
+```
+
+**Note:** For backwards compatibility, `hasMigration` or `hasMigrationsByName` can still be used instead of `hasMigrations`,
+`discoversMigrations` instead of `hasMigrationsByPath`
+and `runsMigrations` instead of `loadsMigrations`.
 
 _See: [Laravel Package Development - Migrations](https://laravel.com/docs/packages#migrations)
 for underlying details._
 
 ### Routes
 
-Laravel Package Tools assumes that any route files are placed in this directory: `<package root>/routes`. Inside
-that directory you can put any route files.
+You can provide either actual route files (`*.php`) or stub route files (`*.php.stub`).
+Actual route files can be loaded,
+and both actual and stub config files will be made publishable.
 
-To register your route, you should pass its name without the extension to the `hasRoute` method.
+Your package's config files can be either loaded/published individually by name
+or you can load/publish all the config files in your configuration file directory.
+
+Laravel Package Tools assumes that any route files are placed in this directory: `<package root>/routes`.
+
+To register your route files, you should pass their names without the extension to the `hasRoutesByName` method.
 
 If your route file is called `web.php` you can register them like this:
 
 ```php
 $package
     ->name('your-package-name')
-    ->hasRoute('web');
+    ->hasRoutesByName('web');
 ```
 
-Should your package contain multiple route files, you can just call `hasRoute` multiple times or use `hasRoutes`.
+Should your package contain multiple route files,
+you can just call `hasRoutesByName` multiple times
+or use `hasRoutesByName` with several arguments or as an array.
 
 ```php
 $package
     ->name('your-package-name')
-    ->hasRoutes(['web', 'admin']);
+    ->hasRoutesByName('web', 'api')
+    ->hasRoutesByName(['admin', 'superuser']);
+```
+
+Your routes can be published using:
+
+```bash
+php artisan vendor:publish --tag=your-package-name-routes
 ```
 
 ### Publishable Service Providers
@@ -987,6 +1061,11 @@ php artisan vendor:publish --tag=your-package-name-translations
 ### Views
 
 Any views your package provides, should be placed in the `<package root>/resources/views` directory.
+This includes:
+* Normal Blade views
+* Blade Anonymous Components
+* Livewire views
+* Livewire Volt Components
 
 You can register these views with the `hasViews` command.
 
@@ -996,12 +1075,13 @@ $package
     ->hasViews();
 ```
 
-This will register your views with Laravel.
+This will register your Blade views with Laravel, and make the `<package root>/views` directory (and all sub-directories) publishable.
 
-If you have a view `<package root>/resources/views/myView.blade.php`, you can use it like
-this: `view('your-package-name::myView')`. Of course, you can also use subdirectories to organise your views. A view
-located at `<package root>/resources/views/subdirectory/myOtherView.blade.php` can be used
-with `view('your-package-name::subdirectory.myOtherView')`.
+If you have a Blade view `<package root>/resources/views/myView.blade.php`,
+you can use it like this: `view('your-package-name::myView')`.
+Of course, you can also use subdirectories to organise your views.
+A view located at `<package root>/resources/views/subdirectory/myOtherView.blade.php`
+can be used with `view('your-package-name::subdirectory.myOtherView')`.
 
 You can pass a custom view namespace to the `hasViews` method.
 
@@ -1024,9 +1104,10 @@ command:
 php artisan vendor:publish --tag=your-package-name-views
 ```
 
-> **Note:**
->
-> If you use custom view namespace then you should change your publish command like this:
+**Note:**
+
+If you use custom view namespace then you can continue to use the above command
+or change your publish command like this:
 ```bash
 php artisan vendor:publish --tag=custom-view-namespace-views
 ```
@@ -1047,7 +1128,6 @@ $package
     });
 ```
 
-
 ### Views Global Shared Data
 
 You can share data with all views using the `sharesDataWithAllViews` method. This will make the shared variable
@@ -1062,6 +1142,24 @@ $package
 **Note:** This is global shared data, available to every view,
 and you need to take care to avoid name clashes with other e.g. other packages.
 It is recommended that the name of any shared data be prefixed with your package name.
+
+### Modifiers
+
+#### isModule()
+
+If you are using PackageServiceProvider to support a Modular monolith Laravel app,
+then add a call to `isModule()`.
+
+At present the scope of this is to prevent all items being published.
+
+#### onlyPublishStubs()
+
+If you are using PackageServiceProvider to support a Laravel package,
+and you have config files or migration files or route files that include both
+actual .php files which will be loaded as configs/migrations/routes
+**and** .php.stub files which are only intended to be published,
+then it might be that you will only want to make the .php.stub files publishable
+and **not** the .php files. If this is the case then add a call to `onlyPublishStubs()`.
 
 ### Creating an Install Command
 
@@ -1213,7 +1311,7 @@ Pest by default does not allow you intentionally to test for them being thrown.
 The tests in this package now include checks for intentional `InvalidPackage` exceptions being thrown
 by catching and saving such exceptions in the Testing ServiceProvider,
 and then rethrowing the exception at the very start of a Pest test case,
-and this is achieved by load a modified version of the Pest `test()` function
+and this is achieved by loading a modified version of the Pest `test()` function
 before anything else is loaded.
 Whilst this is done for you if you run `composer test`,
 if you want to run `vendor/bin/pest` directly you now need to run it like this:

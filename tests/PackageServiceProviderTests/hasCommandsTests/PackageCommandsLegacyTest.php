@@ -33,11 +33,11 @@ it("can register and execute legacy Commands loaded by class name", function () 
         ->artisan('package-tools:other-test-command')
         ->assertSuccessful()
         ->expectsOutput('output of other test command');
-})->group('commands');
+})->group('commands', 'legacy');
 
 it("can register & execute a legacy Command loaded by class name as part of a web transaction", function () {
     $response = $this->get('execute-command');
 
     expect($response->baseResponse->getStatusCode())->toBe(200);
     expect($response->baseResponse->getContent())->toContain('output of test command');
-})->group('commands');
+})->group('commands', 'legacy');

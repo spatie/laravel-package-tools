@@ -4,33 +4,34 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasMigrations
 {
+    protected const migrationsDefaultPath = '../database/migrations';
 
-    public array $migrationFileNames = [];
-    public bool $loadMigrations = false;
-    public bool $discoversMigrations = false;
+    public array $migrationNames = [];
+    protected ?string $migrationsByNamePath = '../database/migrations';
     public array $migrationPaths = [];
-    protected ?string $migrationsPath = '../database/migrations';
+    public bool $loadsMigrations = false;
+    public bool $discoversMigrations = false;
 
-    public function hasMigrationsByName(...$migrationFileNames): self
+    public function hasMigrationsByName(...$migrationNames): self
     {
-        $this->migrationFileNames = array_unique(array_merge(
-            $this->migrationFileNames,
-            collect($migrationFileNames)->flatten()->toArray()
+        $this->migrationNames = array_unique(array_merge(
+            $this->migrationNames,
+            collect($migrationNames)->flatten()->toArray()
         ));
 
-        $this->migrationsPath = $this->verifyRelativeDirOrNull($this->migrationsPath);
+        $this->migrationsByNamePath = $this->verifyRelativeDirOrNull($this->migrationsByNamePath);
 
         return $this;
     }
 
-    public function migrationsPath(?string $directory = null): string
+    public function migrationsByNamePath(?string $directory = null): string
     {
-        return $this->verifyPathSet(__FUNCTION__, $this->migrationsPath, $directory);
+        return $this->verifyPathSet(__FUNCTION__, $this->migrationsByNamePath, $directory);
     }
 
     public function setMigrationsPath(string $path): self
     {
-        $this->migrationsPath = $this->verifyRelativeDir(__FUNCTION__, $path);
+        $this->migrationsByNamePath = $this->verifyRelativeDir(__FUNCTION__, $path);
 
         return $this;
     }
@@ -42,22 +43,22 @@ trait HasMigrations
         return $this;
     }
 
-    public function loadMigrations(bool $loadMigrations = true): self
+    public function loadsMigrations(bool $loadsMigrations = true): self
     {
-        $this->loadMigrations = $loadMigrations;
+        $this->loadsMigrations = $loadsMigrations;
 
         return $this;
     }
 
     /* Legacy backwards compatibility */
-    public function hasMigration(...$migrationFileNames): self
+    public function hasMigration(...$migrationNames): self
     {
-        return $this->hasMigrationsByName(...$migrationFileNames);
+        return $this->hasMigrationsByName(...$migrationNames);
     }
 
-    public function hasMigrations(...$migrationFileNames): self
+    public function hasMigrations(...$migrationNames): self
     {
-        return $this->hasMigrationsByName(...$migrationFileNames);
+        return $this->hasMigrationsByName(...$migrationNames);
     }
 
     public function discoversMigrations(bool $discoversMigrations = true, ?string $path = null): self
@@ -72,6 +73,6 @@ trait HasMigrations
 
     public function runsMigrations(bool $runsMigrations = true): self
     {
-        return $this->loadMigrations($runsMigrations);
+        return $this->loadsMigrations($runsMigrations);
     }
 }

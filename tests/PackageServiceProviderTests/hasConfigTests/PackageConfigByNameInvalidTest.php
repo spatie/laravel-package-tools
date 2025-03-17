@@ -11,7 +11,7 @@ trait PackageConfigByNameInvalidTest
     {
         $package
             ->name('laravel-package-tools')
-            ->hasConfigByName("InvalidFile");
+            ->hasConfigsByName("InvalidFile");
     }
 }
 
@@ -19,4 +19,4 @@ uses(PackageConfigByNameInvalidTest::class);
 
 it("will throw an exception when the Config filename is invalid")
     ->group('config')
-    ->throws(InvalidPackage::class, "hasConfigByName: Config filename 'InvalidFile' is neither .php or .php.stub in package laravel-package-tools");
+    ->throws(InvalidPackage::class, "hasConfigsByName: Config filename 'InvalidFile' is neither .php or .php.stub in package laravel-package-tools");

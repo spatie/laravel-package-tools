@@ -22,7 +22,7 @@ it("can load the blade components by class", function () {
     $content = view('package-tools::component-test')->render();
 
     expect($content)->toStartWith('<div>hello world</div>');
-})->group('blade');
+})->group('blade', 'legacy');
 
 it("can publish the blade components by class", function () {
     $file = app_path('View/Components/vendor/package-tools/TestComponent.php');
@@ -33,4 +33,4 @@ it("can publish the blade components by class", function () {
         ->assertSuccessful();
 
     expect($file)->toBeFile();
-})->group('blade');
+})->group('blade', 'legacy');

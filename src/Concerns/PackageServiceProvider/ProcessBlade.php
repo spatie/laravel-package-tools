@@ -4,6 +4,7 @@ namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
 use Illuminate\Support\Facades\Blade;
 use ReflectionClass;
+use Spatie\LaravelPackageTools\Package;
 
 trait ProcessBlade
 {
@@ -116,21 +117,11 @@ trait ProcessBlade
         }
 
         foreach ($paths as $prefix => $path) {
-            // Get namespace for directory from the first class file in the directory
+            if ($prefix === Package::bladeAnonymousComponentsDefaultPrefix) {
+                $prefix = null;
+            }
+
             Blade::anonymousComponentPath($this->package->buildDirectory($path), $prefix);
-        }
-
-        if (! $this->app->runningInConsole()) {
-            return $this;
-        }
-
-        $appPath = resource_path("views/components/vendor/{$this->package->shortName()}/");
-        $tag = "{$this->package->shortName()}-anonymous-components";
-        foreach ($paths as $prefix => $path) {
-            $this->publishes(
-                [$this->package->basePath($path) => $appPath],
-                $tag
-            );
         }
 
         return $this;

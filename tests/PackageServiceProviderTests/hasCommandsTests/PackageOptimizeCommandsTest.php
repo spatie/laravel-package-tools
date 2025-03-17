@@ -40,4 +40,7 @@ it("can register and execute Optimize Commands", function () {
         ->expectsOutput('output of other test command');
 })
     ->group('commands')
-    ->skip(fn () => is_before_laravel_version(App::version(), '11.27.1'), message_before_laravel_version('11.27.1'));
+    ->skip(
+        fn () => is_before_laravel_version(App::version(), '11.27.1'),
+        message_before_laravel_version('11.27.1', 'hasOptimizeCommands')
+    );

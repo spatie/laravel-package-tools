@@ -10,9 +10,9 @@ trait PackageConfigByNameAlternatePathTest
     {
         $package
             ->name('laravel-package-tools')
-            ->hasConfigByName('pkg-tools', 'alternative')
-            ->hasConfigByName('stub')
-            ->setConfigByNamePath('../config_alt');
+            ->hasConfigsByName('pkg-tools', 'alternative')
+            ->hasConfigsByName('stub')
+            ->setConfigsByNamePath('../config_alt');
     }
 }
 

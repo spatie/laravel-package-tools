@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasViewsT
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageViewsTest
+trait PackageViewsLegacyTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,13 +14,13 @@ trait PackageViewsTest
     }
 }
 
-uses(PackageViewsTest::class);
+uses(PackageViewsLegacyTest::class);
 
 it("can load default views", function () {
     $content = view('package-tools::test')->render();
 
     expect($content)->toStartWith('This is a blade view');
-})->group('views');
+})->group('views', 'legacy');
 
 it("can publish default views", function () {
     $file = resource_path('views/vendor/package-tools/test.blade.php');
@@ -31,4 +31,4 @@ it("can publish default views", function () {
         ->assertSuccessful();
 
     expect($file)->toBeFile();
-})->group('views');
+})->group('views', 'legacy');

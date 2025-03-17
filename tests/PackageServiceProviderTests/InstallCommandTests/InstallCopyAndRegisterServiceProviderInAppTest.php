@@ -47,4 +47,4 @@ it("can copy and register the service provider in the app", function () {
     }
 
     restoreAppConfigFile();
-})->group('installer');
+})->group('installer', 'legacy');

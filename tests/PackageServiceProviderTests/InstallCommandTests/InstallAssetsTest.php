@@ -29,4 +29,4 @@ it("can install the assets", function () {
         ->assertSuccessful();
 
     expect($file)->toBeFile();
-})->group('installer');
+})->group('installer', 'legacy');

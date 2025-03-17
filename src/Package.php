@@ -41,6 +41,7 @@ final class Package
 
     public string $name;
     protected string $basePath;
+    public bool $publishOnlyStubs = false;
 
     public function name(string $name): self
     {
@@ -63,6 +64,19 @@ final class Package
     {
         $this->verifyDir(__FUNCTION__, $path);
         $this->basePath = $path;
+
+        return $this;
+    }
+
+    /**
+     * Where a config/migrations/routes directories can contain both
+     * useable *.php files which can be used directly and
+     * publishable-only *.php.stub files which are only useful when published
+     * we may want to publish the *.php.stub files and not the *.php files
+     **/
+    public function publishOnlyStubs(?bool $publish = true): self
+    {
+        $this->publishOnlyStubs = $publish;
 
         return $this;
     }

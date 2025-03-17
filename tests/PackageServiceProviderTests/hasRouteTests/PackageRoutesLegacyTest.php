@@ -20,10 +20,10 @@ it("can load the legacy route", function () {
     $response = $this->get('my-route');
 
     $response->assertSeeText('my response');
-})->group('routes');
+})->group('routes', 'legacy');
 
 it("can load multiple legacy routes", function () {
     $adminResponse = $this->get('other-route');
 
     $adminResponse->assertSeeText('other response');
-})->group('routes');
+})->group('routes', 'legacy');

@@ -14,7 +14,6 @@ use Symfony\Component\Finder\SplFileInfo;
 abstract class PackageServiceProviderTestCase extends TestCase
 {
     protected array $cleanPathsFull = [
-        'app/Providers/',
         'app/Livewire/',
         'app/View/Components/vendor/',
         'lang/vendor/',
@@ -27,6 +26,7 @@ abstract class PackageServiceProviderTestCase extends TestCase
     ];
 
     protected array $cleanPathsPartial = [
+        'app/Providers/',
         'config/',
         'database/migrations/',
         'routes/',

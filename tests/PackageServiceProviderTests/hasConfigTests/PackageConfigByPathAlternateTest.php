@@ -10,7 +10,7 @@ trait PackageConfigByPathAlternateTest
     {
         $package
             ->name('laravel-package-tools')
-            ->hasConfigByPath('../config_alt');
+            ->hasConfigsByPath('../config_alt');
     }
 }
 

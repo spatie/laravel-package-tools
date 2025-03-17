@@ -16,15 +16,15 @@ trait ProcessConfigs
 
     public function registerPackageConfigsByName(): self
     {
-        if (empty($this->package->configFilenames)) {
+        if (empty($this->package->configsByNameFiles)) {
             return $this;
         }
 
-        foreach ($this->package->configFilenames as $configFilename) {
+        foreach ($this->package->configsByNameFiles as $configFilename) {
             /**
              * Laravel will only load/merge config files ending in .php so we cannot load or merge config .stub files
              **/
-            if (is_file($cFN = $this->package->configPath("{$configFilename}.php"))) {
+            if (is_file($cFN = $this->package->configsByNamePath("{$configFilename}.php"))) {
                 $this->mergeConfigFrom(
                     $cFN,
                     $configFilename
@@ -64,13 +64,13 @@ trait ProcessConfigs
 
     protected function bootPackageConfigsByName(): self
     {
-        if (empty($this->package->configFilenames) || ! $this->app->runningInConsole()) {
+        if (empty($this->package->configsByNameFiles) || ! $this->app->runningInConsole()) {
             return $this;
         }
 
         $shortName = $this->package->shortName();
-        foreach ($this->package->configFilenames as $configFilename) {
-            if ($cFN = $this->phpOrStub($this->package->configPath($configFilename))) {
+        foreach ($this->package->configsByNameFiles as $configFilename) {
+            if ($cFN = $this->phpOrStub($this->package->configsByNamePath($configFilename))) {
                 $this->publishes(
                     [$cFN => config_path("{$configFilename}.php")],
                     "{$shortName}-config"
@@ -79,7 +79,7 @@ trait ProcessConfigs
                 throw InvalidPackage::filenameNeitherPhpNorStub(
                     $this->package->name,
                     'Config',
-                    'hasConfigByName',
+                    'hasConfigsByName',
                     $configFilename
                 );
             }

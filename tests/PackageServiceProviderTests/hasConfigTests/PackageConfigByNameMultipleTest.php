@@ -10,8 +10,8 @@ trait PackageConfigByNameMultipleTest
     {
         $package
             ->name('laravel-package-tools')
-            ->hasConfigByName('package-tools', 'alternative-config')
-            ->hasConfigByName('config-stub');
+            ->hasConfigsByName('package-tools', 'alternative-config')
+            ->hasConfigsByName('config-stub');
     }
 }
 

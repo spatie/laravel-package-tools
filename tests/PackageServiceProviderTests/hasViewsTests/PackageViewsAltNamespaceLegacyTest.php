@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasViewsT
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageViewsAltNamespaceTest
+trait PackageViewsAltNamespaceLegacyTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,13 +14,13 @@ trait PackageViewsAltNamespaceTest
     }
 }
 
-uses(PackageViewsAltNamespaceTest::class);
+uses(PackageViewsAltNamespaceLegacyTest::class);
 
 it("can load the views with a custom namespace", function () {
     $content = view('custom-namespace::test')->render();
 
     expect($content)->toStartWith('This is a blade view');
-})->group('views');
+})->group('views', 'legacy');
 
 it("can publish the views with a custom namespace and tag", function () {
     $file = resource_path('views/vendor/custom-namespace/test.blade.php');
@@ -31,7 +31,7 @@ it("can publish the views with a custom namespace and tag", function () {
         ->assertSuccessful();
 
     expect($file)->toBeFile();
-})->group('views');
+})->group('views', 'legacy');
 
 it("can publish the views with a custom namespace", function () {
     $file = resource_path('views/vendor/custom-namespace/test.blade.php');

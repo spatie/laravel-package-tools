@@ -4,23 +4,15 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasLivewire
 {
-    private static string $livewireComponentsDefaultPath = '/Livewire';
-    private static string $livewireViewsDefaultPath = '../resources/views/livewire';
+    private const livewireComponentsDefaultPath = '/Livewire';
 
-    public array $livewirePaths = [];
+    public array $livewireComponentPaths = [];
 
-    public function hasLivewire(
-        ?string $namespace = null,
-        ?string $livewireViewsPath = null,
-        ?string $livewireComponentsPath = null
-    ): self {
-        $namespace = $namespace ?? $this->shortName();
-        $this->verifyUniqueKey(__FUNCTION__, 'namespace', $this->inertiaComponentsPaths, $namespace);
+    public function hasLivewireComponentsByPath(?string $namespace = null, ?string $path = null): self {
+        $namespace ??= $this->shortName();
+        $this->verifyUniqueKey(__FUNCTION__, 'namespace', $this->livewireComponentsPaths, $namespace);
 
-        $this->livewirePaths[$namespace] = [
-            $this->verifyRelativeDir($livewireViewsPath ?? static::livewireViewsDefaultPath),
-            $this->verifyRelativeDirOrNull($livewireComponentsPath ?? static::livewireComponentsDefaultPath),
-        ];
+        $this->livewireComponentsPaths[$namespace] = $this->verifyRelativeDir($path ?? static::livewireComponentsDefaultPath);
 
         return $this;
     }
