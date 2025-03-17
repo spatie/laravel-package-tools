@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasRouteT
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageRouteByPathDefaultTest
+trait PackageRoutesByPathDefaultTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,7 +14,7 @@ trait PackageRouteByPathDefaultTest
     }
 }
 
-uses(PackageRouteByPathDefaultTest::class);
+uses(PackageRoutesByPathDefaultTest::class);
 
 it("can load multiple routes by default path", function () {
     $response = $this->get('my-route');

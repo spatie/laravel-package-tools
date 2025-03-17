@@ -58,8 +58,8 @@ trait HasCommands
             );
         }
 
-        $optimizeCommand = $this->optimizeDefault($optimizeCommand, "optimize");
-        $optimizeClearCommand = $this->optimizeDefault($optimizeClearCommand, "clear-optimizations");
+        $optimizeCommand = $this->generateOptimizeCommandName($optimizeCommand, "optimize");
+        $optimizeClearCommand = $this->generateOptimizeCommandName($optimizeClearCommand, "clear-optimizations");
 
         $this->optimizeCommands[] = [
             "optimize" => $optimizeCommand,
@@ -69,7 +69,7 @@ trait HasCommands
         return $this;
     }
 
-    private function optimizeDefault(string $cmd, string $defaultSubcmd): string
+    private function generateOptimizeCommandName(?string $cmd, string $defaultSubcmd): string
     {
         if (! $cmd) {
             return $this->shortName() . ":" . $defaultSubcmd;

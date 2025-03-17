@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * A replacement for the standard Pest `test` function that
- * rethrows a ServiceProvider exception which can be tested.
+ * rethrows a TestServiceProvider exception which can be tested.
  *
  * This file needs to be loaded BEFORE the Pest Functions.php
  * and the only way to do that is to use PHP's auto_prepend_file
@@ -20,7 +20,7 @@ declare(strict_types=1);
 use Pest\Support\Backtrace;
 use Pest\Support\HigherOrderTapProxy;
 use Pest\TestSuite;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\ServiceProvider;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\TestServiceProvider;
 
 function test(?string $description = null, ?Closure $closure = null): HigherOrderTapProxy|Pest\PendingCalls\TestCall|Pest\PendingObjects\TestCall
 {
@@ -32,8 +32,8 @@ function test(?string $description = null, ?Closure $closure = null): HigherOrde
 
     // Create a wrapper for $closure that rethrows a saved exception during PackageServiceProvide register/boot
     $rethrower = function () use ($closure) {
-        if (ServiceProvider::$thrownException) {
-            throw ServiceProvider::$thrownException;
+        if (TestServiceProvider::$thrownException) {
+            throw TestServiceProvider::$thrownException;
         }
 
         if ($closure) {

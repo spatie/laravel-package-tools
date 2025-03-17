@@ -1305,11 +1305,38 @@ class YourPackageServiceProvider extends PackageServiceProvider
 composer test
 ```
 
+This package now supports test groups as follows:
+
+```bash
+composer test -- --group=blade
+```
+
+The current groups suported are:
+* base
+* assets
+* blade
+* commands
+* config
+* events
+* inertia
+* livewire
+* migrations
+* provider
+* routes
+* shareddata
+* translations
+* viewcomposer
+* views
+* installer
+
+Additionally, if you wish to test only backwards compatibility you can use:
+* legacy
+
 **Note:** `InvalidPackage` exceptions thrown during Laravel application bootup are reported by Pest,
 but because the occur before the start of a test case
 Pest by default does not allow you intentionally to test for them being thrown.
 The tests in this package now include checks for intentional `InvalidPackage` exceptions being thrown
-by catching and saving such exceptions in the Testing ServiceProvider,
+by catching and saving such exceptions in the TestServiceProvider,
 and then rethrowing the exception at the very start of a Pest test case,
 and this is achieved by loading a modified version of the Pest `test()` function
 before anything else is loaded.

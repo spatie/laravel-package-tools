@@ -8,7 +8,7 @@ use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class ServiceProvider extends PackageServiceProvider
+class TestServiceProvider extends PackageServiceProvider
 {
     public static ?InvalidPackage $thrownException = null;
     public static ?Closure $configurePackageUsing = null;

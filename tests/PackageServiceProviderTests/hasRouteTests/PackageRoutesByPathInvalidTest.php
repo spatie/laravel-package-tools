@@ -5,7 +5,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasRouteT
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageRouteByPathInvalidTest
+trait PackageRoutesByPathInvalidTest
 {
     public function configurePackage(Package $package)
     {
@@ -15,7 +15,7 @@ trait PackageRouteByPathInvalidTest
     }
 }
 
-uses(PackageRouteByPathInvalidTest::class);
+uses(PackageRoutesByPathInvalidTest::class);
 
 it("will throw an exception when the Config path is invalid")
     ->group('routes')

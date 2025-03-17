@@ -4,12 +4,12 @@ namespace Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands;
 
 use Illuminate\Console\Command;
 
-class FourthTestCommand extends Command
+class OptimizeCommand extends Command
 {
-    public $name = 'my-package:fourth-test-command';
+    public $name = 'package-tools:optimize';
 
     public function handle()
     {
-        $this->info('output of fourth test command');
+        $this->info('optimize package-tools');
     }
 }

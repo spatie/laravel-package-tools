@@ -5,7 +5,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasBladeT
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageBladeCustomDirectiveDuplicateTest
+trait PackageBladeCustomDirectiveInvalidDuplicateTest
 {
     public function configurePackage(Package $package)
     {
@@ -22,7 +22,7 @@ trait PackageBladeCustomDirectiveDuplicateTest
     }
 }
 
-uses(PackageBladeCustomDirectiveDuplicateTest::class);
+uses(PackageBladeCustomDirectiveInvalidDuplicateTest::class);
 
 it("throws an exception on an attempt to define the same Blade directive twice")
     ->group('blade')

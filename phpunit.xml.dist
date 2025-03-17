@@ -3,8 +3,7 @@
   backupGlobals="false"
   backupStaticProperties="false"
   bootstrap="vendor/autoload.php"
-  cacheDirectory=".phpunit.cache/"
-  cacheResultFile=".phpunit.cache/results.xml"
+  cacheDirectory=".phpunit.cache"
   colors="true"
   displayDetailsOnTestsThatTriggerWarnings="true"
   processIsolation="false"
@@ -16,33 +15,27 @@
     </testsuite>
   </testsuites>
   <source
-    restrictDeprecations="true"
     restrictNotices="true"
     restrictWarnings="true"
   >
     <include>
-      <directory>.</directory>
+      <directory>src</directory>
     </include>
     <exclude>
-      <directory>./vendor</directory>
-      <directory>./tests</directory>
+      <directory>vendor</directory>
+      <directory>tests</directory>
     </exclude>
   </source>
+  <coverage>
+    <report>
+      <clover outputFile=".phpunit.cache/clover.xml"/>
+      <text outputFile=".phpunit.cache/coverage.txt" showUncoveredFiles="true"/>
+    </report>
+  </coverage>
   <logging>
     <junit outputFile="build/report.junit.xml"/>
   </logging>
-  <source>
-    <include>
-      <directory suffix=".php">./src</directory>
-    </include>
-  </source>
   <php>
     <server name="APP_DEBUG" value="true" />
   </php>
-  <coverage cacheDirectory=".phpunit.cache/code-coverage"
-            processUncoveredFiles="true">
-    <include>
-      <directory suffix=".php">./src</directory>
-    </include>
-  </coverage>
 </phpunit>

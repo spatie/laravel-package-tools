@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestCase;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\ServiceProvider;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\TestServiceProvider;
 use Symfony\Component\Finder\SplFileInfo;
 
 abstract class PackageServiceProviderTestCase extends TestCase
@@ -53,7 +53,7 @@ abstract class PackageServiceProviderTestCase extends TestCase
 
     protected function setUp(): void
     {
-        ServiceProvider::$configurePackageUsing = function (Package $package) {
+        TestServiceProvider::$configurePackageUsing = function (Package $package) {
             $this->configurePackage($package);
         };
 
@@ -77,7 +77,7 @@ abstract class PackageServiceProviderTestCase extends TestCase
     protected function getPackageProviders($app)
     {
         return [
-            ServiceProvider::class,
+            TestServiceProvider::class,
         ];
     }
 
@@ -125,11 +125,11 @@ abstract class PackageServiceProviderTestCase extends TestCase
         return true;
     }
 
-    /* Clear all Laravel ServiceProvider static arrays which are not otherwise cleared between tests */
+    /* Clear all Laravel TestServiceProvider static arrays which are not otherwise cleared between tests */
 
     protected function clearLaravelStaticRegistrations(): self
     {
-        ServiceProvider::reset();
+        TestServiceProvider::reset();
         Facade::clearResolvedInstances();
 
         return $this;

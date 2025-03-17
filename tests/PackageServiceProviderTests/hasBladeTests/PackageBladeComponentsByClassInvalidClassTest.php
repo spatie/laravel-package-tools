@@ -5,7 +5,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasBladeT
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageBladeComponentsByClassInvalidTest
+trait PackageBladeComponentsByClassInvalidClassTest
 {
     public function configurePackage(Package $package)
     {
@@ -15,7 +15,7 @@ trait PackageBladeComponentsByClassInvalidTest
     }
 }
 
-uses(PackageBladeComponentsByClassInvalidTest::class);
+uses(PackageBladeComponentsByClassInvalidClassTest::class);
 
 it("will throw an exception when the Blade Component class is invalid")
     ->group('blade')

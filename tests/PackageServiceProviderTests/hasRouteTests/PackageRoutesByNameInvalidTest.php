@@ -5,7 +5,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasRouteT
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageRouteByNameInvalidTest
+trait PackageRoutesByNameInvalidTest
 {
     public function configurePackage(Package $package)
     {
@@ -15,7 +15,7 @@ trait PackageRouteByNameInvalidTest
     }
 }
 
-uses(PackageRouteByNameInvalidTest::class);
+uses(PackageRoutesByNameInvalidTest::class);
 
 it("will throw an exception when the Config filename is invalid")
     ->group('routes')

@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasRouteT
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageRouteLegacyTest
+trait PackageRoutesLegacyTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,7 +14,7 @@ trait PackageRouteLegacyTest
     }
 }
 
-uses(PackageRouteLegacyTest::class);
+uses(PackageRoutesLegacyTest::class);
 
 it("can load the legacy route", function () {
     $response = $this->get('my-route');

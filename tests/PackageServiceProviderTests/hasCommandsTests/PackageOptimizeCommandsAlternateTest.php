@@ -5,21 +5,21 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasComman
 use Illuminate\Support\Facades\App;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\OtherTestCommand;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\TestCommand;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\FourthTestCommand;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\ThirdTestCommand;
 
-trait PackageOptimizeCommandsTest
+trait PackageOptimizeCommandsAlternateTest
 {
     public function configurePackage(Package $package)
     {
         $package
             ->name('laravel-package-tools')
-            ->hasCommands(TestCommand::class, OtherTestCommand::class)
-            ->hasOptimizeCommands("test-command", "other-test-command");
+            ->hasCommands(FourthTestCommand::class, ThirdTestCommand::class)
+            ->hasOptimizeCommands("my-package:fourth-test-command", "my-package:third-test-command");
     }
 }
 
-uses(PackageOptimizeCommandsTest::class);
+uses(PackageOptimizeCommandsAlternateTest::class);
 
 it("will throw an exception with hasOptimizeCommands when the Laravel version is before 11.27.1")
     ->group('commands')
@@ -28,14 +28,14 @@ it("will throw an exception with hasOptimizeCommands when the Laravel version is
 
 it("can register and execute commands for Optimize", function () {
     $this
-        ->artisan('package-tools:test-command')
+        ->artisan('my-package:fourth-test-command')
         ->assertSuccessful()
-        ->expectsOutput('output of test command');
+        ->expectsOutput('output of fourth test command');
 
     $this
-        ->artisan('package-tools:other-test-command')
+        ->artisan('my-package:third-test-command')
         ->assertSuccessful()
-        ->expectsOutput('output of other test command');
+        ->expectsOutput('output of third test command');
 })
     ->group('commands')
     ->skip(
@@ -47,12 +47,12 @@ it("can register and execute Optimize Commands", function () {
     $this
         ->artisan('optimize')
         ->assertSuccessful()
-        ->expectsOutput('output of test command');
+        ->expectsOutput('output of fourth test command');
 
     $this
         ->artisan('optimize:clear')
         ->assertSuccessful()
-        ->expectsOutput('output of other test command');
+        ->expectsOutput('output of third test command');
 })
     ->group('commands')
     ->skip(

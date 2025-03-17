@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasRouteT
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageRouteByNameTest
+trait PackageRoutesByNameTest
 {
     public function configurePackage(Package $package)
     {
@@ -15,7 +15,7 @@ trait PackageRouteByNameTest
     }
 }
 
-uses(PackageRouteByNameTest::class);
+uses(PackageRoutesByNameTest::class);
 
 it("can load multiple individual routes by name", function () {
     $response = $this->get('my-route');

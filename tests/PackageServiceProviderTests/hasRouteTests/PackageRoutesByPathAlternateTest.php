@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasRouteT
 
 use Spatie\LaravelPackageTools\Package;
 
-trait PackageRouteByPathAlternateTest
+trait PackageRoutesByPathAlternateTest
 {
     public function configurePackage(Package $package)
     {
@@ -14,7 +14,7 @@ trait PackageRouteByPathAlternateTest
     }
 }
 
-uses(PackageRouteByPathAlternateTest::class);
+uses(PackageRoutesByPathAlternateTest::class);
 
 it("can load multiple routes by alternate path", function () {
     $response = $this->get('my-route-alt');

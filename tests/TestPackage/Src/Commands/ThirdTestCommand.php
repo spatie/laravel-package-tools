@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 
 class ThirdTestCommand extends Command
 {
-    public $name = 'package-tools:third-test-command';
+    public $name = 'my-package:third-test-command';
 
     public function handle()
     {
