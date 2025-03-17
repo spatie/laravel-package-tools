@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasRoutes
 {
-    private const routesDefaultPath = '../routes';
+    private static string $routesDefaultPath = '../routes';
 
     public array $routeFilenames = [];
     public array $routesPaths = [];
@@ -36,7 +36,7 @@ trait HasRoutes
 
     public function hasRoutesByPath(?string $path = null): self
     {
-        $this->routesPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::routesDefaultPath);
+        $this->routesPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$routesDefaultPath);
 
         return $this;
     }

@@ -6,7 +6,7 @@ use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
 trait HasCommands
 {
-    private const commandsDefaultPath = "Commands";
+    private static string $commandsDefaultPath = "Commands";
 
     public array $commands = [];
     public array $commandPaths = [];
@@ -36,14 +36,14 @@ trait HasCommands
 
     public function hasCommandsByPath(?string $path = null): self
     {
-        $this->commandPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::commandsDefaultPath);
+        $this->commandPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$commandsDefaultPath);
 
         return $this;
     }
 
     public function hasConsoleCommandsByPath(?string $path = null): self
     {
-        $this->consoleCommandPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::commandsDefaultPath);
+        $this->consoleCommandPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$commandsDefaultPath);
 
         return $this;
     }

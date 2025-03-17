@@ -7,9 +7,9 @@ use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
 trait HasBlade
 {
-    private const bladeComponentsDefaultPath = "Components";
-    public const bladeAnonymousComponentsDefaultPrefix = "[null]";
-    private const bladeAnonymousComponentsDefaultPath = "../resources/views/components";
+    private static string $bladeComponentsDefaultPath = "Components";
+    public static string $bladeAnonymousComponentsDefaultPrefix = "[null]";
+    private static string $bladeAnonymousComponentsDefaultPath = "../resources/views/components";
 
     public array $bladeComponents = [];
     public array $bladeComponentNamespaces = [];
@@ -52,7 +52,7 @@ trait HasBlade
     {
         $prefix ??= $this->shortName();
         $this->verifyUniqueKey(__FUNCTION__, 'prefix', $this->bladeComponentPaths, $prefix);
-        $this->bladeComponentPaths[$prefix] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::bladeComponentsDefaultPath);
+        $this->bladeComponentPaths[$prefix] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$bladeComponentsDefaultPath);
 
         return $this;
     }
@@ -70,10 +70,10 @@ trait HasBlade
         if ($prefix === "[shortname]") {
             $prefix = $this->shortName();
         } else {
-            $prefix ??= static::bladeAnonymousComponentsDefaultPrefix;
+            $prefix ??= static::$bladeAnonymousComponentsDefaultPrefix;
         }
         $this->verifyUniqueKey(__FUNCTION__, 'prefix', $this->bladeAnonymousComponentPaths, $prefix);
-        $this->bladeAnonymousComponentPaths[$prefix] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::bladeAnonymousComponentsDefaultPath);
+        $this->bladeAnonymousComponentPaths[$prefix] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$bladeAnonymousComponentsDefaultPath);
 
         return $this;
     }

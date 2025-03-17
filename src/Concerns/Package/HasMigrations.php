@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasMigrations
 {
-    protected const migrationsDefaultPath = '../database/migrations';
+    protected static string $migrationsDefaultPath = '../database/migrations';
 
     public array $migrationNames = [];
     protected ?string $migrationsByNamePath = '../database/migrations';

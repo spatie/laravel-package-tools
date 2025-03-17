@@ -117,7 +117,7 @@ trait ProcessBlade
         }
 
         foreach ($paths as $prefix => $path) {
-            if ($prefix === Package::bladeAnonymousComponentsDefaultPrefix) {
+            if ($prefix === Package::$bladeAnonymousComponentsDefaultPrefix) {
                 $prefix = null;
             }
 

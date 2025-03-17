@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasConfigs
 {
-    private const configDefaultPath = "../config";
+    private static string $configDefaultPath = "../config";
 
     public array $configsByNameFiles = [];
     public array $configPaths = [];
@@ -42,7 +42,7 @@ trait HasConfigs
 
     public function hasConfigsByPath(?string $path = null): self
     {
-        $this->configPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::configDefaultPath);
+        $this->configPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$configDefaultPath);
 
         return $this;
     }
