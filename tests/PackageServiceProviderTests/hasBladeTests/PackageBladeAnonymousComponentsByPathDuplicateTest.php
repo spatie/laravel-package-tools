@@ -12,6 +12,7 @@ trait PackageBladeAnonymousComponentsByPathDuplicateTest
     {
         $package
             ->name('laravel-package-tools')
+                ->hasViews()
                 ->hasBladeAnonymousComponentsByPath('abc')
                 ->hasBladeAnonymousComponentsByPath('abc', "../resources/views_alt/components");
     }

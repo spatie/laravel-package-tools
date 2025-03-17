@@ -12,6 +12,7 @@ trait PackageBladeAnonymousComponentsByPathInvalidTest
     {
         $package
             ->name('laravel-package-tools')
+            ->hasViews()
             ->hasBladeAnonymousComponentsByPath('abc', "Invalid_path");
     }
 }

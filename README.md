@@ -846,7 +846,7 @@ php artisan vendor:publish --tag=your-package-name-livewire-components
 ### Database Migrations
 
 You can provide either actual migration files (`*.php`) or stub migration files (`*.php.stub`),
-and for `*.php` files if you call `loadMigrations` they will also be loaded
+and for `*.php` files if you call `loadsMigrations` they will also be loaded
 so that if the user runs `artisan migrate` these migrations will be run.
 Both actual and stub migration files will be made publishable.
 

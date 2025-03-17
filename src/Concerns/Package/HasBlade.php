@@ -57,7 +57,7 @@ trait HasBlade
         return $this;
     }
 
-    public function hasBladeAnonymousComponentsByPath(?string $prefix = null, ?string $path = "[shortname]"): self
+    public function hasBladeAnonymousComponentsByPath(?string $prefix = "[shortname]", ?string $path = null): self
     {
         if (version_compare(App::version(), '9.44.0') < 0) {
             throw InvalidPackage::laravelFunctionalityNotYetImplemented(
