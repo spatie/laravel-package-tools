@@ -1,16 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="false" bootstrap="vendor/autoload.php" colors="true" processIsolation="false" stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" cacheDirectory=".phpunit.cache" backupStaticProperties="false">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+  backupGlobals="false"
+  backupStaticProperties="false"
+  bootstrap="vendor/autoload.php"
+  cacheDirectory=".phpunit.cache"
+  colors="true"
+  displayDetailsOnTestsThatTriggerWarnings="true"
+  processIsolation="false"
+  stopOnFailure="false"
+>
   <testsuites>
     <testsuite name="Spatie Test Suite">
       <directory>tests</directory>
     </testsuite>
   </testsuites>
+  <source
+    restrictNotices="true"
+    restrictWarnings="true"
+  >
+    <include>
+      <directory>src</directory>
+    </include>
+    <exclude>
+      <directory>vendor</directory>
+      <directory>tests</directory>
+    </exclude>
+  </source>
+  <coverage>
+    <report>
+      <clover outputFile=".phpunit.cache/clover.xml"/>
+      <text outputFile=".phpunit.cache/coverage.txt" showUncoveredFiles="true"/>
+    </report>
+  </coverage>
   <logging>
     <junit outputFile="build/report.junit.xml"/>
   </logging>
-  <source>
-    <include>
-      <directory suffix=".php">./src</directory>
-    </include>
-  </source>
+  <php>
+    <server name="APP_DEBUG" value="true" />
+  </php>
 </phpunit>

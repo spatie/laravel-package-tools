@@ -4,11 +4,17 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasTranslations
 {
-    public bool $hasTranslations = false;
+    private static string $translationsDefaultPath = '../resources/lang';
 
-    public function hasTranslations(): static
+    public array $translationPaths = [];
+
+    public function hasTranslations(?string $namespace = null, ?string $path = null): self
     {
-        $this->hasTranslations = true;
+        $namespace = $namespace ?? $this->shortName();
+        $this->verifyUniqueKey(__FUNCTION__, 'namespace', $this->translationPaths, $namespace);
+
+        $this->translationPaths[$namespace] =
+            $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$translationsDefaultPath);
 
         return $this;
     }

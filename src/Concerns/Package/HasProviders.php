@@ -2,13 +2,21 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\Package;
 
+use Illuminate\Support\Str;
+
 trait HasProviders
 {
-    public ?string $publishableProviderName = null;
+    private static string $publishableProviderDefaultPath = '../resources/stubs/';
 
-    public function publishesServiceProvider(string $providerName): static
+    public array $publishableProviderNames = [];
+
+    public function publishesServiceProvider(?string $providerName = null, string $path = null): self
     {
-        $this->publishableProviderName = $providerName;
+        $providerName =
+            (Str::contains($providerName, '/') ? '' : static::$publishableProviderDefaultPath) .
+            ($providerName ?? $this->studlyCase($this->shortName()) . 'ServiceProvider') . '.php.stub';
+
+        $this->publishableProviderNames[] = $this->verifyRelativeFile(__FUNCTION__, $providerName);
 
         return $this;
     }

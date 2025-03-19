@@ -4,11 +4,17 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasAssets
 {
-    public bool $hasAssets = false;
+    private static string $assetsDefaultPath = '../resources/dist';
 
-    public function hasAssets(): static
+    public array $assetsPaths = [];
+
+    public function hasAssets(?string $namespace = null, ?string $path = null): self
     {
-        $this->hasAssets = true;
+        $namespace ??= $this->shortName();
+        $this->verifyUniqueKey(__FUNCTION__, 'namespace', $this->assetsPaths, $namespace);
+
+        $this->assetsPaths[$namespace] =
+            $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$assetsDefaultPath);
 
         return $this;
     }

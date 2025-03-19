@@ -4,21 +4,18 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasViews
 {
-    public bool $hasViews = false;
+    private static string $viewsDefaultPath = '../resources/views';
 
-    public ?string $viewNamespace = null;
+    public array $viewsPaths = [];
 
-    public function hasViews(?string $namespace = null): static
+    public function hasViews(?string $namespace = null, ?string $path = null): self
     {
-        $this->hasViews = true;
+        $namespace = $namespace ?? $this->shortName();
+        $this->verifyUniqueKey(__FUNCTION__, 'namespace', $this->viewsPaths, $namespace);
 
-        $this->viewNamespace = $namespace;
+        $this->viewsPaths[$namespace] =
+            $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$viewsDefaultPath);
 
         return $this;
-    }
-
-    public function viewNamespace(): string
-    {
-        return $this->viewNamespace ?? $this->shortName();
     }
 }
