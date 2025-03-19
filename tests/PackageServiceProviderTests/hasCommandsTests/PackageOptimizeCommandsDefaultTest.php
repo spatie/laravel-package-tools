@@ -5,8 +5,8 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasComman
 use Illuminate\Support\Facades\App;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\OptimizeCommand;
 use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\OptimizeClearCommand;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\OptimizeCommand;
 
 trait PackageOptimizeCommandsDefaultTest
 {
