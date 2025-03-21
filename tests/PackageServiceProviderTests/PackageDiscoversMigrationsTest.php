@@ -60,6 +60,6 @@ it('can run migrations which registers them', function () {
     /** @var \Illuminate\Database\Migrations\Migrator $migrator */
     $migrator = app('migrator');
 
-    $this->assertCount(5, $migrator->paths());
+    $this->assertCount(6, $migrator->paths());
     $this->assertStringContainsString('laravel_package_tools', $migrator->paths()[0]);
 });
