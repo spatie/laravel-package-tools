@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.20.1 - 2025-03-21
+
+### What's Changed
+
+* Fix: Code Improvements & Consistent for Migrations by @tech-wolf-tw in https://github.com/spatie/laravel-package-tools/pull/163
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.20.0...1.20.1
+
 ## 1.20.0 - 2025-03-21
 
 **Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.91.1...1.20.0
