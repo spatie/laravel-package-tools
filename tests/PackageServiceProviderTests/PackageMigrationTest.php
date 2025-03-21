@@ -13,7 +13,7 @@ trait ConfigurePackageMigrationTest
             ->name('laravel-package-tools')
             ->hasMigration('create_another_laravel_package_tools_table')
             ->hasMigration('create_regular_laravel_package_tools_table')
-            ->hasMigration('2025_03_14_011123_create_custom_table')
+            ->hasMigration('2025_03_14_011123_create_laravel_package_tools_table')
             ->runsMigrations();
     }
 }
@@ -35,7 +35,7 @@ it('can publish migration with a prefixed timestamp', function () {
         ->doesntExpectOutput('hey')
         ->assertExitCode(0);
 
-    assertMigrationPublished('2020_01_01_000003_create_custom_table.php');
+    assertMigrationPublished('2020_01_01_000003_create_laravel_package_tools_table.php');
 });
 
 it('can publish the migration without being stubbed', function () {
