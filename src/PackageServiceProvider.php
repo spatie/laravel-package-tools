@@ -12,8 +12,6 @@ use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
 abstract class PackageServiceProvider extends ServiceProvider
 {
-    const TIMESTAMP_PATTERN = '/^\d{4}_\d{2}_\d{2}_\d{6}_/';
-
     protected Package $package;
 
     abstract public function configurePackage(Package $package): void;
@@ -384,6 +382,6 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     private static function stripTimestampPrefix(string $filename): string
     {
-        return preg_replace(self::TIMESTAMP_PATTERN, '', $filename);
+        return preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $filename);
     }
 }
