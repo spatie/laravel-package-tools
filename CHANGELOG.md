@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.91.1 - 2025-03-21
+
+### What's Changed
+
+* Fix: Migration Name Prefixed with by timestamp twice by @tech-wolf-tw in https://github.com/spatie/laravel-package-tools/pull/162
+
+### New Contributors
+
+* @tech-wolf-tw made their first contribution in https://github.com/spatie/laravel-package-tools/pull/162
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.19.0...1.91.1
+
 ## 1.19.0 - 2025-02-06
 
 ### What's Changed
