@@ -373,9 +373,15 @@ abstract class PackageServiceProvider extends ServiceProvider
             }
         }
 
+        $migrationFileName = self::stripTimestampPrefix($migrationFileName);
         $timestamp = $now->format('Y_m_d_His');
-        $migrationFileName = Str::of($migrationFileName)->snake()->finish('.php');
+        $formattedFileName = Str::of($migrationFileName)->snake()->finish('.php');
 
-        return database_path($migrationsPath . $timestamp . '_' . $migrationFileName);
+        return database_path("{$migrationsPath}{$timestamp}_{$formattedFileName}");
+    }
+
+    private static function stripTimestampPrefix(string $filename): string
+    {
+        return preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $filename);
     }
 }
