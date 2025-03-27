@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.92.0 - 2025-03-27
+
+### What's Changed
+
+* feat: Allow finding the base path when a laravel folder organisation … by @gjvanahee in https://github.com/spatie/laravel-package-tools/pull/144
+
+### New Contributors
+
+* @gjvanahee made their first contribution in https://github.com/spatie/laravel-package-tools/pull/144
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.20.1...1.92.0
+
 ## 1.20.1 - 2025-03-21
 
 ### What's Changed
