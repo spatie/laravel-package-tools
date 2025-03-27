@@ -2,7 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Tests\TestPackage\Src\Providers;
 
-use Closure;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 

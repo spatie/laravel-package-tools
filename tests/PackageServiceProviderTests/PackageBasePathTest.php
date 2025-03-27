@@ -16,5 +16,5 @@ uses(ConfigurePackageBasePathTest::class);
 
 it('will set the base path to the Src dir when the laravel folder organisation is applied', function () {
     $provider = new ServiceProvider(app());
-    expect($provider->getPackageBaseDir())->toEndWith( DIRECTORY_SEPARATOR.'TestPackage'.DIRECTORY_SEPARATOR.'Src');
+    expect($provider->getPackageBaseDir())->toEndWith(DIRECTORY_SEPARATOR.'TestPackage'.DIRECTORY_SEPARATOR.'Src');
 });
