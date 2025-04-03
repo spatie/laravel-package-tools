@@ -10,46 +10,125 @@ use Symfony\Component\Finder\SplFileInfo;
 
 trait ProcessMigrations
 {
+    protected Carbon $now;
+
     protected function bootPackageMigrations(): self
     {
-        if ($this->package->discoversMigrations) {
-            if (! empty($this->package->migrationNames)) {
-                throw InvalidPackage::conflictingMethods(
-                    $this->package->name,
-                    'hasMigrations',
-                    'discoversMigrations'
-                );
-            }
-
-            $this->package->migrationNames = static::convertDiscovers($this->package->migrationsByNamePath());
-        }
-
-        if (empty($this->package->migrationNames)) {
+        if (! $this->app->runningInConsole()) {
             return $this;
         }
 
-        $now = Carbon::now();
-        $vendorPath = $this->package->migrationsByNamePath();
-        foreach ($this->package->migrationNames as $migrationFileName) {
+        $this->now = Carbon::now();
+
+        return $this
+            ->bootPublishMigrationsByName()
+            ->bootPublishMigrationsByPath()
+            ->bootPublishMigrationsByDiscovers()
+            ->bootLoadMigrationsByName()
+            ->bootLoadMigrationsByPath()
+            ->bootLegacyLoadPublishedMigrationsByName()
+            ->bootLegacyLoadPublishedMigrationsByDiscovers();
+    }
+
+    protected function bootPublishMigrationsByName(): self
+    {
+        return $this->bootPublishMigrationsCommon($this->package->migrationsByNamePath(), $this->package->migrationPublishesNames);
+    }
+
+    protected function bootPublishMigrationsByPath(): self
+    {
+        return $this->bootPublishMigrationsByPathCommon($this->package->migrationPublishesPaths);
+    }
+
+    protected function bootPublishMigrationsByDiscovers(): self
+    {
+        return $this->bootPublishMigrationsByPathCommon($this->package->migrationDiscoversPaths);
+    }
+
+    protected function bootLoadMigrationsByName(): self
+    {
+        return $this->bootLoadMigrationsCommon($this->package->migrationsByNamePath(), $this->package->migrationLoadsNames);
+    }
+
+    protected function bootLoadMigrationsByPath(): self
+    {
+        return $this->bootLoadMigrationsByPathCommon($this->package->migrationLoadsPaths);
+    }
+
+    protected function bootLegacyLoadPublishedMigrationsByName(): self
+    {
+        if (! $this->package->migrationLegacyLoadsPublished || ! $this->package->migrationPublishesNames) {
+            return $this;
+        }
+
+        /* We only want to load published migrations that are .php files and not in the explicitly published names */
+        return $this->bootLoadMigrationsCommon(
+            $this->package->migrationsByNamePath(),
+            array_diff($this->package->migrationPublishesNames, $this->package->migrationLoadsNames)
+        );
+    }
+
+    protected function bootLegacyLoadPublishedMigrationsByDiscovers(): self
+    {
+        if (! $this->package->migrationLegacyLoadsPublished || ! $this->package->migrationDiscoversPaths) {
+            return $this;
+        }
+
+        return $this->bootLoadMigrationsByPathCommon($this->package->migrationDiscoversPaths);
+    }
+
+    protected function convertPathToNames(string $path): array
+    {
+        $path .= DIRECTORY_SEPARATOR;
+        return collect(File::allfiles($path))->map(function (SplFileInfo $file) use ($path): string {
+            $relativePath = Str::after($file->getPathname(), $path);
+            foreach ([".stub", ".php"] as $suffix) {
+                if (str_ends_with($relativePath, $suffix)) {
+                    $relativePath = substr($relativePath, 0, -strlen($suffix));
+                }
+            }
+
+            return $relativePath;
+        })->toArray();
+    }
+
+    protected function bootLoadMigrationsByPathCommon(array $paths): self
+    {
+        foreach ($paths as $path) {
+            $path = $this->package->basePath($path);
+            $this->bootLoadMigrationsCommon($path, $this->convertPathToNames($path));
+        }
+
+        return $this;
+    }
+
+    protected function bootPublishMigrationsByPathCommon(array $paths): self
+    {
+        foreach ($paths as $path) {
+            $path = $this->package->basePath($path);
+            $this->bootPublishMigrationsCommon($path, $this->convertPathToNames($path));
+        }
+
+        return $this;
+    }
+
+    protected function bootLoadMigrationsCommon(string $vendorPath, array $migrationLoadsNames): self
+    {
+        if (empty($migrationLoadsNames)) {
+            return $this;
+        }
+
+        foreach ($migrationLoadsNames as $migrationFileName) {
             $vendorMigration = $this->phpOrStub("{$vendorPath}/{$migrationFileName}");
             if (! $vendorMigration) {
                 continue;
-            }
-
-            $appMigration = $this->generateMigrationName($migrationFileName . '.php', $now->addSecond());
-
-            if ($this->app->runningInConsole()) {
-                $this->publishes(
-                    [$vendorMigration => database_path("migrations/{$appMigration}")],
-                    "{$this->package->shortName()}-migrations"
-                );
             }
 
             /**
              * Laravel will only load files ending in .php so we cannot load .stub files for migration
              * https://github.com/laravel/framework/blob/11.x/src/Illuminate/Database/Migrations/Migrator.php#L540
              **/
-            if ($this->package->loadsMigrations && str_ends_with($vendorMigration, '.php')) {
+            if (str_ends_with($vendorMigration, '.php')) {
                 $this->loadMigrationsFrom($vendorMigration);
             }
         }
@@ -57,7 +136,30 @@ trait ProcessMigrations
         return $this;
     }
 
-    protected function generateMigrationName(string $migrationFileName, Carbon $now): string
+    protected function bootPublishMigrationsCommon(string $vendorPath, array $migrationPublishesNames): self
+    {
+        if (empty($migrationPublishesNames)) {
+            return $this;
+        }
+
+        foreach ($migrationPublishesNames as $migrationFileName) {
+            $vendorMigration = $this->phpOrStub("{$vendorPath}/{$migrationFileName}");
+            if (! $vendorMigration) {
+                continue;
+            }
+
+            $appMigration = $this->generateMigrationName($migrationFileName . '.php');
+
+            $this->publishes(
+                [$vendorMigration => database_path("migrations/{$appMigration}")],
+                "{$this->package->shortName()}-migrations"
+            );
+        }
+
+        return $this;
+    }
+
+    protected function generateMigrationName(string $migrationFileName): string
     {
         $migrationPath = dirname($migrationFileName);
         if ($migrationPath) {
@@ -72,22 +174,6 @@ trait ProcessMigrations
             }
         }
 
-        $timestamp = $now->format('Y_m_d_His_');
-
-        return $migrationPath . $timestamp . $migrationFileName;
-    }
-
-    protected static function convertDiscovers(string $path): array
-    {
-        return collect(File::allfiles($path))->map(function (SplFileInfo $file) use ($path): string {
-            $relativePath = Str::after($file->getPathname(), $path);
-            foreach ([".stub", ".php"] as $suffix) {
-                if (str_ends_with($relativePath, $suffix)) {
-                    $relativePath = substr($relativePath, 0, -strlen($suffix));
-                }
-            }
-
-            return $relativePath;
-        })->toArray();
+        return $migrationPath . $this->now->addSecond()->format('Y_m_d_His_') . $migrationFileName;
     }
 }

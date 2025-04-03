@@ -8,40 +8,61 @@ trait HasCommands
 {
     private static string $commandsDefaultPath = "Commands";
 
-    public array $commands = [];
+    public array $commandClasses = [];
     public array $commandPaths = [];
-    public array $consoleCommands = [];
+    public array $consoleCommandClasses = [];
     public array $consoleCommandPaths = [];
     public array $optimizeCommands = [];
 
-    public function hasCommandsByClass(...$commandClassNames): self
+    public function loadsCommandsByClass(...$commandClassNames): self
     {
-        $this->commands = array_unique(array_merge(
-            $this->commands,
-            $this->verifyClassNames(__FUNCTION__, $commandClassNames)
+        return $this->handleConsoleCommandsByClass(__FUNCTION__, $this->commandClasses, ...$commandClassNames);
+    }
+
+    public function loadsConsoleCommandsByClass(...$commandClassNames): self
+    {
+        return $this->handleConsoleCommandsByClass(__FUNCTION__, $this->consoleCommandClasses, ...$commandClassNames);
+    }
+
+    protected function handleConsoleCommandsByClass(string $method, array &$classes, ...$commandClassNames): self
+    {
+        $classes = array_unique(array_merge(
+            $classes,
+            $this->verifyClassNames($method, $commandClassNames)
         ));
 
         return $this;
     }
 
-    public function hasConsoleCommandsByClass(...$commandClassNames): self
+    /* Legacy backwards compatibility */
+    public function hasCommand(string $commandClassName): self
     {
-        $this->consoleCommands = array_unique(array_merge(
-            $this->consoleCommands,
-            $this->verifyClassNames(__FUNCTION__, $commandClassNames)
-        ));
-
-        return $this;
+        return $this->loadsCommandsByClass($commandClassName);
     }
 
-    public function hasCommandsByPath(?string $path = null): self
+    public function hasCommands(...$commandClassNames): self
+    {
+        return $this->loadsCommandsByClass(...$commandClassNames);
+    }
+
+    public function hasConsoleCommand($commandClassName): self
+    {
+        return $this->loadsConsoleCommandsByClass($commandClassName);
+    }
+
+    public function hasConsoleCommands(...$commandClassNames): self
+    {
+        return $this->loadsConsoleCommandsByClass(...$commandClassNames);
+    }
+
+    public function loadsCommandsByPath(?string $path = null): self
     {
         $this->commandPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$commandsDefaultPath);
 
         return $this;
     }
 
-    public function hasConsoleCommandsByPath(?string $path = null): self
+    public function loadsConsoleCommandsByPath(?string $path = null): self
     {
         $this->consoleCommandPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$commandsDefaultPath);
 
@@ -78,26 +99,5 @@ trait HasCommands
         } else {
             return $cmd;
         }
-    }
-
-    /* Legacy backwards compatibility */
-    public function hasCommand(...$commandClassNames): self
-    {
-        return $this->hasCommandsByClass(...$commandClassNames);
-    }
-
-    public function hasCommands(...$commandClassNames): self
-    {
-        return $this->hasCommandsByClass(...$commandClassNames);
-    }
-
-    public function hasConsoleCommand(...$commandClassNames): self
-    {
-        return $this->hasConsoleCommandsByClass(...$commandClassNames);
-    }
-
-    public function hasConsoleCommands(...$commandClassNames): self
-    {
-        return $this->hasConsoleCommandsByClass(...$commandClassNames);
     }
 }

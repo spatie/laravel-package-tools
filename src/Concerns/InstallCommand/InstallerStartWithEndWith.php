@@ -9,14 +9,14 @@ trait InstallerStartWithEndWith
     public ?Closure $startWith = null;
     public ?Closure $endWith = null;
 
-    public function startWith($callable): self
+    public function startWith(callable $callable): self
     {
         $this->startWith = $callable;
 
         return $this;
     }
 
-    public function endWith($callable): self
+    public function endWith(callable $callable): self
     {
         $this->endWith = $callable;
 

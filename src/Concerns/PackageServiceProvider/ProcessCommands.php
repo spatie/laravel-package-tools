@@ -16,22 +16,22 @@ trait ProcessCommands
 
     protected function bootPackageCommandsByClass(): self
     {
-        if (empty($this->package->commands)) {
+        if (empty($this->package->commandClasses)) {
             return $this;
         }
 
-        $this->commands($this->package->commands);
+        $this->commands($this->package->commandClasses);
 
         return $this;
     }
 
     protected function bootPackageConsoleCommandsByClass(): self
     {
-        if (empty($this->package->consoleCommands) || ! $this->app->runningInConsole()) {
+        if (empty($this->package->consoleCommandClasses) || ! $this->app->runningInConsole()) {
             return $this;
         }
 
-        $this->commands($this->package->consoleCommands);
+        $this->commands($this->package->consoleCommandClasses);
 
         return $this;
     }
@@ -42,7 +42,7 @@ trait ProcessCommands
             return $this;
         }
 
-        $this->commands($this->getClassesInPaths('hasCommandsByPath', $this->package->commandPaths));
+        $this->commands($this->getClassesInPaths('loadsCommandsByPath', $this->package->commandPaths));
 
         return $this;
     }
@@ -53,14 +53,14 @@ trait ProcessCommands
             return $this;
         }
 
-        $this->commands($this->getClassesInPaths('hasConsoleCommandsByPath', $this->package->consoleCommandPaths));
+        $this->commands($this->getClassesInPaths('loadsConsoleCommandsByPath', $this->package->consoleCommandPaths));
 
         return $this;
     }
 
     protected function bootPackageOptimizeCommands(): self
     {
-        if (empty($this->package->optimizeCommands) || ! $this->app->runningInConsole()) {
+        if (empty($this->package->optimizeCommands)) {
             return $this;
         }
 

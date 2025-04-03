@@ -6,15 +6,29 @@ trait HasRoutes
 {
     private static string $routesDefaultPath = '../routes';
 
-    public array $routeFilenames = [];
-    public array $routesPaths = [];
+    public array $routesLoadsFiles = [];
+    public array $routesLoadsPaths = [];
+    public array $routesPublishesFiles = [];
+    public array $routesPublishesPaths = [];
     protected string $routesPath = '../routes';
 
-    public function hasRoutesByName(...$routeFilenames): self
+    public function loadsRoutesByName(...$routesFiles): self
     {
-        $this->routeFilenames = array_unique(array_merge(
-            $this->routeFilenames,
-            collect($routeFilenames)->flatten()->toArray()
+        $this->routesLoadsFiles = array_unique(array_merge(
+            $this->routesLoadsFiles,
+            collect($routesFiles)->flatten()->toArray()
+        ));
+
+        $this->routesPath = $this->verifyRelativeDirOrNull($this->routesPath);
+
+        return $this;
+    }
+
+    public function publishesRoutesByName(...$routesFiles): self
+    {
+        $this->routesPublishesFiles = array_unique(array_merge(
+            $this->routesPublishesFiles,
+            collect($routesFiles)->flatten()->toArray()
         ));
 
         $this->routesPath = $this->verifyRelativeDirOrNull($this->routesPath);
@@ -34,21 +48,29 @@ trait HasRoutes
         return $this->verifyPathSet(__FUNCTION__, $this->routesPath, $directory);
     }
 
-    public function hasRoutesByPath(?string $path = null): self
+    public function loadsRoutesByPath(?string $path = null): self
     {
-        $this->routesPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$routesDefaultPath);
+        $this->routesLoadsPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$routesDefaultPath);
+
+        return $this;
+    }
+
+    public function publishesRoutesByPath(?string $path = null): self
+    {
+        $this->routesPublishesPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$routesDefaultPath);
 
         return $this;
     }
 
     /* Legacy backwards compatibility */
-    public function hasRoute(...$routeFilenames): self
+    public function hasRoute(string $routeFileName): self
     {
-        return $this->hasRoutesByName(...$routeFilenames);
+        return $this->hasRoutes($routeFileName);
     }
 
-    public function hasRoutes(...$routeFilenames): self
+    public function hasRoutes(...$routesFileNames): self
     {
-        return $this->hasRoutesByName(...$routeFilenames);
+        return $this->loadsRoutesByName(...$routesFileNames);
+        return $this->publishesRoutesByName(...$routesFileNames);
     }
 }

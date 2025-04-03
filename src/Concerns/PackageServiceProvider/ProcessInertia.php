@@ -6,21 +6,22 @@ trait ProcessInertia
 {
     protected function bootPackageInertia(): self
     {
-        if (! $this->package->inertiaComponentsPaths || ! $this->app->runningInConsole()) {
+        if (! $this->package->inertiaComponentsPublishesPaths || ! $this->app->runningInConsole()) {
             return $this;
         }
 
         /* Publish under two tags for legacy reasons */
         $shortName = $this->package->shortName();
         $tag = "{$shortName}-inertia-components";
-        foreach ($this->package->inertiaComponentsPaths as $namespace => $path) {
+        foreach ($this->package->inertiaComponentsPublishesPaths as $namespace => $path) {
+            $toPath = resource_path("js/Pages/{$this->package->studlyCase($namespace)}");
             $this->publishes(
-                [$this->package->basePath($path) => resource_path("js/Pages/{$this->package->studlyCase($namespace)}")],
+                [$this->package->basePath($path) => $toPath],
                 $tag
             );
             if ($namespace !== $shortName) {
                 $this->publishes(
-                    [$this->package->basePath($path) => resource_path("js/Pages/{$this->package->studlyCase($namespace)}")],
+                    [$this->package->basePath($path) => $toPath],
                     "{$namespace}-inertia-components"
                 );
             }

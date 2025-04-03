@@ -6,16 +6,22 @@ trait HasInertia
 {
     private static string $inertiaComponentsDefaultPath = '../resources/js/Pages';
 
-    public array $inertiaComponentsPaths = [];
+    public array $inertiaComponentsPublishesPaths = [];
 
-    public function hasInertiaComponents(?string $namespace = null, ?string $path = null): self
+    public function publishesInertiaComponentsByPath(?string $namespace = null, ?string $path = null): self
     {
         $namespace ??= $this->shortName();
-        $this->verifyUniqueKey(__FUNCTION__, 'namespace', $this->inertiaComponentsPaths, $namespace);
+        $this->verifyUniqueKey(__FUNCTION__, 'namespace', $this->inertiaComponentsPublishesPaths, $namespace);
 
-        $this->inertiaComponentsPaths[$namespace] =
+        $this->inertiaComponentsPublishesPaths[$namespace] =
             $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$inertiaComponentsDefaultPath);
 
         return $this;
+    }
+
+    /* Legacy backwards compatibility */
+    public function hasInertiaComponents(?string $namespace = null): self
+    {
+        return $this->publishesInertiaComponentsByPath($namespace);
     }
 }

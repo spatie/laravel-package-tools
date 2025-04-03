@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Concerns\InstallCommand;
 
 trait InstallerPublishes
 {
-    protected array $publishes = [];
+    public array $publishes = [];
 
     public function publish(string ...$tag): self
     {
@@ -16,14 +16,24 @@ trait InstallerPublishes
         return $this;
     }
 
-    public function publishConfigFile(): self
-    {
-        return $this->publish('config');
-    }
-
     public function publishAssets(): self
     {
         return $this->publish('assets');
+    }
+
+    public function publishBladeComponents(): self
+    {
+        return $this->publish('components');
+    }
+
+    public function publishConfigFile(): self
+    {
+        return $this->publishConfigFiles();
+    }
+
+    public function publishConfigFiles(): self
+    {
+        return $this->publish('config');
     }
 
     public function publishInertiaComponents(): self
@@ -31,9 +41,34 @@ trait InstallerPublishes
         return $this->publish('inertia-components');
     }
 
+    public function publishLivewireComponents(): self
+    {
+        return $this->publish('livewire-components');
+    }
+
     public function publishMigrations(): self
     {
         return $this->publish('migrations');
+    }
+
+    public function publishServiceProviders(): self
+    {
+        return $this->publish('provider');
+    }
+
+    public function publishRoutes(): self
+    {
+        return $this->publish('routes');
+    }
+
+    public function publishTranslations(): self
+    {
+        return $this->publish('translations');
+    }
+
+    public function publishViews(): self
+    {
+        return $this->publish('views');
     }
 
     protected function processPublishes(): self

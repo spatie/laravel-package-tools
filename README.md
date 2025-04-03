@@ -13,27 +13,6 @@ Whilst the intended use is to assist package developers more easily
 to integrate their package with Laravel,
 this also has all the functionality you need to modularise large applications.
 
-Version 2.0 extends the original package functionality to:
-
-* Provide greater ability to load functions by path (and where appropriate multiple paths)
-so as to mimic the autoload functionality provided by Laravel for certain paths
-(see [Laravel's Directory Structure](https://laravel.com/docs/structure)).
-
-* Have greater consistency about loading stuff individually by class or name,
-or by path or (where appropriate) namespace.
-
-* Have improved error checking functionality for inconsistent or invalid method calls
-
-To provide a consistent API this has required some changes to the method names used,
-however backwards compatibility with previous versions has been maintained so that
-any upgrades should not break your valid existing `PackageServiceProvider` calls.
-
-**Note:** Whilst all method calls are backwardly compatible,
-where your package definition is not strictly valid
-because e.g. a file or path you named is needed but doesn't exist,
-you will now get an Invalid Package exception in non-production environments
-when you previously didn't.
-
 Here's an example of how it can be used.
 
 ```php
@@ -48,23 +27,23 @@ class YourPackageServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('your-package-name')
-            ->hasAssets()
-            ->hasConfigFiles()
-            ->hasBladeComponentsByClass('spatie', Alert::class)
-            ->hasBladeComposerByClass('*', MyViewComposer::class)
-            ->hasCommandsbyClass(YourCoolPackageCommand::class)
-            ->hasMigrations('create_package_tables')
-            ->hasRoutes('web')
-            ->hasTranslations()
-            ->hasViews()
+            ->publishesAssets()
+            ->loadsConfigFiles()
+            ->loadsBladeComponentsByClass('spatie', Alert::class)
+            ->loadsBladeComposerByClass('*', MyViewComposer::class)
+            ->loadsCommandsbyClass(YourCoolPackageCommand::class)
+            ->publishesMigrations('create_package_tables')
+            ->loadsRoutes('web')
+            ->loadsTranslations()
+            ->publishesViews()
             ->sharesDataWithAllViews('downloads', 3)
-            ->publishesServiceProvider('MyProviderName')
-            ->hasInstallCommand(function(InstallCommand $command) {
+            ->loadsServiceProvider('MyProviderName')
+            ->loadsInstallCommand(function(InstallCommand $command) {
                 $command
                     ->publishConfigFile()
                     ->publishAssets()
                     ->publishMigrations()
-                    ->copyAndRegisterServiceProviderInApp()
+                    ->registerServiceProvidersInApp()
                     ->askToStarRepoOnGitHub();
             });
     }
@@ -74,32 +53,64 @@ class YourPackageServiceProvider extends PackageServiceProvider
 Under the hood it will do the necessary work to register the necessary things
 and make all sorts of files publishable.
 
-Laravel Package Tools can also be used to modularise your application as follows:
+Laravel Package Tools can also be used to modularise your monolithic application,
+and to support Domain Driven Design / Development,
+though in this case you are unlikely to want to publish much if anything.
 
-```php
-use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Spatie\LaravelPackageTools\Package;
-use MyPackage\ViewComponents\Alert;
-use Spatie\LaravelPackageTools\Commands\InstallCommand;
+## Significant changes in v1.19
 
-class YourPackageServiceProvider extends PackageServiceProvider
-{
-    public function configurePackage(Package $package): void
-    {
-        $package
-            ->name('module-name')
-            ->hasAssets()
-            ->hasConfigsByName()
-            ->hasBladeComponentsByClass('spatie', Alert::class)
-            ->hasBladeComposerByClass('*', MyViewComposer::class)
-            ->hasCommandsbyClass(YourCoolPackageCommand::class)
-            ->hasMigrationsByName('create_package_tables')
-            ->hasRoutesByName('web')
-            ->hasTranslations()
-            ->hasViews();
-    }
-}
-```
+Version 1.19 extends the original package functionality to:
+
+* Provide greater ability to load functions by path (and where needed multiple paths)
+rather than by only class or name,
+so as to mimic the autoload functionality provided by Laravel for certain paths
+(see [Laravel's Directory Structure](https://laravel.com/docs/structure))
+and avoid the need for the package or mnodule developer
+explicitly to list each and every class individually.
+
+* Provide separate calls for loading or registering files, classes or paths and for publishing same -
+this provides a clear separation between loading or registering functionality
+and making it publishable,
+and avoids creating publishable tags for functionality
+that the developer doesn't want to publish;
+Loading functionality is achieved using `loads{X}By{Class|Name|Namespace|Path}()`,
+and publishes using `publishes{X}By{Class|Name|Namespace|Path}()`.
+
+* Have greater method name consistency across different types of code
+for loading or publishing functionality,
+by name, class, path or (where appropriate) by namespace.
+
+* Have improved error checking functionality for inconsistent or invalid method calls.
+These throw InvalidPackage exceptions when `APPDEBUG==true` **and** `ENV!==production`,
+so an upgrade of Laravel Package Tools should not break your application in production
+even if there are inconsistent or invalid methods calls in your definition.
+
+In versions of Laravel Package Tools prior to 1.19,
+all functionality defined by `hasXXXX()` that could be made publishable was made publishable,
+and as Laravel Package Tools gets used by more and more packages
+this can lead to a proliferation of publishable tags.
+
+One of the changes made in version 1.19 is to split defining
+the functionality to be loaded and the functionality to be made publishable
+into separate `loadsXXXX()` and `publishesXXXX()` methods.
+The Rationale for these changes are:
+1. It is considered unlikely that you will wish to both load and publish the same functionality; and
+2. It is not good practice to publish functionality that you do not explicitly wish to publish.
+
+In addition, Laravel Package Tools now allows you to load or publish functionality
+by class, name, path or namespace (as appropriate for each type of functionality)
+and consequently for method name consistency the `loadsXXXX()` and `publishesXXXX()` methods
+now include this e.g. `publishesAssetsByPath()`.
+
+If you are using Laravel Package Tools for modular monolithic application development,
+then you probably are not wanting to publish anything and you should therefore use only
+`loadsXXXX()` methods.
+
+The above has resulted in significant changes to the methods that you call to define your package,
+however all the legacy `hasXXXX()` methods are still supported
+in order to provide full backwards compatibility for existing packages
+so that a Laravel Package Tools version upgrade
+should not break your valid existing `PackageServiceProvider` definitions.
 
 ## Support us
 
@@ -118,6 +129,7 @@ We publish all received postcards on [our virtual postcard wall](https://spatie.
 To avoid needing to scroll through to find the right usage section, here is a Table of Contents:
 
 * [Directory Structure](#directory-structure)
+* [Making your functionality publishable](#making-your-functionality-publishable)
 * [Getting Started](#getting-started)
 * [Assets](#assets)
 * [Blade Components](#blade-components)
@@ -168,20 +180,20 @@ The structure for a package expected by default looks like this:
 <package root>/routes/                    Routes
 ```
 
-However most of these default paths can be changed if necessary using a `setXXXXPath("path")` call.
+However all of these default paths can be changed if necessary.
 
 Note: When using paths in any Package method,
 the path given is relative to the location of your primary Service Provider
 i.e. relative to `<package root>/src`
-so `<package root>/ConfigFiles` would be set using `->setConfigsPath("../ConfigFiles")`
-and `<package root>/src/ServiceProviders` would be set using  `->setPublishableServiceProvidersPath("ServiceProviders")`.
+so e.g. `<package root>/ConfigFiles` would be specified as `../ConfigFiles`.
 
 **Note:** If your primary Service Provider is located in `<package root>/src/Providers` then you can set
 the base path with a call to `setBasePath(__DIR__ . '/../')`.
 
 ### Getting Started
 
-In your package you should let your service provider extend `Spatie\LaravelPackageTools\PackageServiceProvider`.
+In your package you should let your service provider extend `Spatie\LaravelPackageTools\PackageServiceProvider`
+(which iself extends Laravel's standard ServiceProvider `Illuminate\Support\ServiceProvider`).
 
 ```php
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -213,24 +225,16 @@ the Laravel project:
 ```php
 $package
     ->name('your-package-name')
-    ->hasAssets();
+    ->publishesAssetsByPath();
 ```
 
 By default these assets are located in `<package root>/resources/dist`,
-however you can override this by specifying a path with `hasAssets()`:
+however you can override this by specifying a path with `publishesAssetsByPath()`:
 
 ```php
 $package
     ->name('your-package-name')
-    ->hasAssets(path: './assets/');
-```
-
-You can change the directory name it will be published to bu using a namespace i.e. to publish to `public/vendor/my-package` use:
-
-```php
-$package
-    ->name('your-package-name')
-    ->hasAssets('my-package');
+    ->publishesAssetsByPath(path: './assets/');
 ```
 
 Users of your package will be able to publish the assets with this command:
@@ -242,20 +246,36 @@ php artisan vendor:publish --tag=your-package-name-assets
 and this will copy over the assets to the `public/vendor/<your-package-name>` directory
 of the users application.
 
+You can change the directory name it will be published to by using a namespace i.e. to publish to `public/vendor/my-package` use:
+
+```php
+$package
+    ->name('your-package-name')
+    ->publishesAssetsByPath('my-package');
+```
+
+and users of your package will be able to publish the assets with this command:
+
+```bash
+php artisan vendor:publish --tag=my-package-assets
+```
+
+**Note:** The `hasAssets()` method is still supported for backwards compatibility.
+
 ### Blade Components
 
 There are three ways you can register and publish Blade (view) components:
 
-1. Individually by class using `hasBladeComponentsByClass()`
-2. By specifying the path for your Blade Components with `hasBladeComponentsByPath()`
-3. Using the namespace root of your Blade Components with `hasBladeComponentsByNamespace()`
+1. Individually by class using `loadsBladeComponentsByClass()` and `publishesBladeComponentsByClass()`
+2. By specifying the path for your Blade Components with `loadsBladeComponentsByPath()` and `publishesBladeComponentsByPath()`
+3. Using the namespace root of your Blade Components with `loadsBladeComponentsByNamespace()`
 
 In each case, you need to provide a component prefix which will be used in a view
 to load the component.
 
 Your Blade components should be placed by default in the `<package root>/src/Components` directory.
-And if you describe them by Class or Path (but not Namepace),
-they can be published to `app/Views/Components/vendor/<package name>`
+And if you use a `publishesBladeComponentsXXXX()` method
+they will be published to `app/Views/Components/vendor/<package name>`
 in the user's Laravel project with this command:
 
 ```bash
@@ -264,52 +284,66 @@ php artisan vendor:publish --tag=your-package-name-components
 
 #### Registering and publishing Blade Components individually by class
 
-You can register and publish Blade components individually by name with the `hasBladeComponentsByClass` method.
+You can register Blade components individually by class name with the `loadsBladeComponentsByClass` method,
+and publish them individually with the `publishesBladeComponentsByClass` method.
 
 ```php
 use MyPackage\Components\Alert;
-use MyPackage\Components\Message;
-use MyPackage\Components\Email;
-use MyPackage\Components\Banner;
-use MyPackage\Components\Menu;
-
 
 $package
     ->name('your-package-name')
-    ->hasBladeComponentsByClass('spatie', Alert::class)
-    ->hasBladeComponentsByClass('spatie', Message::class, Email::class)
-    ->hasBladeComponentsByClass('spatie', [Banner::class, Menu::class]);
+    ->loadsBladeComponentsByClass('spatie', Alert::class)
+    ->publishesBladeComponentsByClass('spatie', Alert::class);
 ```
 
-This will register the individual Blade components with Laravel,
+You can call these methods multiple times,
+and you can specify multiple classes in a single call
+either as multiple parameters or as an array i.e.:
+
+* `loadsBladeComponentsByClass('spatie', Alert::class, Message::class)`
+* `publishesBladeComponentsByClass('spatie', [Alert::class, Message::class])`
+
+The `loadsBladeComponentsByClass()` method will register
+the individual Blade components with Laravel,
 and they can then be referenced in Blade views as e.g. `<x-spatie-alert />`,
 where `spatie` is the prefix you provided during registration,
 and `alert` is the lower-case version of the class name.
 
-**Note:** For backwards compatibility, `hasViewComponents` & `hasViewComponents`
-can still be used instead of `hasBladeComponentsByClass`.
+**Note:** For backwards compatibility, `hasViewComponent` & `hasViewComponents`
+can still be used, and are equivalent to using
+both `loadsBladeComponentsByClass` and `publishesBladeComponentsByClass`.
+
+**Note:** In previous versions, unlike every other type of publishable file,
+Blade Components were published using the full package name
+including "laravel-" if the name started with that rather than with the shortened name.
+To preserve backward compatibility Blade components listed by class are now published under
+both the full and short names if they differ
+i.e. if your package is named "laravel-my-package" then Blade components
+can be published using either `--tag=my-package-components` or
+`--tag=laravel-my-package-components`.
+You are encouraged to switch to using the short-name in your documentation.
 
 _See: [Laravel Package Development - View Components](https://laravel.com/docs/packages#view-components)
 for underlying details._
 
 #### Registering and publishing Blade Components by Path
 
-The second way to register Blade components is by path
-using `hasBladeComponentsByPath()` as follows:
+The second way to register and . or publish Blade components is by path
+using `loadsBladeComponentsByPath()` `publishesBladeComponentsByPath()` as follows:
 
 ```php
 $package
     ->name('your-package-name')
-    ->hasBladeComponentsByPath('spatie', "Components/spatie")
-    ->hasBladeComponentsByPath('spatie2', "Components/spatie2");
+    ->loadsBladeComponentsByPath('spatie', "Components/spatie")
+    ->publishesBladeComponentsByPath('spatie2', "Components/spatie2");
 ```
-For each path, this will determine the namespace
-by evaluating the first php file in the path,
-and then register the namespace with Laravel (like `hasBladeComponentsByNamespace`),
+For each path, `loadsBladeComponentsByPath()` will determine the namespace
+by reading the namespace from the first php file in the path,
+and then register the namespace with Laravel (like `loadsBladeComponentsByNamespace`),
 and they can then be referenced in Blade views as e.g. `<x-spatie::alert />`.
 
 If you omit parameters, the default prefix is your short package name,
-and the default path is `Components`.
+and the default path is `<package-root>/src/Components`.
 
 #### Registering Blade Components by Namespace
 
@@ -319,8 +353,8 @@ using `hasBladeComponentsByNamespace()` as follows:
 ```php
 $package
     ->name('your-package-name')
-    ->hasBladeComponentsByNamespace('spatie', "MyPackage\\ViewComponents")
-    ->hasBladeComponentsByNamespace('spatie2', "MyPackage\\ViewComponents2");
+    ->loadsBladeComponentsByNamespace('spatie', "MyPackage\\ViewComponents")
+    ->loadsBladeComponentsByNamespace('spatie2', "MyPackage\\ViewComponents2");
 ```
 
 This will register the individual Blade component namespaces with Laravel,
@@ -345,12 +379,12 @@ in the `<package root>/resources/views/components` directory.
 Since they live in a subdirectory of `resources/views`
 you can make them publishable them using `hasViews`,
 however if you wish to register them for use as part of the package,
-then call `hasBladeAnonymousComponentsByPath` as follows:
+then call `loadsBladeAnonymousComponentsByPath` as follows:
 
 ```php
 $package
     ->name('your-package-name')
-    ->hasBladeAnonymousComponentsByPath('spatie');
+    ->loadsBladeAnonymousComponentsByPath('spatie');
 ```
 
 and then the components can be used in Blade views as: `<x-spatie::my-component>`.
@@ -360,8 +394,8 @@ You can register and publish components in any other directory as follows:
 ```php
 $package
     ->name('your-package-name')
-    ->hasBladeAnonymousComponentsByPath('spatie1');
-    ->hasBladeAnonymousComponentsByPath('spatie2', '../resources/views/my_components');
+    ->loadsBladeAnonymousComponentsByPath('spatie1');
+    ->loadsBladeAnonymousComponentsByPath('spatie2', '../resources/views/my_components');
 ```
 
 and then the use them in Blade views as: `<x-spatie1::my-component>` and `<x-spatie2::my-other-component>`.
@@ -377,7 +411,7 @@ as follows:
 ```php
 $package
     ->name('your-package-name')
-    ->hasBladeAnonymousComponentsByPath(null);
+    ->loadsBladeAnonymousComponentsByPath(null);
 ```
 
 ### Blade Custom Directives
@@ -391,7 +425,7 @@ You can register Blade Directives using `hasBladeCustomDirective()` as follows:
 ```php
 $package
     ->name('your-package-name')
-    ->hasBladeCustomDirective('datetime', function ($expression): string {
+    ->loadsBladeCustomDirective('datetime', function ($expression): string {
         return "<?php echo ($expression)->format('m/d/Y H:i'); ?>";
     });
 ```
@@ -412,7 +446,7 @@ You can register Blade Echo Handlers using `hasBladeCustomEchoHandler()` as foll
 ```php
 $package
     ->name('your-package-name')
-    ->hasBladeCustomEchoHandler(function (Money $money): string {
+    ->loadsBladeCustomEchoHandler(function (Money $money): string {
         return $money->formatTo('en_GB');
     });
 ```
@@ -432,7 +466,7 @@ You can register Blade conditionals using `hasBladeCustomIf()` as follows:
 ```php
 $package
     ->name('your-package-name')
-    ->hasBladeCustomIf('disk', function ($value): bool {
+    ->loadsBladeCustomIf('disk', function ($value): bool {
         return config('filesystems.default') === $value;
     });
 ```
@@ -462,33 +496,33 @@ Custom Artisan commands can be registered with Laravel, either as:
 
 There are two ways you can register and publish commands:
 
-1. Individually by class using `hasCommandsByClass()` or `hasConsoleCommandsByClass()`
-2. By specifying the path for your Commands with `hasCommandsByPath()` or `hasConsoleCommandsByPath()`
+1. Individually by class using `loadsCommandsByClass()` or `loadsConsoleCommandsByClass()`
+2. By specifying the path for your Commands with `loadsCommandsByPath()` or `loadsConsoleCommandsByPath()`
 
 _See: [Laravel Package Development - Commands](https://laravel.com/docs/packages#commands)
 for underlying details._
 
 #### Registering Commands by Class
 
-You can register any callable commands your package provides with the `hasCommandsByClass` function,
-and console-only commands with the `hasConsoleCommandsByClass`.
+You can register any callable commands your package provides with the `loadsCommandsByClass` function,
+and console-only commands with the `loadsConsoleCommandsByClass`.
 If your package provides multiple commands,
-you can either use `hasCommandsByClass` or `hasConsoleCommandsByClass` multiple times,
-or use multiple arguments or pass an array to `hasCommandsByClass` / `hasConsoleCommandsByClass`.
+you can either use `loadsCommandsByClass` or `loadsConsoleCommandsByClass` multiple times,
+or use multiple arguments or pass an array to `loadsCommandsByClass` / `loadsConsoleCommandsByClass`.
 
 ```php
 $package
     ->name('your-package-name')
-    ->hasCommandsByClass(Command1::class)
-    ->hasCommandsByClass(
+    ->loadsCommandsByClass(Command1::class)
+    ->loadsCommandsByClass(
         Command2::class,
         Command3::class
     )
-    ->hasConsoleCommandsByClass([Command4::class, Command5::class]);
+    ->loadsConsoleCommandsByClass([Command4::class, Command5::class]);
 ```
 
-**Note:** For backwards compatibility, `hasCommand` can still be used instead of `hasCommandsByClass`,
-and `hasConsoleCommand` for `hasConsoleCommandsByClass`.
+**Note:** For backwards compatibility, `hasCommand` can still be used instead of `loadsCommandsByClass`,
+and `hasConsoleCommand` for `loadsConsoleCommandsByClass`.
 
 #### Registering Commands by Path
 
@@ -497,7 +531,7 @@ Alternatively you can load all the commands in one or more paths as follows:
 ```php
 $package
     ->name('your-package-name')
-    ->hasConsoleCommandsByPath('Console/Commands');
+    ->loadsConsoleCommandsByPath('Console/Commands');
 ```
 
 If you omit the path, the default path is `Commands`.
@@ -515,22 +549,22 @@ these can be registered for `artisan optimize` using the `hasOptimizeCommands()`
 ```php
 $package
     ->name('your-package-name')
-    ->hasConsoleCommands(Optimize::class, OptimizeClear::class)
-    ->hasOptimizeCommands();
+    ->loadsConsoleCommands(Optimize::class, OptimizeClear::class)
+    ->loadsOptimizeCommands();
 ```
 to use the above defaults or
 ```php
 $package
     ->name('your-package-name')
-    ->hasConsoleCommands(Optimize::class, OptimizeClear::class)
-    ->hasOptimizeCommands('set-optimize', 'clear-optimize');
+    ->loadsConsoleCommands(Optimize::class, OptimizeClear::class)
+    ->loadsOptimizeCommands('set-optimize', 'clear-optimize');
 ```
 or to use different verbs or
 ```php
 $package
     ->name('your-package-name')
-    ->hasConsoleCommands(Optimize::class, OptimizeClear::class)
-    ->hasOptimizeCommands('my-package:set-optimize', 'my-package:clear-optimize');
+    ->loadsConsoleCommands(Optimize::class, OptimizeClear::class)
+    ->loadsOptimizeCommands('my-package:set-optimize', 'my-package:clear-optimize');
 ```
 to explicitly define the full commands.
 
@@ -563,7 +597,7 @@ To make your config file publishable and if a .php file merge it with any publis
 ```php
 $package
     ->name('your-package-name')
-    ->hasConfigFiles();
+    ->loadsConfigFiles();
 ```
 
 Should your package have multiple config files, you can either call `hasConfigByName` multiple times
@@ -572,7 +606,7 @@ or pass their names as multiple arguments or an array to `hasConfigByName`.
 ```php
 $package
     ->name('your-package-name')
-    ->hasConfigByName([
+    ->loadsConfigByName([
         'my-config-file',
         'another-config-file'
     ]);
@@ -584,7 +618,7 @@ however you can override this with `setConfigPath()`:
 ```php
 $package
     ->name('your-package-name')
-    ->hasConfigByName()
+    ->loadsConfigByName()
     ->setConfigPath('../configfiles/');
 ```
 
@@ -602,7 +636,7 @@ then please add a call to `publishOnlyStubs` as follows:
 ```php
 $package
     ->name('your-package-name')
-    ->hasConfigByName('my-config-file', 'my-config-stub')
+    ->loadsConfigByName('my-config-file', 'my-config-stub')
     ->publishOnlyStubs();
 ```
 
@@ -617,7 +651,7 @@ directory without specifying them individually by name as follows:
 ```php
 $package
     ->name('your-package-name')
-    ->hasConfigByPath();
+    ->loadsConfigByPath();
 ```
 
 and override the default path as follows:
@@ -625,7 +659,7 @@ and override the default path as follows:
 ```php
 $package
     ->name('your-package-name')
-    ->hasConfigByPath('../configfiles/');
+    ->loadsConfigByPath('../configfiles/');
 ```
 
 _See: [Laravel Package Development - Default Package Configuration](https://laravel.com/docs/packages#default-package-configuration)
@@ -663,20 +697,20 @@ You can register Subscrber classes in your PackageServiceProvider as follows:
 ```php
 $package
     ->name('your-package-name')
-    ->hasEventSubscribers(SubscriberClass1::class)
-    ->hasEventSubscribers(SubscriberClass2::class, SubscriberClass3::class);
+    ->loadsEventSubscribers(SubscriberClass1::class)
+    ->loadsEventSubscribers(SubscriberClass2::class, SubscriberClass3::class);
 ```
 
 _See: [Laravel docs - Event Subscribers](https://laravel.com/docs/events#event-subscribers)._
 
-Event listeners can be registered either by class using `hasEventListenerByClass`
+Event listeners can be registered either by class using `loadsEventListenerByClass`
 
 #### Event & Listener classes
 
 ```php
 $package
     ->name('your-package-name')
-    ->hasEventListenerByName(
+    ->loadsEventListenerByName(
         EventClass::class,
         [ListenerClass::class, "method"]
     );
@@ -696,10 +730,10 @@ in order not to polute the ServiceProvider with functionality that should belong
 ```php
 $package
     ->name('your-package-name')
-    ->hasEventListenerAnonymous(function (EventClass $event) {
+    ->loadsEventListenerAnonymous(function (EventClass $event) {
         //
     })
-    ->hasEventListenerQueueableAnonymous(function (EventClass $event) {
+    ->loadsEventListenerQueueableAnonymous(function (EventClass $event) {
         //
     });
 ```
@@ -742,10 +776,10 @@ as an additional first parameter before the payload.
 ```php
 $package
     ->name('your-package-name')
-    ->hasEventListenerWildcardByClosure('user.*', function (string $eventName, ...$payload) {
+    ->loadsEventListenerWildcardByClosure('user.*', function (string $eventName, ...$payload) {
         //
     })
-    ->hasEventListenerWildcardByClass('user.*', [WildcardListener::class, 'wildcardHandle']);
+    ->loadsEventListenerWildcardByClass('user.*', [WildcardListener::class, 'wildcardHandle']);
 ```
 
 _See: [Laravel Events - Wildcard Listeners](https://laravel.com/docs/events#wildcard-event-listeners)
@@ -760,7 +794,7 @@ Of course, you can also use subdirectories to organise your components.
 ```php
 $package
     ->name('your-package-name')
-    ->hasInertiaComponents();
+    ->loadsInertiaComponents();
 ```
 
 Your `.vue` or `.jsx` files should be placed by default in the `<package root>/resources/js/Pages` directory,
@@ -769,7 +803,7 @@ or you can override this with another path by:
 ```php
 $package
     ->name('your-package-name')
-    ->hasInertiaComponents(path: '../resources/js/Inertia');
+    ->loadsInertiaComponents(path: '../resources/js/Inertia');
 ```
 
 You can also use multiple paths with separate tag namespaces:
@@ -777,8 +811,8 @@ You can also use multiple paths with separate tag namespaces:
 ```php
 $package
     ->name('your-package-name')
-    ->hasInertiaComponents(path: '../resources/js/Inertia')
-    ->hasInertiaComponents('more', '../resources/js/MoreInertia');
+    ->publishesInertiaComponentsByPath(path: '../resources/js/Inertia')
+    ->publishesInertiaComponentsByPath('more', '../resources/js/MoreInertia');
 ```
 
 Your Inertia components will be published
@@ -814,8 +848,8 @@ and they can be made publishable to `app/Livewire/vendor/your-package-name` by u
 ```php
 $package
     ->name('your-package-name')
-    ->hasViews()
-    ->hasLivewireComponents();
+    ->loadsViews()
+    ->loadsLivewireComponents();
 ```
 
 You can override this with another path with:
@@ -823,8 +857,8 @@ You can override this with another path with:
 ```php
 $package
     ->name('your-package-name')
-    ->hasViews()
-    ->hasLivewireComponents(path: 'LivewireComponents');
+    ->loadsViews()
+    ->loadsLivewireComponents(path: 'LivewireComponents');
 ```
 
 and you can specify several paths with:
@@ -832,9 +866,9 @@ and you can specify several paths with:
 ```php
 $package
     ->name('your-package-name')
-    ->hasViews()
-    ->hasLivewireComponents()
-    ->hasLivewireComponents('my-livewire', 'LivewireComponents');
+    ->loadsViews()
+    ->loadsLivewireComponents()
+    ->loadsLivewireComponents('my-livewire', 'LivewireComponents');
 ```
 
 Your Livewire components can be published using:
@@ -869,7 +903,7 @@ you add it to your package like this:
 ```php
 $package
     ->name('your-package-name')
-    ->hasMigrationsByName('create_my_package_table');
+    ->loadsMigrationsByName('create_my_package_table');
 ```
 
 Should your package contain multiple migration files,
@@ -879,16 +913,16 @@ pass multiple arguments or an array of filenames in one call.
 ```php
 $package
     ->name('your-package-name')
-    ->hasMigrations(['my_package_tables', 'some_other_migration']);
+    ->loadsMigrations(['my_package_tables', 'some_other_migration']);
 ```
 
 Alternatively, if you wish to load or publish all migrations in your package without naming them individually,
-you may call `discoversMigrations`.
+you may call `hasMigrationsByPath`.
 
 ```php
 $package
     ->name('your-package-name')
-    ->discoversMigrations();
+    ->loadsMigrationsByPath();
 ```
 
 Calling this method will look for migrations in the `./database/migrations` directory of your project.
@@ -898,10 +932,10 @@ you may pass a value to the `$path` variable to instruct the app to discover mig
 ```php
 $package
     ->name('your-package-name')
-    ->discoversMigrations(path: '/path/to/your/migrations/folder');
+    ->loadsMigrationsByPath(path: '/path/to/your/migrations/folder');
 ```
 
-Calling either `hasMigrations` or `discoversMigrations` will also make migrations publishable.
+Calling either `hasMigrationsByName` or `hasMigrationsByPath` will also make migrations publishable.
 Users of your package will be able to publish the migrations with this command:
 
 ```bash
@@ -916,7 +950,7 @@ ready for running with `artisan migrate` without needing the users of your packa
 ```php
 $package
     ->name('your-package-name')
-    ->hasMigrations(['my_package_tables', 'some_other_migration'])
+    ->loadsMigrations(['my_package_tables', 'some_other_migration'])
     ->loadsMigrations();
 ```
 
@@ -927,7 +961,7 @@ then please add a call to `publishOnlyStubs` as follows:
 ```php
 $package
     ->name('your-package-name')
-    ->hasMigrationByName('my-config-file', 'my-config-stub')
+    ->loadsMigrationByName('my-config-file', 'my-config-stub')
     ->publishOnlyStubs();
 ```
 
@@ -956,7 +990,7 @@ If your route file is called `web.php` you can register them like this:
 ```php
 $package
     ->name('your-package-name')
-    ->hasRoutesByName('web');
+    ->loadsRoutesByName('web');
 ```
 
 Should your package contain multiple route files,
@@ -966,8 +1000,8 @@ or use `hasRoutesByName` with several arguments or as an array.
 ```php
 $package
     ->name('your-package-name')
-    ->hasRoutesByName('web', 'api')
-    ->hasRoutesByName(['admin', 'superuser']);
+    ->loadsRoutesByName('web', 'api')
+    ->loadsRoutesByName(['admin', 'superuser']);
 ```
 
 Your routes can be published using:
@@ -979,18 +1013,36 @@ php artisan vendor:publish --tag=your-package-name-routes
 ### Publishable Service Providers
 
 Some packages need one or more example service providers to be copied
-into the `app\Providers` directory of the Laravel app.
+into the `app/Providers` directory of the Laravel app.
 For instance, the `laravel/horizon` package copies an `HorizonServiceProvider`
 into your app with some sensible defaults.
 
 ```php
 $package
     ->name('your-package-name')
-    ->publishesServiceProvider($nameOfYourServiceProvider);
+    ->loadsServiceProvider('MyServiceProvider');
 ```
 
 The file that will be copied to the app should be stored in your package
-in `/resources/stubs/{$nameOfYourServiceProvider}.php.stub`.
+in `/resources/stubs/MyServiceProvider.php.stub`.
+
+If you want to put your stub in a different location, then you can specify it as follows:
+
+```php
+$package
+    ->name('your-package-name')
+    ->loadsServiceProvider('../resources/provider_stubs/MyServiceProvider');
+```
+
+You can also use a default ServiceProvider name as follows:
+
+```php
+$package
+    ->name('your-package-name')
+    ->loadsServiceProvider();
+```
+
+and `YourPackageNameServiceProvider` will be used.
 
 When your package is installed into an app, running this command...
 
@@ -998,8 +1050,12 @@ When your package is installed into an app, running this command...
 php artisan vendor:publish --tag=your-package-name-provider
 ```
 
-... will copy `/resources/stubs/{$nameOfYourServiceProvider}.php.stub` in your package
-to `app/Providers/{$nameOfYourServiceProvider}.php` in the app of the user.
+... will copy `/resources/stubs/MyServiceProvider.php.stub` in your package
+to `app/Providers/MyServiceProvider.php` in the app of the user.
+
+If you use the InstallCommand, you can also have this ServiceProvider added to the
+user's Laravel configuration with the appropriate namespace
+by using the `registerServiceProvidersInApp()` method.
 
 ### Translations
 
@@ -1011,7 +1067,7 @@ You can register these translations with the `hasTranslations` command.
 ```php
 $package
     ->name('your-package-name')
-    ->hasTranslations();
+    ->loadsTranslations();
 ```
 
 This will register the translations with Laravel.
@@ -1072,7 +1128,7 @@ You can register these views with the `hasViews` command.
 ```php
 $package
     ->name('your-package-name')
-    ->hasViews();
+    ->loadsViews();
 ```
 
 This will register your Blade views with Laravel, and make the `<package root>/views` directory (and all sub-directories) publishable.
@@ -1088,7 +1144,7 @@ You can pass a custom view namespace to the `hasViews` method.
 ```php
 $package
     ->name('your-package-name')
-    ->hasViews('custom-view-namespace');
+    ->loadsViews('custom-view-namespace');
 ```
 
 You can now use the views of the package like this:
@@ -1122,8 +1178,8 @@ To register a view composer with all views, use an asterisk as the view name `'*
 ```php
 $package
     ->name('your-package-name')
-    ->hasViewComposer('viewName', MyViewComposer::class)
-    ->hasViewComposer('*', function($view) {
+    ->loadsViewComposer('viewName', MyViewComposer::class)
+    ->loadsViewComposer('*', function($view) {
         $view->with('sharedVariable', 123);
     });
 ```
@@ -1143,24 +1199,6 @@ $package
 and you need to take care to avoid name clashes with other e.g. other packages.
 It is recommended that the name of any shared data be prefixed with your package name.
 
-### Modifiers
-
-#### isModule()
-
-If you are using PackageServiceProvider to support a Modular monolith Laravel app,
-then add a call to `isModule()`.
-
-At present the scope of this is to prevent all items being published.
-
-#### onlyPublishStubs()
-
-If you are using PackageServiceProvider to support a Laravel package,
-and you have config files or migration files or route files that include both
-actual .php files which will be loaded as configs/migrations/routes
-**and** .php.stub files which are only intended to be published,
-then it might be that you will only want to make the .php.stub files publishable
-and **not** the .php files. If this is the case then add a call to `onlyPublishStubs()`.
-
 ### Creating an Install Command
 
 Instead of instructing your users to run multiple artisan commands to
@@ -1176,9 +1214,26 @@ Instead, you can simply call, `hasInstallCommand` and configure it using a closu
 Here is a list of things you can do with the `hasInstallCommand`:
 
 * Publish one or several types of file i.e. run several artisan vendor:publish commands with various --tags
-* Ask the user whether to run migrations (including but not limited to your packages migrations)
+* Ask the user whether to run migrations (including but not limited to your package's migrations)
 * Ask the user whether to star the Github repo for your package
-* Run yor own custom callables before and after running the rest of the installer
+* Run your own custom callables before and after running the rest of the installer
+
+This list of methods you can call are:
+* publishAssets()
+* publishBladeCoponents()
+* publishConfigFiles()
+* publishInertiaComponents()
+* publishLivewireComponents()
+* publishMigrations()
+* publishServiceProviders()
+* publishRoutes()
+* publishTranslations()
+* publishViews()
+* registerServiceProvidersInApp()
+* startWith(function ():void { // your code })
+* endWith(function ():void { // your code })
+* askToRunMigrations()
+* askToStarRepoOnGitHub()
 
 Here's an example.
 
@@ -1193,16 +1248,16 @@ class YourPackageServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('your-package-name')
-            ->hasConfigFile()
-            ->hasMigration('create_package_tables')
-            ->publishesServiceProvider('MyServiceProviderName')
-            ->hasInstallCommand(function(InstallCommand $installer) {
+            ->loadsConfigFile()
+            ->loadsMigration('create_package_tables')
+            ->loadsServiceProvider('MyServiceProviderName')
+            ->loadsInstallCommand(function(InstallCommand $installer) {
                 $installer
                     ->publishConfigFile()
                     ->publishAssets()
                     ->publishMigrations()
                     ->askToRunMigrations()
-                    ->copyAndRegisterServiceProviderInApp()
+                    ->registerServiceProvidersInApp()
                     ->askToStarRepoOnGitHub('your-vendor/your-repo-name')
             });
     }
@@ -1236,7 +1291,7 @@ use Spatie\LaravelPackageTools\Commands\InstallCommand;
 public function configurePackage(Package $package): void
 {
     $package
-        ->hasInstallCommand(function(InstallCommand $command) {
+        ->loadsInstallCommand(function(InstallCommand $command) {
             $command
                 ->startWith(function(InstallCommand $command) {
                     $command->info('Hello, and welcome to my great new package!');
@@ -1245,7 +1300,7 @@ public function configurePackage(Package $package): void
                 ->publishAssets()
                 ->publishMigrations()
                 ->askToRunMigrations()
-                ->copyAndRegisterServiceProviderInApp()
+                ->registerServiceProvidersInApp()
                 ->askToStarRepoOnGitHub('your-vendor/your-repo-name')
                 ->endWith(function(InstallCommand $command) {
                     $command->info('Have a great day!');
@@ -1253,6 +1308,9 @@ public function configurePackage(Package $package): void
         });
 }
 ```
+
+**Note:** For backwards compatibility,
+`copyAndRegisterServiceProviderInApp()` can still be used in place of `registerServiceProvidersInApp()`.
 
 ### Lifecycle Hooks
 

@@ -3,35 +3,40 @@
 namespace Spatie\LaravelPackageTools\Concerns\InstallCommand;
 
 use Illuminate\Support\Str;
+use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
 trait InstallerServiceProviderInApp
 {
     protected bool $copyServiceProviderInApp = false;
 
-    public function copyAndRegisterServiceProviderInApp(): self
+    public function registerServiceProvidersInApp(bool $copy = true): self
     {
-        $this->copyServiceProviderInApp = true;
+        $this->copyServiceProviderInApp = $copy;
 
         return $this;
+    }
+
+    public function copyAndRegisterServiceProviderInApp(bool $copy = true): self
+    {
+        return $this->registerServiceProvidersInApp($copy);
     }
 
     protected function processServiceProviderInApp(): self
     {
-        if ($this->copyServiceProviderInApp) {
-            $this->comment('Publishing service provider...');
-
-            $this->copyServiceProviderInApp();
+        if (! $this->copyServiceProviderInApp) {
+            return $this;
         }
 
-        return $this;
-    }
+        $this->comment('Publishing service provider...');
 
-    protected function copyServiceProviderInApp(): self
-    {
         $providerNames = $this->package->publishableProviderNames;
 
         if (empty($providerNames)) {
-            return $this;
+            throw InvalidPackage::conflictingMethods(
+                $this->package->name,
+                'registerServiceProvidersInApp',
+                'not publishesServiceProvider'
+            );
         }
 
         $this->callSilent('vendor:publish', ['--tag' => $this->package->shortName() . '-provider']);
@@ -39,14 +44,17 @@ trait InstallerServiceProviderInApp
         $appPHP = intval(app()->version()) < 11 || ! file_exists(base_path('bootstrap/providers.php'));
 
         if ($appPHP) {
-            $appConfig = file_get_contents(config_path('app.php'));
+            $configFile = config_path('app.php');
         } else {
-            $appConfig = file_get_contents(base_path('bootstrap/providers.php'));
+            $configFile = base_path('bootstrap/providers.php');
         }
+        $appConfig = file_get_contents($configFile);
 
         $appConfigOriginal = $appConfig;
 
         $namespace = Str::replaceLast('\\', '', $this->laravel->getNamespace());
+
+        $changes = false;
 
         foreach ($providerNames as $providerName) {
             $providerName = basename($providerName, '.php.stub');
@@ -55,6 +63,8 @@ trait InstallerServiceProviderInApp
             if (Str::contains($appConfig, $namespace . $class)) {
                 continue;
             }
+
+            $changes = true;
 
             if ($appPHP) {
                 $appConfig = str_replace(
@@ -77,14 +87,8 @@ trait InstallerServiceProviderInApp
             ));
         }
 
-        if ($appConfig == $appConfigOriginal) {
-            return $this;
-        }
-
-        if ($appPHP) {
-            file_put_contents(config_path('app.php'), $appConfig);
-        } else {
-            file_put_contents(base_path('bootstrap/providers.php'), $appConfig);
+        if ($changes) {
+            file_put_contents($configFile, $appConfig);
         }
 
         return $this;

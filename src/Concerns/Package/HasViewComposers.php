@@ -4,14 +4,20 @@ namespace Spatie\LaravelPackageTools\Concerns\Package;
 
 trait HasViewComposers
 {
-    public array $viewComposers = [];
+    public array $viewLoadsComposers = [];
 
-    public function hasViewComposer($view, $viewComposer): self
+    public function loadsViewComposer(string|array $view, callable|string $viewComposer): self
     {
-        foreach (collect($view)->flatten()->toArray() as $viewName) {
-            $this->viewComposers[$viewName] = $viewComposer;
+        foreach ((array) $view as $viewName) {
+            $this->verifyUniqueKey(__FUNCTION__, 'namespace', $this->viewLoadsComposers, $viewName);
+            $this->viewLoadsComposers[$viewName] = $viewComposer;
         }
 
         return $this;
+    }
+
+    public function hasViewComposer(string|array $view, callable|string $viewComposer): self
+    {
+        return $this->loadsViewComposer($view, $viewComposer);
     }
 }

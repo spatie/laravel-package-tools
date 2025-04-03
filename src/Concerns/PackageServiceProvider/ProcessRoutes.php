@@ -11,30 +11,45 @@ trait ProcessRoutes
     public function bootPackageRoutes(): self
     {
         return $this
-            ->bootPackageRoutesByName()
-            ->bootPackageRoutesByPath();
+            ->bootLoadRoutesByName()
+            ->bootLoadRoutesByPath()
+            ->bootPublishRoutesByName()
+            ->bootPublishRoutesByPath();
     }
 
-    protected function bootPackageRoutesByName(): self
+    protected function bootLoadRoutesByName(): self
     {
-        if (empty($this->package->routeFilenames)) {
+        if (empty($this->package->routesLoadsFiles)) {
             return $this;
         }
 
         $routesPath = $this->package->routesPath();
-        foreach ($this->package->routeFilenames as $routeFilename) {
+        foreach ($this->package->routesLoadsFiles as $routeFilename) {
 
             if (is_file("{$routesPath}/{$routeFilename}.php")) {
                 $this->loadRoutesFrom("{$routesPath}/{$routeFilename}.php");
+            } elseif (!is_file("{$routesPath}/{$routeFilename}.php.stub")){
+                throw InvalidPackage::filenameNeitherPhpNorStub(
+                    $this->package->name,
+                    'Routes',
+                    'loadsRoutesByName',
+                    $routeFilename
+                );
             }
         }
 
-        if (! $this->app->runningInConsole()) {
+        return $this;
+    }
+
+    protected function bootPublishRoutesByName(): self
+    {
+        if (empty($this->package->routesPublishesFiles) || ! $this->app->runningInConsole()) {
             return $this;
         }
 
+        $routesPath = $this->package->routesPath();
         $tag = $this->package->shortName() . '-routes';
-        foreach ($this->package->routeFilenames as $routeFilename) {
+        foreach ($this->package->routesPublishesFiles as $routeFilename) {
             if ($rFN = $this->phpOrStub("{$routesPath}/{$routeFilename}")) {
                 $this->publishes(
                     [$rFN => base_path("routes/{$routeFilename}.php")],
@@ -44,7 +59,7 @@ trait ProcessRoutes
                 throw InvalidPackage::filenameNeitherPhpNorStub(
                     $this->package->name,
                     'Routes',
-                    'hasRoutesByName',
+                    'publishesRoutesByName',
                     $routeFilename
                 );
             }
@@ -53,13 +68,13 @@ trait ProcessRoutes
         return $this;
     }
 
-    protected function bootPackageRoutesByPath(): self
+    protected function bootLoadRoutesByPath(): self
     {
-        if (empty($this->package->routesPaths)) {
+        if (empty($this->package->routesLoadsPaths)) {
             return $this;
         }
 
-        foreach ($this->package->routesPaths as $path) {
+        foreach ($this->package->routesLoadsPaths as $path) {
             $basePath = $this->package->basePath($path);
             collect(File::allFiles($basePath))->each(function (SplFileInfo $file) use ($basePath) {
                 if (is_file($file->getPathname()) and str_ends_with($file->getFilename(), '.php')) {
@@ -68,16 +83,31 @@ trait ProcessRoutes
             });
         }
 
-        if (! $this->app->runningInConsole()) {
+        return $this;
+    }
+
+    protected function bootPublishRoutesByPath(): self
+    {
+        if (empty($this->package->routesPublishesPaths) || ! $this->app->runningInConsole()) {
             return $this;
         }
 
         $tag = $this->package->shortName() . '-routes';
-        foreach ($this->package->routesPaths as $path) {
-            $this->publishes(
-                [$this->package->basePath($path) => base_path("routes")],
-                $tag
-            );
+        $toPath = base_path("routes");
+        foreach ($this->package->routesPublishesPaths as $path) {
+            $basePath = $this->package->basePath($path);
+            collect(File::allFiles($basePath))->each(function (SplFileInfo $file) use ($basePath, $toPath, $tag) {
+                $filename = $file->getFilename();
+                if (is_file($file->getPathname()) and
+                    (str_ends_with($filename, '.php') || str_ends_with($filename, '.php.stub'))
+                ) {
+                    $toFile = basename($filename);
+                    $this->publishes(
+                        ["{$basePath}/{$filename}" => "{$toPath}/{$toFile}"],
+                        $tag
+                    );
+                }
+            });
         }
 
         return $this;

@@ -2,20 +2,21 @@
 
 namespace Spatie\LaravelPackageTools;
 
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 use ReflectionClass;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\PackageServiceProviderHelpers;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessAssets;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessBlade;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessBladeAnonymousComponents;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessBladeComponents;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessBladeCustomDirectives;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessCommands;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessConfigs;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessEvents;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessInertia;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessLivewire;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessMigrations;
-use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessProviders;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessRoutes;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessServiceProviders;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessTranslations;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewComposers;
 use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViews;
@@ -24,16 +25,20 @@ use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
 abstract class PackageServiceProvider extends ServiceProvider
 {
+    use PackageServiceProviderHelpers;
+
     use ProcessAssets;
-    use ProcessBlade;
+    use ProcessBladeAnonymousComponents;
+    use ProcessBladeComponents;
+    use ProcessBladeCustomDirectives;
     use ProcessCommands;
     use ProcessConfigs;
     use ProcessEvents;
     use ProcessInertia;
     use ProcessLivewire;
     use ProcessMigrations;
-    use ProcessProviders;
     use ProcessRoutes;
+    use ProcessServiceProviders;
     use ProcessTranslations;
     use ProcessViews;
     use ProcessViewComposers;
@@ -41,6 +46,7 @@ abstract class PackageServiceProvider extends ServiceProvider
 
 
     protected Package $package;
+    protected bool $notPublishable;
 
     abstract public function configurePackage(Package $package): void;
 
@@ -83,15 +89,17 @@ abstract class PackageServiceProvider extends ServiceProvider
 
         $this
             ->bootPackageAssets()
-            ->bootPackageBlade()
+            ->bootPackageBladeAnonymousComponents()
+            ->bootPackageBladeComponents()
+            ->bootPackageBladeCustomDirectives()
             ->bootPackageCommands()
             ->bootPackageConfigs()
             ->bootPackageEvents()
             ->bootPackageInertia()
             ->bootPackageLivewire()
             ->bootPackageMigrations()
-            ->bootPackageProviders()
             ->bootPackageRoutes()
+            ->bootPackageServiceProviders()
             ->bootPackageTranslations()
             ->bootPackageViews()
             ->bootPackageViewComposers()
@@ -122,107 +130,5 @@ abstract class PackageServiceProvider extends ServiceProvider
 
     public function packageBooted(): void
     {
-    }
-
-    /* Utility methods */
-
-    private function phpOrStub(string $filename): string
-    {
-        if (is_file($file = $filename . '.php')) {
-            return $file;
-        }
-
-        if (is_file($file = $filename . '.php.stub')) {
-            return $file;
-        }
-
-        return "";
-    }
-
-    protected function existingFile(string $file): string
-    {
-        if (is_file($file)) {
-            return $file;
-        }
-
-        return "";
-    }
-
-    // Get namespace for directory from the first class file in the directory
-    protected function getNamespaceOfRelativePath($path): string
-    {
-        return $this->getNamespaceOfPath($this->package->buildDirectory($path));
-    }
-
-    // Get namespace for directory from the first class file in the directory
-    protected function getNamespaceOfPath($path): string
-    {
-        foreach (glob($path . '/*.php') as $file) {
-            if ($namespace = $this->readNamespaceFromFile($file)) {
-                return $namespace;
-            }
-        }
-
-        throw InvalidPackage::cannotDetermineNamespace(
-            $this->package->name,
-            'hasBladeComponentsByPath',
-            $path
-        );
-    }
-
-    protected function readNamespaceFromFile($file): string
-    {
-        $namespace = "";
-        $handle = fopen($file, "r");
-        if ($handle) {
-            while (($line = fgets($handle)) !== false) {
-                $parts = explode(' ', trim($line));
-                if ($parts[0] === 'namespace') {
-                    $namespace = rtrim(trim($parts[1]), ';');
-
-                    break;
-                }
-            }
-            fclose($handle);
-
-            return $namespace;
-        }
-
-        return "";
-    }
-
-    protected function getClassesInPaths(string $method, ...$paths): array
-    {
-        $classes = [];
-        foreach (collect($paths)->flatten()->toArray() as $path) {
-            $path = $this->package->buildDirectory($path);
-            $namespace = $this->getNamespaceOfPath($path);
-            $pathClasses = [];
-
-            foreach (File::allfiles($path) as $file) {
-                if (! str_ends_with($filename = $file->getPathname(), '.php')) {
-                    continue;
-                }
-                $pathClasses[] = $namespace . str_replace(
-                    ['/', '.php'],
-                    ['\\', ''],
-                    Str::after($filename, $path)
-                );
-            }
-
-            if (empty($pathClasses)) {
-                throw InvalidPackage::pathDoesNotContainClasses(
-                    $this->package->name,
-                    $method,
-                    $path
-                );
-            }
-
-            $classes = array_unique(array_merge($classes, $pathClasses));
-        }
-
-        $this->package->verifyClassNames($method, $classes);
-
-        return $classes;
     }
 }

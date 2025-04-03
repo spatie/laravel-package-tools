@@ -8,12 +8,18 @@ trait ProcessTranslations
 {
     protected function bootPackageTranslations(): self
     {
-        if (! $this->package->translationPaths) {
+        return $this
+            ->bootLoadTranslations()
+            ->bootPublishTranslations();
+    }
+
+    protected function bootLoadTranslations(): self
+    {
+        if (! $this->package->translationLoadsPaths) {
             return $this;
         }
 
-
-        foreach ($this->package->translationPaths as $namespace => $translationPath) {
+        foreach ($this->package->translationLoadsPaths as $namespace => $translationPath) {
 
             /**
              * Same language files cannot be loaded simultaneously from two locations
@@ -38,12 +44,17 @@ trait ProcessTranslations
             }
         }
 
-        if (! $this->app->runningInConsole()) {
+        return $this;
+    }
+
+    protected function bootPublishTranslations(): self
+    {
+        if (! $this->package->translationPublishesPaths || ! $this->app->runningInConsole()) {
             return $this;
         }
 
         $tag = "{$this->package->shortName()}-translations";
-        foreach ($this->package->translationPaths as $namespace => $translationPath) {
+        foreach ($this->package->translationPublishesPaths as $namespace => $translationPath) {
             $translationPath = $this->package->basePath($translationPath);
             $langPath = lang_path("vendor/{$namespace}");
             $this->publishes(

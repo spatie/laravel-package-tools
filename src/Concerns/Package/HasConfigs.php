@@ -6,21 +6,33 @@ trait HasConfigs
 {
     private static string $configDefaultPath = "../config";
 
-    public array $configsByNameFiles = [];
-    public array $configPaths = [];
+    public array $configLoadsFiles = [];
+    public array $configLoadsPaths = [];
+    public array $configPublishesFiles = [];
+    public array $configPublishesPaths = [];
     protected ?string $configsByNamePath = '../config';
 
-    public function hasConfigsByName(...$configsByNameFiles): self
+    public function loadsConfigsByName(...$configFiles): self
     {
-        $configsByNameFiles = collect($configsByNameFiles)->flatten()->toArray();
+        return $this->handleConfigsByName(__FUNCTION__, $this->configLoadsFiles, ...$configFiles);
+    }
 
-        if (! $configsByNameFiles) {
-            $configsByNameFiles = [$this->shortName()];
+    public function publishesConfigsByName(...$configFiles): self
+    {
+        return $this->handleConfigsByName(__FUNCTION__, $this->configPublishesFiles, ...$configFiles);
+    }
+
+    protected function handleConfigsByName(string $method, array &$names, ...$configFiles): self
+    {
+        $configFiles = collect($configFiles)->flatten()->toArray();
+
+        if (! $configFiles) {
+            $configFiles = [$this->shortName()];
         }
 
-        $this->configsByNameFiles = array_unique(array_merge(
-            $this->configsByNameFiles,
-            $configsByNameFiles
+        $names = array_unique(array_merge(
+            $names,
+            $configFiles
         ));
 
         $this->configsByNamePath = $this->verifyRelativeDirOrNull($this->configsByNamePath);
@@ -40,21 +52,32 @@ trait HasConfigs
         return $this->verifyPathSet(__FUNCTION__, $this->configsByNamePath, $directory);
     }
 
-    public function hasConfigsByPath(?string $path = null): self
+
+    /* Legacy backwards compatibility */
+    public function hasConfigFile(null|string|array $configFileName = null): self
     {
-        $this->configPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$configDefaultPath);
+        return ($configFileName === null) ? $this->hasConfigFiles() : $this->hasConfigFiles($configFileName);
+    }
+
+    public function hasConfigFiles(...$configFiles): self
+    {
+        return $this
+            ->loadsConfigsByName(...$configFiles)
+            ->publishesConfigsByName(...$configFiles);
+    }
+
+
+    public function loadsConfigsByPath(?string $path = null): self
+    {
+        $this->configLoadsPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$configDefaultPath);
 
         return $this;
     }
 
-    /* Legacy backwards compatibility */
-    public function hasConfigFile(...$configsByNameFiles): self
+    public function publishesConfigsByPath(?string $path = null): self
     {
-        return $this->hasConfigsByName(...$configsByNameFiles);
-    }
+        $this->configPublishesPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$configDefaultPath);
 
-    public function hasConfigFiles(...$configsByNameFiles): self
-    {
-        return $this->hasConfigsByName(...$configsByNameFiles);
+        return $this;
     }
 }

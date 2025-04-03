@@ -11,7 +11,7 @@ trait PackageSharedDataLegacyTest
         $package
             ->name('laravel-package-tools')
             ->hasViews()
-            ->sharesDataWithAllViews('sharedItemTest', 'hello_world');
+            ->sharesDataWithAllViews(name: 'sharedItemTest', value: 'hello_world');
     }
 }
 

@@ -6,13 +6,15 @@ use Spatie\LaravelPackageTools\Commands\InstallCommand;
 
 trait HasInstallCommand
 {
-    public function hasInstallCommand($callable): self
+    public ?InstallCommand $installCommand = null;
+
+    public function hasInstallCommand(callable $callable): self
     {
-        $installCommand = new InstallCommand($this);
+        $this->installCommand = new InstallCommand($this);
 
-        $callable($installCommand);
+        $callable($this->installCommand);
 
-        $this->consoleCommands[] = $installCommand;
+        $this->consoleCommandClasses[] = $this->installCommand;
 
         return $this;
     }

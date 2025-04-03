@@ -6,16 +6,28 @@ trait HasMigrations
 {
     protected static string $migrationsDefaultPath = '../database/migrations';
 
-    public array $migrationNames = [];
-    protected ?string $migrationsByNamePath = '../database/migrations';
-    public array $migrationPaths = [];
-    public bool $loadsMigrations = false;
-    public bool $discoversMigrations = false;
+    public array $migrationLoadsNames = [];
+    public array $migrationPublishesNames = [];
+    public array $migrationLoadsPaths = [];
+    public array $migrationPublishesPaths = [];
+    public array $migrationDiscoversPaths = [];
+    public bool  $migrationLegacyLoadsPublished = false;
+    private ?string $migrationsByNamePath = '../database/migrations';
 
-    public function hasMigrationsByName(...$migrationNames): self
+    public function loadsMigrationsByName(...$migrationNames): self
     {
-        $this->migrationNames = array_unique(array_merge(
-            $this->migrationNames,
+        return $this->handlesMigrationsByName(__FUNCTION__, $this->migrationLoadsNames, ...$migrationNames);
+    }
+
+    public function publishesMigrationsByName(...$migrationNames): self
+    {
+        return $this->handlesMigrationsByName(__FUNCTION__, $this->migrationPublishesNames, ...$migrationNames);
+    }
+
+    private function handlesMigrationsByName(string $method, array &$names, ...$migrationNames): self
+    {
+        $names = array_unique(array_merge(
+            $names,
             collect($migrationNames)->flatten()->toArray()
         ));
 
@@ -26,46 +38,51 @@ trait HasMigrations
 
     public function migrationsByNamePath(?string $directory = null): string
     {
-        return $this->verifyPathSet(__FUNCTION__, $this->migrationsByNamePath, $directory);
+        return $this->verifyPathSet('loads/publishesMigrationsByName', $this->migrationsByNamePath, $directory);
     }
 
-    public function setMigrationsPath(string $path): self
+    public function setMigrationsByNamePath(string $path): self
     {
         $this->migrationsByNamePath = $this->verifyRelativeDir(__FUNCTION__, $path);
 
         return $this;
     }
 
-    public function hasMigrationsByPath(string $path): self
+    public function loadsMigrationsByPath(?string $path = null): self
     {
-        $this->migrationPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path);
+        $this->migrationLoadsPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$migrationsDefaultPath);
 
         return $this;
     }
 
-    public function loadsMigrations(bool $loadsMigrations = true): self
+    public function publishesMigrationsByPath(?string $path = null): self
     {
-        $this->loadsMigrations = $loadsMigrations;
+        $this->migrationPublishesPaths[] = $this->verifyRelativeDir(__FUNCTION__, $path ?? static::$migrationsDefaultPath);
 
         return $this;
     }
 
     /* Legacy backwards compatibility */
-    public function hasMigration(...$migrationNames): self
+    public function hasMigration(string $migrationFileName): self
     {
-        return $this->hasMigrationsByName(...$migrationNames);
+        return $this->hasMigrations($migrationFileName);
     }
 
-    public function hasMigrations(...$migrationNames): self
+    public function hasMigrations(...$migrationFileNames): self
     {
-        return $this->hasMigrationsByName(...$migrationNames);
+        return $this->publishesMigrationsByName(...$migrationFileNames);
     }
 
-    public function discoversMigrations(bool $discoversMigrations = true, ?string $path = null): self
+    public function discoversMigrations(bool $discoversMigrations = true, string $path = '/database/migrations'): self
     {
-        $this->discoversMigrations = $discoversMigrations;
-        if ($discoversMigrations and ! is_null($path)) {
-            return $this->hasMigrationsByPath($path);
+        // Legacy discoversMigrations uses absolute paths so makes them relative
+        $path = '../' . trim($path, '/');
+
+        if ($discoversMigrations) {
+            $this->migrationDiscoversPaths[] = $path;
+        } elseif (($keyToDelete = array_search($path, $this->migrationDiscoversPaths)) !== false) {
+            // Remove path from migrationsByPath list
+            unset($this->migrationDiscoversPaths[$keyToDelete]);
         }
 
         return $this;
@@ -73,6 +90,8 @@ trait HasMigrations
 
     public function runsMigrations(bool $runsMigrations = true): self
     {
-        return $this->loadsMigrations($runsMigrations);
+        $this->migrationLegacyLoadsPublished = $runsMigrations;
+
+        return $this;
     }
 }

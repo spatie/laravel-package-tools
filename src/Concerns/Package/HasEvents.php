@@ -14,7 +14,7 @@ trait HasEvents
     public array $eventListenersWildcardsByClass = [];
     public array $eventSubscribers = [];
 
-    public function hasEventListenerByClasses(string $eventClass, string $listenerClass, ?string $listenerMethod = null): self
+    public function loadsEventListenerByClasses(string $eventClass, string $listenerClass, ?string $listenerMethod = null): self
     {
         $listener = $this->parseListenerClass(__FUNCTION__, $eventClass, $listenerClass, $listenerMethod, "handle");
 
@@ -23,7 +23,7 @@ trait HasEvents
         return $this;
     }
 
-    public function hasEventListenerByName(string $name, string $listenerClass, ?string $listenerMethod = null): self
+    public function loadsEventListenerByName(string $name, string $listenerClass, ?string $listenerMethod = null): self
     {
         $listener = $this->parseListenerClass(__FUNCTION__, $name, $listenerClass, $listenerMethod, "handle");
 
@@ -32,28 +32,28 @@ trait HasEvents
         return $this;
     }
 
-    public function hasEventListenerAnonymous(callable $closure): self
+    public function loadsEventListenerAnonymous(callable $closure): self
     {
         $this->eventListenersAnonymous[] = $closure;
 
         return $this;
     }
 
-    public function hasEventListenerQueueableAnonymous(callable $closure): self
+    public function loadsEventListenerQueueableAnonymous(callable $closure): self
     {
         $this->eventListenersQueueable[] = $closure;
 
         return $this;
     }
 
-    public function hasEventListenerWildcardAnonymous(string $wildcard, callable $closure): self
+    public function loadsEventListenerWildcardAnonymous(string $wildcard, callable $closure): self
     {
         $this->eventListenersWildcardsAnonymous[] = [$wildcard, $closure];
 
         return $this;
     }
 
-    public function hasEventListenerWildcardByClass(string $wildcard, string $listenerClass, ?string $listenerMethod = null): self
+    public function loadsEventListenerWildcardByClass(string $wildcard, string $listenerClass, ?string $listenerMethod = null): self
     {
         $listener = $this->parseListenerClass(__FUNCTION__, $wildcard, $listenerClass, $listenerMethod, "handleWildcard");
 

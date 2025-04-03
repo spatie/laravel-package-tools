@@ -11,7 +11,7 @@ trait PackageViewComposerLegacyTest
         $package
             ->name('laravel-package-tools')
             ->hasViews()
-            ->hasViewComposer('*', function ($view) {
+            ->hasViewComposer(view: '*', viewComposer: function ($view) {
                 $view->with('sharedItemTest', 'hello world');
             });
     }

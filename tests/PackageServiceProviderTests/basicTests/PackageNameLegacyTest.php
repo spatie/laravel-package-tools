@@ -8,7 +8,7 @@ trait PackageNameLegacyTest
 {
     public function configurePackage(Package $package)
     {
-        $package->name('laravel-package-tools');
+        $package->name(name: 'laravel-package-tools');
     }
 }
 

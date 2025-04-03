@@ -46,26 +46,19 @@ expect()->extend('toBeFileOrDirectory', function () {
  * a php artisan migrate
  **/
 
-// expect("/path/to/migrations")->toHaveMigrationsLoaded(['list of', 'migrations expected', 'to be loaded'])
-expect()->extend('toHaveMigrationsLoaded', function (...$testFiles) {
+// expect("/path/to/migrations")->toHaveExpectedMigrationsLoaded(['list of', 'migrations expected', 'to be loaded'])
+expect()->extend('toHaveExpectedMigrationsLoaded', function (...$expectedFiles) {
     expect($this->value)->toBeDirectory();
-    $testFiles = collect($testFiles)->flatten()->toArray();
+    $expectedFiles = collect($expectedFiles)->flatten()->toArray();
     $loadedFiles = getLoadedMigrations($this->value);
     $failures = [];
 
-    foreach ($testFiles as $testFile) {
-        if (! isFileListed($loadedFiles, $testFile . '.php', endsWith: true)) {
-            $failures[] = $testFile;
+    foreach ($expectedFiles as $expectedFile) {
+        if (! isFileListed($loadedFiles, $expectedFile . '.php', endsWith: true)) {
+            $failures[] = $expectedFile;
         }
     }
 
-    if ($failures) {
-        fwrite(
-            STDERR,
-            "Migration(s) not loaded that should have been: " .
-            var_export($failures, true) . PHP_EOL . "Published: " . var_export($loadedFiles, true)
-        );
-    }
     expect($failures)->toBeEmpty(
         "Migration(s) not loaded that should have been: " .
         var_export($failures, true) . PHP_EOL . "Loaded: " . var_export($loadedFiles, true)
@@ -74,29 +67,29 @@ expect()->extend('toHaveMigrationsLoaded', function (...$testFiles) {
     return $this;
 });
 
-// expect("/path/to/migrations")->toHaveMigrationsNotLoaded(['list of', 'migrations expected', 'NOT to be loaded'])
-expect()->extend('toHaveMigrationsNotLoaded', function (...$testFiles) {
-    expect($this->value)->toBeFile();
-    $testFiles = collect($testFiles)->flatten()->toArray();
+// expect("/path/to/migrations")->toHaveOnlyExpectedMigrationsLoaded(['list of', 'migrations expected', 'to be loaded'])
+expect()->extend('toHaveOnlyExpectedMigrationsLoaded', function (...$expectedFiles) {
+    expect($this->value)->toBeDirectory();
+    $migrationFiles = getDirectoryContents($this->value);
+    $expectedFiles = collect($expectedFiles)->flatten()->toArray();
     $loadedFiles = getLoadedMigrations($this->value);
     $failures = [];
 
-    foreach ($testFiles as $testFile) {
-        if (isFileListed($loadedFiles, $testFile, endsWith: false)) {
-            $failures[] = $testFile;
+    foreach ($migrationFiles as $migrationFile) {
+        $migrationFile = Str::before($migrationFile, '.php');
+
+        if (in_array($migrationFile, $expectedFiles)) {
+            continue;
+        }
+
+        if (isFileListed($loadedFiles, $migrationFile, endsWith: false)) {
+            $failures[] = $migrationFile;
         }
     }
 
-    if ($failures) {
-        fwrite(
-            STDERR,
-            "Migration(s) loaded that shouldn't have been: " .
-            var_export($failures, true) . PHP_EOL . "Published: " . var_export($loadedFiles, true)
-        );
-    }
     expect($failures)->toBeEmpty(
         "Migration(s) loaded that shouldn't have been: " .
-        var_export($failures, true) . PHP_EOL . "Loaded: " . var_export($loadedFiles, true)
+        var_export($failures, true) . PHP_EOL . "Expected: " . var_export($expectedFiles, true)
     );
 
     return $this;
@@ -118,24 +111,18 @@ function getLoadedMigrations(string $vendorMigrationPath): array
  * so that they will be run when the user does a php artisan migrate
  **/
 
-expect()->extend('toHaveMigrationsPublished', function (...$testFiles) {
-    $testFiles = collect($testFiles)->flatten()->toArray();
-    $publishedFiles = getPublishedMigrations();
+// expect("/path/to/migrations")->toHaveExpectedMigrationPublished(['list of', 'migrations expected', 'to be published'])
+expect()->extend('toHaveExpectedMigrationsPublished', function (...$expectedFiles) {
+    $expectedFiles = collect($expectedFiles)->flatten()->toArray();
+    $publishedFiles = getDirectoryContents(database_path("migrations"));
     $failures = [];
 
-    foreach ($testFiles as $testFile) {
-        if (! isFileListed($publishedFiles, $testFile . '.php', endsWith: true)) {
-            $failures[] = $testFile;
+    foreach ($expectedFiles as $expectedFile) {
+        if (! isFileListed($publishedFiles, $expectedFile . '.php', endsWith: true)) {
+            $failures[] = $expectedFile;
         }
     }
 
-    if ($failures) {
-        fwrite(
-            STDERR,
-            "Migration(s) not published that should have been: " .
-            var_export($failures, true) . PHP_EOL . "Published: " . var_export($publishedFiles, true)
-        );
-    }
     expect($failures)->toBeEmpty(
         "Migration(s) not published that should have been: " .
         var_export($failures, true) . PHP_EOL . "Published: " . var_export($publishedFiles, true)
@@ -144,39 +131,40 @@ expect()->extend('toHaveMigrationsPublished', function (...$testFiles) {
     return $this;
 });
 
-expect()->extend('toHaveMigrationsNotPublished', function (...$testFiles) {
-    $testFiles = collect($testFiles)->flatten()->toArray();
-    $publishedFiles = getPublishedMigrations();
+// expect("/path/to/migrations")->toHaveOnlyExpectedMigrationPublished(['list of', 'migrations expected', 'to be published'])
+expect()->extend('toHaveOnlyExpectedMigrationsPublished', function (...$expectedFiles) {
+    expect($this->value)->toBeDirectory();
+    $migrationFiles = getDirectoryContents($this->value);
+    $expectedFiles = collect($expectedFiles)->flatten()->toArray();
+    $publishedFiles = getDirectoryContents(database_path("migrations"));
     $failures = [];
 
-    foreach ($testFiles as $testFile) {
-        if (isFileListed($publishedFiles, $testFile, endsWith: false)) {
-            $failures[] = $testFile;
+    foreach ($migrationFiles as $migrationFile) {
+        $migrationFile = Str::before($migrationFile, '.php');
+        if (in_array($migrationFile, $expectedFiles)) {
+            continue;
+        }
+
+        if (isFileListed($publishedFiles, $migrationFile, endsWith: false)) {
+            $failures[] = $migrationFile;
         }
     }
 
-    if ($failures) {
-        fwrite(
-            STDERR,
-            "Migration(s) published that shouldn't have been: " .
-            var_export($failures, true) . PHP_EOL . "Published: " . var_export($publishedFiles, true)
-        );
-    }
     expect($failures)->toBeEmpty(
         "Migration(s) published that shouldn't have been: " .
-        var_export($failures, true) . PHP_EOL . "Published: " . var_export($publishedFiles, true)
+        var_export($failures, true) . PHP_EOL . "Expected: " . var_export($expectedFiles, true)
     );
 
     return $this;
 });
 
-function getPublishedMigrations(): array
+function getDirectoryContents(string $path): array
 {
-    $databasePath = realpath(database_path("migrations")) . DIRECTORY_SEPARATOR;
+    $path = realpath($path) . DIRECTORY_SEPARATOR;
 
-    return collect(File::allFiles($databasePath))
-        ->map(function (SplFileInfo $file) use ($databasePath): string {
-            return Str::replace('\\', '/', Str::after(realpath($file->getPathname()), $databasePath));
+    return collect(File::allFiles($path))
+        ->map(function (SplFileInfo $file) use ($path): string {
+            return Str::replace('\\', '/', Str::after(realpath($file->getPathname()), $path));
         })
         ->toArray();
 }
@@ -185,10 +173,10 @@ function getPublishedMigrations(): array
 * Utility functions
 */
 
-function isFileListed(array $listedFiles, string $testFile, bool $endsWith): bool
+function isFileListed(array $listedFiles, string $expectedFile, bool $endsWith): bool
 {
-    $fileName = basename($testFile);
-    $filePath = substr($testFile, 0, -strlen($fileName) - 1);
+    $fileName = basename($expectedFile);
+    $filePath = substr($expectedFile, 0, -strlen($fileName) - 1);
 
     return arrayAny($listedFiles, function (string $file, int $ix) use ($filePath, $fileName, $endsWith) {
         $fileBase = basename($file);
