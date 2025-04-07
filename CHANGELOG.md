@@ -2,7 +2,7 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
-## 1.99.0 - 2025-05-01
+## 1.93.0 - 2025-05-01
 
 * Major improvements by @Sophist-UK in https://github.com/spatie/laravel-package-tools/pull/158
 - Extend the restructing/readability/extendability approach started in #157
@@ -18,7 +18,52 @@ All notable changes to `laravel-package-tools` will be documented in this file.
 - Switch test cases from Pest/PHPunit hybrid using the PHPunit Assertion API to full Pest Expactation API
 - Make test cases much more comprehensive.
 
-**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.18.2...1.18.3
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.92.0...1.93.0
+
+## 1.92.0 - 2025-03-27
+
+### What's Changed
+
+* feat: Allow finding the base path when a laravel folder organisation … by @gjvanahee in https://github.com/spatie/laravel-package-tools/pull/144
+
+### New Contributors
+
+* @gjvanahee made their first contribution in https://github.com/spatie/laravel-package-tools/pull/144
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.20.1...1.92.0
+
+## 1.20.1 - 2025-03-21
+
+### What's Changed
+
+* Fix: Code Improvements & Consistent for Migrations by @tech-wolf-tw in https://github.com/spatie/laravel-package-tools/pull/163
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.20.0...1.20.1
+
+## 1.20.0 - 2025-03-21
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.91.1...1.20.0
+
+## 1.91.1 - 2025-03-21
+
+### What's Changed
+
+* Fix: Migration Name Prefixed with by timestamp twice by @tech-wolf-tw in https://github.com/spatie/laravel-package-tools/pull/162
+
+### New Contributors
+
+* @tech-wolf-tw made their first contribution in https://github.com/spatie/laravel-package-tools/pull/162
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.19.0...1.91.1
+
+## 1.19.0 - 2025-02-06
+
+### What's Changed
+
+* Laravel 12 Support by @erikn69 in https://github.com/spatie/laravel-package-tools/pull/160
+* Ignore .phpunit.cache by @erikn69 in https://github.com/spatie/laravel-package-tools/pull/161
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.18.3...1.19.0
 
 ## 1.18.3 - 2025-01-22
 
