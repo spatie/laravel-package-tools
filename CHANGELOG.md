@@ -2,7 +2,7 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
-## 1.19.0 - 2025-03-01
+## 1.99.0 - 2025-05-01
 
 * Major improvements by @Sophist-UK in https://github.com/spatie/laravel-package-tools/pull/158
 - Extend the restructing/readability/extendability approach started in #157

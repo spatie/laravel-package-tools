@@ -70,8 +70,7 @@ trait HasRoutes
 
     public function hasRoutes(...$routesFileNames): self
     {
+        // Although we now provide publishesRoutes legacy code only loaded routes
         return $this->loadsRoutesByName(...$routesFileNames);
-
-        return $this->publishesRoutesByName(...$routesFileNames);
     }
 }
