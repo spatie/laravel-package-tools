@@ -20,7 +20,7 @@ trait PackageHasMigrationsLegacyPublishOnlyTest
                 'folder/create_table_subfolder_explicit_normal'
             )
             ->hasMigration(migrationFileName: '2025_03_14_011123_create_laravel_package_tools_table')
-;
+        ;
     }
 }
 
