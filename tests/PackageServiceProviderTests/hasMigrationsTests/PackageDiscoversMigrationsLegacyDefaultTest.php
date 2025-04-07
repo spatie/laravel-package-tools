@@ -51,9 +51,9 @@ it("does not overwrite an existing migration by discoversMigrations", function (
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
 
-    expect(true)->toHaveExpectedMigrationsPublished('2020_01_01_000001_create_table_discover_normal');
+    expect(true)->toHaveExpectedMigrationsPublished('2020_01_01_000001_create_laravel_package_tools_table');
 
-    $filePath = database_path('migrations/2020_01_01_000001_create_table_discover_normal');
+    $filePath = database_path('migrations/2020_01_01_000001_create_laravel_package_tools_table');
 
     file_put_contents($filePath, 'modified');
 

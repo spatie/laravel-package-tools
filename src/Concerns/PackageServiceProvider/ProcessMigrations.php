@@ -174,6 +174,11 @@ trait ProcessMigrations
             }
         }
 
-        return $migrationPath . $this->now->addSecond()->format('Y_m_d_His_') . $migrationFileName;
+        return $migrationPath . $this->now->addSecond()->format('Y_m_d_His_') . self::stripTimestampPrefix($migrationFileName);
+    }
+
+    private static function stripTimestampPrefix(string $filename): string
+    {
+        return preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $filename);
     }
 }

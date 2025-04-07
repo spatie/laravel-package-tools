@@ -17,8 +17,9 @@ trait PackageHasMigrationsLegacyPublishLoadTest
             ->hasMigrations(
                 'create_table_explicit_stub',
                 'folder/create_table_subfolder_explicit_stub',
-                'folder/create_table_subfolder_explicit_normal'
+                'folder/create_table_subfolder_explicit_normal',
             )
+            ->hasMigration(migrationFileName: '2025_03_14_011123_create_laravel_package_tools_table')
             ->runsMigrations();
     }
 }
@@ -30,6 +31,7 @@ $expectPublished = [
     'create_table_explicit_stub',
     'folder/create_table_subfolder_explicit_normal',
     'folder/create_table_subfolder_explicit_stub',
+    'create_laravel_package_tools_table',
 ];
 $expectLoaded = [
     'create_table_explicit_normal',

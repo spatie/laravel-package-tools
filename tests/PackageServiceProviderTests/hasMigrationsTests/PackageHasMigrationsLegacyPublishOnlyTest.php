@@ -18,7 +18,9 @@ trait PackageHasMigrationsLegacyPublishOnlyTest
                 'create_table_explicit_stub',
                 'folder/create_table_subfolder_explicit_stub',
                 'folder/create_table_subfolder_explicit_normal'
-            );
+            )
+            ->hasMigration(migrationFileName: '2025_03_14_011123_create_laravel_package_tools_table')
+;
     }
 }
 
@@ -29,6 +31,7 @@ $expectPublished = [
     'create_table_explicit_stub',
     'folder/create_table_subfolder_explicit_normal',
     'folder/create_table_subfolder_explicit_stub',
+    'create_laravel_package_tools_table',
 ];
 $expectLoaded = [
 ];
@@ -78,7 +81,7 @@ it("does overwrite an existing migration with 'artisan migrate --force'", functi
     expect($filePath)->toHaveContentsMatchingFile(__DIR__.'/../../TestPackage/database/migrations/create_table_explicit_normal.php');
 })->group('migrations', 'legacy');
 
-it("loads only the explicitly listed non-stub migrations for 'artisan migrate'", function () use ($expectLoaded) {
+it("doesn't load any non-stub migrations for 'artisan migrate'", function () use ($expectLoaded) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();

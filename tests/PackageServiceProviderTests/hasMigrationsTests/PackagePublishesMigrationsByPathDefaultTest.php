@@ -45,9 +45,9 @@ it("doesn't overwrite an existing migrations by path", function () {
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
 
-    expect(true)->toHaveExpectedMigrationsPublished('2020_01_01_000001_create_table_discover_normal');
+    expect(true)->toHaveExpectedMigrationsPublished('2020_01_01_000001_create_laravel_package_tools_table');
 
-    $filePath = database_path('migrations/2020_01_01_000001_create_table_discover_normal.php');
+    $filePath = database_path('migrations/2020_01_01_000001_create_laravel_package_tools_table.php');
 
     file_put_contents($filePath, 'modified');
 
@@ -63,9 +63,9 @@ it("does overwrite an existing migration by path with 'artisan migrate --force'"
         ->artisan('vendor:publish --tag=package-tools-migrations')
         ->assertSuccessful();
 
-    expect(true)->toHaveExpectedMigrationsPublished('2020_01_01_000001_create_table_discover_normal');
+    expect(true)->toHaveExpectedMigrationsPublished('2020_01_01_000001_create_laravel_package_tools_table');
 
-    $filePath = database_path('migrations/2020_01_01_000001_create_table_discover_normal.php');
+    $filePath = database_path('migrations/2020_01_01_000001_create_laravel_package_tools_table.php');
 
     file_put_contents($filePath, 'overwritten');
 
@@ -73,7 +73,7 @@ it("does overwrite an existing migration by path with 'artisan migrate --force'"
         ->artisan('vendor:publish --tag=package-tools-migrations  --force')
         ->assertSuccessful();
 
-    expect($filePath)->toHaveContentsMatchingFile(__DIR__.'/../../TestPackage/database/migrations/create_table_discover_normal.php');
+    expect($filePath)->toHaveContentsMatchingFile(__DIR__.'/../../TestPackage/database/migrations/2025_03_14_011123_create_laravel_package_tools_table.php.stub');
 })->group('migrations');
 
 it("loads only the expected migrations by path for 'artisan migrate'", function () use ($expectLoaded) {
