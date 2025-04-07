@@ -5,7 +5,6 @@ namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 use Symfony\Component\Finder\SplFileInfo;
 
 trait ProcessMigrations
@@ -80,6 +79,7 @@ trait ProcessMigrations
     protected function convertPathToNames(string $path): array
     {
         $path .= DIRECTORY_SEPARATOR;
+
         return collect(File::allfiles($path))->map(function (SplFileInfo $file) use ($path): string {
             $relativePath = Str::after($file->getPathname(), $path);
             foreach ([".stub", ".php"] as $suffix) {

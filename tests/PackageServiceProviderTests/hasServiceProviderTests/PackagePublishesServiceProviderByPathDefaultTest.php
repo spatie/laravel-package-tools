@@ -19,7 +19,7 @@ uses(PackagePublishesServiceProviderByPathDefaultTest::class);
 it("can publish service providers by Path", function () {
     $files = [
         app_path('Providers/PackageToolsServiceProvider.php'),
-        app_path('Providers/MyPackageServiceProvider.php')
+        app_path('Providers/MyPackageServiceProvider.php'),
     ];
 
     expect($files)->each->not->toBeFileOrDirectory();

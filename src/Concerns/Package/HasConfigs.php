@@ -52,7 +52,6 @@ trait HasConfigs
         return $this->verifyPathSet(__FUNCTION__, $this->configsByNamePath, $directory);
     }
 
-
     /* Legacy backwards compatibility */
     public function hasConfigFile(null|string|array $configFileName = null): self
     {
@@ -65,7 +64,6 @@ trait HasConfigs
             ->loadsConfigsByName(...$configFiles)
             ->publishesConfigsByName(...$configFiles);
     }
-
 
     public function loadsConfigsByPath(?string $path = null): self
     {

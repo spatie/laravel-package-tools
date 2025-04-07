@@ -9,7 +9,6 @@ trait HasTranslations
     public array $translationLoadsPaths = [];
     public array $translationPublishesPaths = [];
 
-
     public function loadsTranslationsByPath(?string $namespace = null, ?string $path = null): self
     {
         $namespace = $namespace ?? $this->shortName();

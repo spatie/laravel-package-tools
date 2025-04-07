@@ -28,7 +28,7 @@ trait ProcessRoutes
 
             if (is_file("{$routesPath}/{$routeFilename}.php")) {
                 $this->loadRoutesFrom("{$routesPath}/{$routeFilename}.php");
-            } elseif (!is_file("{$routesPath}/{$routeFilename}.php.stub")){
+            } elseif (! is_file("{$routesPath}/{$routeFilename}.php.stub")) {
                 throw InvalidPackage::filenameNeitherPhpNorStub(
                     $this->package->name,
                     'Routes',

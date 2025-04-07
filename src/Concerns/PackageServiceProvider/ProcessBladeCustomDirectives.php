@@ -3,8 +3,6 @@
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
 use Illuminate\Support\Facades\Blade;
-use ReflectionClass;
-use Spatie\LaravelPackageTools\Package;
 
 trait ProcessBladeCustomDirectives
 {

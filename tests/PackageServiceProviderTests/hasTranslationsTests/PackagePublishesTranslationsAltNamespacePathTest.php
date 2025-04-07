@@ -2,7 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\hasTranslationsTests;
 
-use Illuminate\Support\Facades\App;
 use Spatie\LaravelPackageTools\Package;
 
 trait PackagePublishesTranslationsAltNamespacePathTest

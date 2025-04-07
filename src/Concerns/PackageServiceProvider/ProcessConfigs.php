@@ -29,7 +29,7 @@ trait ProcessConfigs
                     $cFN,
                     $configFilename
                 );
-            } elseif (!is_file($this->package->configsByNamePath("{$configFilename}.php.stub"))) {
+            } elseif (! is_file($this->package->configsByNamePath("{$configFilename}.php.stub"))) {
                 throw InvalidPackage::filenameNeitherPhpNorStub(
                     $this->package->name,
                     'Config',

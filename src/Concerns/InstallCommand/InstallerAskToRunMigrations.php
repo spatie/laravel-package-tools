@@ -17,7 +17,8 @@ trait InstallerAskToRunMigrations
     {
         if ($this->askToRunMigrations) {
             if ($this->package->migrationLoadsNames || $this->package->migrationLoadsPaths ||
-                ($this->package->migrationLegacyLoadsPublished &&
+                (
+                    $this->package->migrationLegacyLoadsPublished &&
                     ($this->package->migrationPublishesNames || $this->package->migrationPublishesPaths)
                 )
             ) {

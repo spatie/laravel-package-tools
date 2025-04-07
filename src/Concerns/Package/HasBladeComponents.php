@@ -2,7 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\Package;
 
-use Illuminate\Support\Facades\App;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
 trait HasBladeComponents

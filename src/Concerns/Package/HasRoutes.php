@@ -71,6 +71,7 @@ trait HasRoutes
     public function hasRoutes(...$routesFileNames): self
     {
         return $this->loadsRoutesByName(...$routesFileNames);
+
         return $this->publishesRoutesByName(...$routesFileNames);
     }
 }

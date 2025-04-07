@@ -100,7 +100,6 @@ trait ProcessBladeComponents
      * If needed, this might be possible in the future by querying composer autoloads,
      * but for the moment this is a documented restriction.
      **/
-
     protected function bootLoadsBladeComponentsByPath(): self
     {
         if (empty($paths = $this->package->bladeLoadsComponentPaths)) {
