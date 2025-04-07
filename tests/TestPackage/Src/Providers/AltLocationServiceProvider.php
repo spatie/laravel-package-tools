@@ -5,7 +5,7 @@ namespace Spatie\LaravelPackageTools\Tests\TestPackage\Src\Providers;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class ServiceProvider extends PackageServiceProvider
+class AltLocationServiceProvider extends PackageServiceProvider
 {
     public function getPackageBaseDir():string
     {
