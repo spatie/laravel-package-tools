@@ -1,8 +1,18 @@
-# Tools for creating Laravel packages
+<div align="left">
+    <a href="https://spatie.be/open-source?utm_source=github&utm_medium=banner&utm_campaign=laravel-package-tools">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://spatie.be/packages/header/laravel-package-tools/html/dark.webp">
+        <img alt="Logo for laravel-package-tools" src=" https://spatie.be/packages/header/laravel-package-tools/html/light.webp" height="190">
+      </picture>
+    </a>
+
+<h1>Tools for creating Laravel packages</h1>
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-package-tools.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-package-tools)
 ![Tests](https://github.com/spatie/laravel-package-tools/workflows/Tests/badge.svg)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-package-tools.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-package-tools)
+    
+</div>
 
 This package contains a `PackageServiceProvider` that you can use in your packages to easily register config files,
 migrations, and more.
