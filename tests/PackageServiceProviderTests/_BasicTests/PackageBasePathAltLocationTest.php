@@ -1,0 +1,22 @@
+<?php
+
+namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\_BasicTests;
+
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Providers\ServiceProvider;
+
+trait PackageBasePathAltLocationTest
+{
+    public function configurePackage(Package $package)
+    {
+        $package
+            ->name('laravel-package-tools');
+    }
+}
+
+uses(PackageBasePathAltLocationTest::class);
+
+it('will set the base path to the Src dir when the laravel folder organisation is applied', function () {
+    $provider = new ServiceProvider(app());
+    expect($provider->getPackageBaseDir())->toEndWith(DIRECTORY_SEPARATOR.'TestPackage'.DIRECTORY_SEPARATOR.'Src');
+});
