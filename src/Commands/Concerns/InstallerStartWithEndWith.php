@@ -4,7 +4,7 @@ namespace Spatie\LaravelPackageTools\Commands\Concerns;
 
 use Closure;
 
-trait SupportsStartWithEndWith
+trait InstallerStartWithEndWith
 {
     public ?Closure $startWith = null;
     public ?Closure $endWith = null;
