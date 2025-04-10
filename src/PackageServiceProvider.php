@@ -87,9 +87,8 @@ abstract class PackageServiceProvider extends ServiceProvider
             ->bootPackageTranslations()
             ->bootPackageViews()
             ->bootPackageViewComposers()
-            ->bootPackageViewSharedData();
-
-        $this->packageBooted();
+            ->bootPackageViewSharedData()
+            ->packageBooted();
 
         return $this;
     }
