@@ -2,7 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\Package;
 
-use Spatie\LaravelPackageTools\Commands\Concerns;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 
 trait HasInstallCommand

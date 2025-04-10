@@ -2,9 +2,8 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCommandTests;
 
-use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use function PHPUnit\Framework\assertFileExists;
-use Spatie\LaravelPackageTools\Commands\Concerns;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use function Spatie\PestPluginTestTime\testTime;
 
