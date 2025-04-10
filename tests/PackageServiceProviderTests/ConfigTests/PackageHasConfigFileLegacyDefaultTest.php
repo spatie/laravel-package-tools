@@ -2,8 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\ConfigTests;
 
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertFileExists;
 use Spatie\LaravelPackageTools\Package;
 
 trait PackageHasConfigFileLegacyDefaultTest
@@ -18,14 +16,25 @@ trait PackageHasConfigFileLegacyDefaultTest
 
 uses(PackageHasConfigFileLegacyDefaultTest::class);
 
-it('can register the config file', function () {
-    assertEquals('value', config('package-tools.key'));
-});
+it("registers only the default config file by legacy", function () {
+    expect(config('package-tools.key'))->toBe('value');
+})->group('config', 'legacy');
 
-it('can publish the config file', function () {
+it("publishes only the default config file by legacy", function () {
+    $publishedFiles = [
+        config_path('package-tools.php'),
+    ];
+    $nonPublishedFiles = [
+        config_path('alternative-config.php'),
+        config_path('config-stub.php'),
+    ];
+    expect($publishedFiles)->each->not->toBeFileOrDirectory();
+    expect($nonPublishedFiles)->each->not->toBeFileOrDirectory();
+
     $this
         ->artisan('vendor:publish --tag=package-tools-config')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    assertFileExists(config_path('package-tools.php'));
-});
+    expect($publishedFiles)->each->toBeFile();
+    expect($nonPublishedFiles)->each->not->toBeFileOrDirectory();
+})->group('config', 'legacy');

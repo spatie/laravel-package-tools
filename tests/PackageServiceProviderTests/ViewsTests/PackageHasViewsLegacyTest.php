@@ -2,8 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\ViewsTests;
 
-use function PHPUnit\Framework\assertFileExists;
-use function PHPUnit\Framework\assertStringStartsWith;
 use Spatie\LaravelPackageTools\Package;
 
 trait PackageHasViewsLegacyTest
@@ -18,16 +16,19 @@ trait PackageHasViewsLegacyTest
 
 uses(PackageHasViewsLegacyTest::class);
 
-it('can load the views', function () {
+it("can load default views", function () {
     $content = view('package-tools::test')->render();
 
-    assertStringStartsWith('This is a blade view', $content);
-});
+    expect($content)->toStartWith('This is a blade view');
+})->group('views', 'legacy');
 
-it('can publish the views', function () {
+it("can publish default views", function () {
+    $file = resource_path('views/vendor/package-tools/test.blade.php');
+    expect($file)->not->toBeFileOrDirectory();
+
     $this
         ->artisan('vendor:publish --tag=package-tools-views')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    assertFileExists(base_path('resources/views/vendor/package-tools/test.blade.php'));
-});
+    expect($file)->toBeFile();
+})->group('views', 'legacy');

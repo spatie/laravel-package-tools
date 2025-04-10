@@ -2,8 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\TranslationsTests;
 
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertFileExists;
 use Spatie\LaravelPackageTools\Package;
 
 trait PackageHasTranslationsLegacyTest
@@ -18,18 +16,17 @@ trait PackageHasTranslationsLegacyTest
 
 uses(PackageHasTranslationsLegacyTest::class);
 
-it('can load the translations', function () {
-    assertEquals('translation', trans('package-tools::translations.translatable'));
-});
+it("can load the translations", function () {
+    $this->assertEquals('translation', trans('package-tools::translations.translatable'));
+})->group('translations', 'legacy');
 
-it('can publish the translations', function () {
+it("can publish the translations", function () {
+    $file = lang_path("vendor/package-tools/en/translations.php");
+    expect($file)->not->toBeFileOrDirectory();
+
     $this
         ->artisan('vendor:publish --tag=package-tools-translations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    $path = (function_exists('lang_path'))
-        ? lang_path("vendor/package-tools/en/translations.php")
-        : resource_path("lang/vendor/package-tools/en/translations.php");
-
-    assertFileExists($path);
-});
+    expect($file)->toBeFile();
+})->group('translations', 'legacy');

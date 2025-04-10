@@ -3,7 +3,7 @@
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\CommandsTests;
 
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestClasses\TestCommand;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\TestCommand;
 
 trait PackageHasCommandLegacyTest
 {
@@ -11,7 +11,7 @@ trait PackageHasCommandLegacyTest
     {
         $package
             ->name('laravel-package-tools')
-            ->hasCommand(TestCommand::class);
+            ->hasCommand(commandClassName: TestCommand::class);
     }
 }
 
@@ -19,6 +19,6 @@ uses(PackageHasCommandLegacyTest::class);
 
 it('can execute a registered commands', function () {
     $this
-        ->artisan('test-command')
+        ->artisan('package-tools:test-command')
         ->assertExitCode(0);
-});
+})->group('commands', 'legacy');

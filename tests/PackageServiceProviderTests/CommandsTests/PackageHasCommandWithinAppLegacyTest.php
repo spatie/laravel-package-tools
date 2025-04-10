@@ -3,7 +3,7 @@
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\CommandsTests;
 
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestClasses\TestCommand;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\TestCommand;
 
 trait PackageHasCommandWithinAppLegacyTest
 {

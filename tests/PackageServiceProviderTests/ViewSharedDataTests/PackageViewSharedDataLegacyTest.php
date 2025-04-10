@@ -2,7 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\ViewSharedDataTests;
 
-use function PHPUnit\Framework\assertStringStartsWith;
 use Spatie\LaravelPackageTools\Package;
 
 trait PackageViewSharedDataLegacyTest
@@ -12,16 +11,16 @@ trait PackageViewSharedDataLegacyTest
         $package
             ->name('laravel-package-tools')
             ->hasViews()
-            ->sharesDataWithAllViews('sharedItemTest', 'hello_world');
+            ->sharesDataWithAllViews(name: 'sharedItemTest', value: 'hello_world');
     }
 }
 
 uses(PackageViewSharedDataLegacyTest::class);
 
-it('can share data with all views', function () {
+it("can share data with all views", function () {
     $content1 = view('package-tools::shared-data')->render();
     $content2 = view('package-tools::shared-data-2')->render();
 
-    assertStringStartsWith('hello_world', $content1);
-    assertStringStartsWith('hello_world', $content2);
-});
+    expect($content1)->toStartWith('hello_world');
+    expect($content2)->toStartWith('hello_world');
+})->group('shareddata', 'legacy');

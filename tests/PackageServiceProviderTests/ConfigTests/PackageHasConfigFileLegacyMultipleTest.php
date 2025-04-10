@@ -2,7 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\ConfigTests;
 
-use function PHPUnit\Framework\assertEquals;
 use Spatie\LaravelPackageTools\Package;
 
 trait PackageHasConfigFileLegacyMultipleTest
@@ -11,14 +10,40 @@ trait PackageHasConfigFileLegacyMultipleTest
     {
         $package
             ->name('laravel-package-tools')
-            ->hasConfigFile(['package-tools', 'alternative-config']);
+            ->hasConfigFile(configFileName: 'package-tools')
+            ->hasConfigFile(configFileName: 'alternative-config')
+            ->hasConfigFile(configFileName: 'config-stub');
     }
 }
 
 uses(PackageHasConfigFileLegacyMultipleTest::class);
 
-it('can register multiple config files', function () {
-    assertEquals('value', config('package-tools.key'));
+it("registers multiple config files by legacy", function () {
+    expect(config('package-tools.key'))->toBe('value');
+    expect(config('alternative-config.alternative_key'))->toBe('alternative_value');
+})->group('config', 'legacy');
 
-    assertEquals('alternative_value', config('alternative-config.alternative_key'));
-});
+it("doesn't register stub config files by legacy", function () {
+    expect(config('config-stub.stub_key'))->toBe(null);
+})->group('config', 'legacy');
+
+it("publishes multiple config files by legacy", function () {
+    $publishedFiles = [
+        config_path('package-tools.php'),
+        config_path('alternative-config.php'),
+        config_path('config-stub.php'),
+    ];
+    $nonPublishedFiles = [
+        config_path('unpublished-config.php'),
+        config_path('unpublished-stub.php'),
+    ];
+    expect($publishedFiles)->each->not->toBeFileOrDirectory();
+    expect($nonPublishedFiles)->each->not->toBeFileOrDirectory();
+
+    $this
+        ->artisan('vendor:publish --tag=package-tools-config')
+        ->assertSuccessful();
+
+    expect($publishedFiles)->each->toBeFile();
+    expect($nonPublishedFiles)->each->not->toBeFileOrDirectory();
+})->group('config', 'legacy');

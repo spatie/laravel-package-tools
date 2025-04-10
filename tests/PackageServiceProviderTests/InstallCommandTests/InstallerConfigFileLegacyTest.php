@@ -2,17 +2,13 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCommandTests;
 
-use function PHPUnit\Framework\assertFileExists;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
-use function Spatie\PestPluginTestTime\testTime;
 
 trait InstallerConfigFileLegacyTest
 {
     public function configurePackage(Package $package)
     {
-        testTime()->freeze('2020-01-01 00:00:00');
-
         $package
             ->name('laravel-package-tools')
             ->hasConfigFile()
@@ -24,12 +20,13 @@ trait InstallerConfigFileLegacyTest
 
 uses(InstallerConfigFileLegacyTest::class);
 
-it('can install the config file', function () {
-    $configPath = config_path('package-tools.php');
+it("can install the config file", function () {
+    $configFile = config_path('package-tools.php');
+    expect($configFile)->not->toBeFileOrDirectory();
 
     $this
         ->artisan('package-tools:install')
         ->assertSuccessful();
 
-    assertFileExists($configPath);
-});
+    expect($configFile)->toBeFile();
+})->group('installer', 'legacy');
