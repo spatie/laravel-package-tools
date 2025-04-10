@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.92.3 - 2025-04-10
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.92.1...1.92.3
+
 ## 1.92.2 - 2025-04-10
 
 **Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.92.1...1.92.2
