@@ -2,8 +2,9 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCommandTests;
 
-use function PHPUnit\Framework\assertEquals;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
+use function PHPUnit\Framework\assertEquals;
+use Spatie\LaravelPackageTools\Commands\Concerns;
 use Spatie\LaravelPackageTools\Package;
 use function Spatie\PestPluginTestTime\testTime;
 

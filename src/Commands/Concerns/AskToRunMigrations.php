@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Concerns\InstallCommand;
+namespace Spatie\LaravelPackageTools\Commands\Concerns;
 
-trait InstallerAskToRunMigrations
+trait AskToRunMigrations
 {
     protected bool $askToRunMigrations = false;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\LaravelPackageTools\Concerns\InstallCommand;
+namespace Spatie\LaravelPackageTools\Commands\Concerns;
 
 use Illuminate\Support\Str;
 

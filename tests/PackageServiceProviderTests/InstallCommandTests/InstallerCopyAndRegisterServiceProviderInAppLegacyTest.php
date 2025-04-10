@@ -2,9 +2,10 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\InstallCommandTests;
 
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use function PHPUnit\Framework\assertStringContainsString;
 use function PHPUnit\Framework\assertStringNotContainsString;
-use Spatie\LaravelPackageTools\Commands\InstallCommand;
+use Spatie\LaravelPackageTools\Commands\Concerns;
 use Spatie\LaravelPackageTools\Package;
 
 trait InstallerCopyAndRegisterServiceProviderInAppLegacyTest

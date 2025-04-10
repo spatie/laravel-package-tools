@@ -23,7 +23,7 @@ Here's an example of how it can be used.
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\LaravelPackageTools\Package;
 use MyPackage\ViewComponents\Alert;
-use Spatie\LaravelPackageTools\Commands\InstallCommand;
+use Spatie\LaravelPackageTools\Commands\Concerns;
 
 class YourPackageServiceProvider extends PackageServiceProvider
 {
@@ -451,7 +451,7 @@ call, `hasInstallCommand` and configure it using a closure. Here's an example.
 ```php
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Commands\InstallCommand;
+use Spatie\LaravelPackageTools\Commands\Concerns;
 
 class YourPackageServiceProvider extends PackageServiceProvider
 {
@@ -496,7 +496,7 @@ end when running `php artisan your-package-name:install`. You can use this to pe
 output.
 
 ```php
-use Spatie\LaravelPackageTools\Commands\InstallCommand;
+use Spatie\LaravelPackageTools\Commands\Concerns;
 
 public function configurePackage(Package $package): void
 {
