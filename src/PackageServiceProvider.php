@@ -104,6 +104,7 @@ abstract class PackageServiceProvider extends ServiceProvider
     protected function getPackageBaseDir(): string
     {
         $reflector = new ReflectionClass(get_class($this));
+
         $packageBaseDir = dirname($reflector->getFileName());
 
         // Some packages like to keep Laravels directory structure and place
