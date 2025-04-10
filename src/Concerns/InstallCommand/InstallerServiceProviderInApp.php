@@ -3,7 +3,6 @@
 namespace Spatie\LaravelPackageTools\Concerns\InstallCommand;
 
 use Illuminate\Support\Str;
-use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
 trait InstallerServiceProviderInApp
 {

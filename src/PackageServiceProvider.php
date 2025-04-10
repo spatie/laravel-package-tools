@@ -66,7 +66,6 @@ abstract class PackageServiceProvider extends ServiceProvider
         return new Package();
     }
 
-
     public function packageRegistered()
     {
     }

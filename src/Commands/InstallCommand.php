@@ -2,9 +2,7 @@
 
 namespace Spatie\LaravelPackageTools\Commands;
 
-use Closure;
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 use Spatie\LaravelPackageTools\Concerns\InstallCommand\InstallerAskToRunMigrations;
 use Spatie\LaravelPackageTools\Concerns\InstallCommand\InstallerAskToStarRepoOnGitHub;
 use Spatie\LaravelPackageTools\Concerns\InstallCommand\InstallerPublishes;
