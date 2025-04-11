@@ -16,6 +16,7 @@ use Spatie\LaravelPackageTools\Concerns\Package\HasTranslations;
 use Spatie\LaravelPackageTools\Concerns\Package\HasViewComposers;
 use Spatie\LaravelPackageTools\Concerns\Package\HasViews;
 use Spatie\LaravelPackageTools\Concerns\Package\HasViewSharedData;
+use Spatie\LaravelPackageTools\Concerns\Package\PackageHelpers;
 
 class Package
 {
@@ -32,6 +33,7 @@ class Package
     use HasViewComposers;
     use HasViews;
     use HasViewSharedData;
+    use PackageHelpers;
 
     public string $name;
 
