@@ -2,8 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\BladeComponentsTests;
 
-use function PHPUnit\Framework\assertFileExists;
-use function PHPUnit\Framework\assertStringStartsWith;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Components\TestComponent;
 
@@ -14,22 +12,25 @@ trait PackageHasViewComponentLegacyTest
         $package
             ->name('laravel-package-tools')
             ->hasViews()
-            ->hasViewComponent('abc', TestComponent::class);
+            ->hasViewComponent(prefix: 'abc', viewComponentName: TestComponent::class);
     }
 }
 
 uses(PackageHasViewComponentLegacyTest::class);
 
-it('can load the view components', function () {
+it("can load blade components using legacy hasViewComponent", function () {
     $content = view('package-tools::component-test')->render();
 
-    assertStringStartsWith('<div>hello world</div>', $content);
-});
+    expect($content)->toStartWith('<div>hello world</div>');
+})->group('blade', 'blade-components', 'legacy');
 
-it('can publish the view components', function () {
+it("can publish blade components by legacy hasViewComponent", function () {
+    $file = app_path('View/Components/vendor/package-tools/TestComponent.php');
+    expect($file)->not->toBeFileOrDirectory();
+
     $this
         ->artisan('vendor:publish --tag=laravel-package-tools-components')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    assertFileExists(base_path('app/View/Components/vendor/package-tools/TestComponent.php'));
-});
+    expect($file)->toBeFile();
+})->group('blade', 'blade-components', 'legacy');

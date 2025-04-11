@@ -2,8 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\ServiceProviderTests;
 
-use function PHPUnit\Framework\assertFileDoesNotExist;
-use function PHPUnit\Framework\assertFileExists;
 use Spatie\LaravelPackageTools\Package;
 
 trait PackagePublishesServiceProviderLegacyTest
@@ -12,20 +10,20 @@ trait PackagePublishesServiceProviderLegacyTest
     {
         $package
             ->name('laravel-package-tools')
-            ->publishesServiceProvider('MyPackageServiceProvider');
+            ->publishesServiceProvider(providerName: 'MyPackageServiceProvider');
     }
 }
 
 uses(PackagePublishesServiceProviderLegacyTest::class);
 
-it('can publish a service provider', function () {
+it("can publish a service provider", function () {
     $providerPath = app_path('Providers/MyPackageServiceProvider.php');
 
-    assertFileDoesNotExist($providerPath);
+    expect($providerPath)->not->toBeFileOrDirectory();
 
     $this
         ->artisan('vendor:publish --tag=package-tools-provider')
         ->assertSuccessful();
 
-    assertFileExists($providerPath);
-});
+    expect($providerPath)->toBeFile();
+})->group('provider', 'legacy');

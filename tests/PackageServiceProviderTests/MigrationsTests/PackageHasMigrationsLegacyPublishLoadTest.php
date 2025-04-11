@@ -13,85 +13,85 @@ trait PackageHasMigrationsLegacyPublishLoadTest
 
         $package
             ->name('laravel-package-tools')
-            ->hasMigration('create_another_laravel_package_tools_table')
-            ->hasMigration('create_regular_laravel_package_tools_table')
-            ->hasMigration('2025_03_14_011123_create_laravel_package_tools_table')
+            ->hasMigration(migrationFileName: 'create_table_explicit_normal')
+            ->hasMigrations(
+                'create_table_explicit_stub',
+                'folder/create_table_subfolder_explicit_stub',
+                'folder/create_table_subfolder_explicit_normal',
+            )
+            ->hasMigration(migrationFileName: '2025_03_14_011123_create_laravel_package_tools_table_stub')
             ->runsMigrations();
     }
 }
 
 uses(PackageHasMigrationsLegacyPublishLoadTest::class);
 
-it('can publish the migration', function () {
+$expectPublished = [
+    'create_table_explicit_normal',
+    'create_table_explicit_stub',
+    'folder/create_table_subfolder_explicit_normal',
+    'folder/create_table_subfolder_explicit_stub',
+    'create_laravel_package_tools_table_stub',
+];
+$expectLoaded = [
+    '2025_03_14_011123_create_laravel_package_tools_table_stub',
+    'create_table_explicit_normal',
+    'create_table_explicit_stub',
+    'folder/create_table_subfolder_explicit_normal',
+    'folder/create_table_subfolder_explicit_stub',
+    'create_laravel_package_tools_table_stub',
+];
+
+it("publishes only the explicitly listed migrations", function () use ($expectPublished) {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->doesntExpectOutput('hey')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    assertMigrationPublished('create_another_laravel_package_tools_table.php');
-});
+    expect(__DIR__ . '/../../TestPackage/database/migrations')->toHaveExpectedMigrationsPublished($expectPublished);
+    expect(__DIR__ . '/../../TestPackage/database/migrations')->toHaveOnlyExpectedMigrationsPublished($expectPublished);
+})->group('migrations', 'legacy');
 
-it('can publish migration with a prefixed timestamp', function () {
+it("doesn't overwrite an existing migration", function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->doesntExpectOutput('hey')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    assertMigrationPublished('2020_01_01_000003_create_laravel_package_tools_table.php');
-});
+    $filePath = database_path('migrations/2020_01_01_000001_create_table_explicit_normal.php');
 
-it('can publish the migration without being stubbed', function () {
-    $this
-        ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
-
-    assertMigrationPublished('create_regular_laravel_package_tools_table.php');
-});
-
-it('does not overwrite the existing migration', function () {
-    $this
-        ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
-
-    $filePath = database_path('migrations/2020_01_01_000001_create_another_laravel_package_tools_table.php');
-
-    assertMigrationPublished('create_another_laravel_package_tools_table.php');
-
+    expect(true)->toHaveExpectedMigrationsPublished('2020_01_01_000001_create_table_explicit_normal');
 
     file_put_contents($filePath, 'modified');
 
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    $this->assertStringEqualsFile($filePath, 'modified');
-});
+    expect($filePath)->toHaveContentsMatching('modified');
+})->group('migrations', 'legacy');
 
-it('does overwrite the existing migration with force', function () {
+it("does overwrite an existing migration with 'artisan migrate --force'", function () {
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    $filePath = database_path('migrations/2020_01_01_000001_create_another_laravel_package_tools_table.php');
+    expect(true)->toHaveExpectedMigrationsPublished('2020_01_01_000001_create_table_explicit_normal');
 
-    $this->assertFileExists($filePath);
+    $filePath = database_path('migrations/2020_01_01_000001_create_table_explicit_normal.php');
 
-    file_put_contents($filePath, 'modified');
+    file_put_contents($filePath, 'overwritten');
 
     $this
         ->artisan('vendor:publish --tag=package-tools-migrations  --force')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    $this->assertStringEqualsFile(
-        $filePath,
-        file_get_contents(__DIR__.'/../../TestPackage/database/migrations/create_another_laravel_package_tools_table.php.stub')
-    );
-});
+    expect($filePath)->toHaveContentsMatchingFile(__DIR__.'/../../TestPackage/database/migrations/create_table_explicit_normal.php');
+})->group('migrations', 'legacy');
 
-it('can run migrations which registers them', function () {
-    /** @var \Illuminate\Database\Migrations\Migrator $migrator */
-    $migrator = app('migrator');
+it("loads only the explicitly listed non-stub migrations for 'artisan migrate'", function () use ($expectLoaded) {
+    $this
+        ->artisan('vendor:publish --tag=package-tools-migrations')
+        ->assertSuccessful();
 
-    $this->assertCount(3, $migrator->paths());
-    $this->assertStringContainsString('laravel_package_tools', $migrator->paths()[0]);
-});
+    expect(__DIR__ . '/../../TestPackage/database/migrations')->toHaveExpectedMigrationsLoaded($expectLoaded);
+    expect(__DIR__ . '/../../TestPackage/database/migrations')->toHaveOnlyExpectedMigrationsLoaded($expectLoaded);
+})->group('migrations', 'legacy');

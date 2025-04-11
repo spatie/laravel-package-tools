@@ -12,7 +12,7 @@ trait InstallerMigrationLegacyTest
         $package
             ->name('laravel-package-tools')
             ->hasConfigFile()
-            ->hasMigration('create_another_laravel_package_tools_table')
+            ->hasMigration('create_table_explicit_normal')
             ->hasInstallCommand(function (InstallCommand $command) {
                 $command->publishMigrations();
             });
@@ -21,10 +21,10 @@ trait InstallerMigrationLegacyTest
 
 uses(InstallerMigrationLegacyTest::class);
 
-it('can install the migrations', function () {
+it("can install the migrations", function () {
     $this
         ->artisan('package-tools:install')
         ->assertSuccessful();
 
-    assertMigrationPublished('create_another_laravel_package_tools_table.php');
-});
+    expect(true)->toHaveExpectedMigrationsPublished('create_table_explicit_normal');
+})->group('installer', 'legacy');

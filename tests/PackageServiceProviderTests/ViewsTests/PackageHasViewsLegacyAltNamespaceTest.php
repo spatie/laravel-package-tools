@@ -2,8 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\ViewsTests;
 
-use function PHPUnit\Framework\assertFileExists;
-use function PHPUnit\Framework\assertStringStartsWith;
 use Spatie\LaravelPackageTools\Package;
 
 trait PackageHasViewsLegacyAltNamespaceTest
@@ -12,22 +10,25 @@ trait PackageHasViewsLegacyAltNamespaceTest
     {
         $package
             ->name('laravel-package-tools')
-            ->hasViews('custom-namespace');
+            ->hasViews(namespace: 'custom-namespace');
     }
 }
 
 uses(PackageHasViewsLegacyAltNamespaceTest::class);
 
-it('can load the views with a custom namespace', function () {
+it("can load the views with a custom namespace", function () {
     $content = view('custom-namespace::test')->render();
 
-    assertStringStartsWith('This is a blade view', $content);
-});
+    expect($content)->toStartWith('This is a blade view');
+})->group('views', 'legacy');
 
-it('can publish the views with a custom namespace', function () {
+it("can publish the views with a custom namespace and tag", function () {
+    $file = resource_path('views/vendor/custom-namespace/test.blade.php');
+    expect($file)->not->toBeFileOrDirectory();
+
     $this
         ->artisan('vendor:publish --tag=custom-namespace-views')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    assertFileExists(base_path('resources/views/vendor/custom-namespace/test.blade.php'));
-});
+    expect($file)->toBeFile();
+})->group('views', 'legacy');

@@ -2,7 +2,6 @@
 
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\AssetsTests;
 
-use function PHPUnit\Framework\assertFileExists;
 use Spatie\LaravelPackageTools\Package;
 
 trait PackageHasAssetsLegacyTest
@@ -17,10 +16,13 @@ trait PackageHasAssetsLegacyTest
 
 uses(PackageHasAssetsLegacyTest::class);
 
-it('can publish the assets', function () {
+it("can publish the assets", function () {
+    $file = public_path('vendor/package-tools/dummy.js');
+    expect($file)->not->toBeFileOrDirectory();
+
     $this
         ->artisan('vendor:publish --tag=package-tools-assets')
-        ->assertExitCode(0);
+        ->assertSuccessful();
 
-    assertFileExists(public_path('vendor/package-tools/dummy.js'));
-});
+    expect($file)->toBeFile();
+})->group('assets', 'legacy');

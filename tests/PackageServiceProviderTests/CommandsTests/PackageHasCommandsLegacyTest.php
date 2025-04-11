@@ -3,10 +3,10 @@
 namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\CommandsTests;
 
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\Tests\TestClasses\FourthTestCommand;
-use Spatie\LaravelPackageTools\Tests\TestClasses\OtherTestCommand;
-use Spatie\LaravelPackageTools\Tests\TestClasses\TestCommand;
-use Spatie\LaravelPackageTools\Tests\TestClasses\ThirdTestCommand;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\FourthTestCommand;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\OtherTestCommand;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\TestCommand;
+use Spatie\LaravelPackageTools\Tests\TestPackage\Src\Commands\ThirdTestCommand;
 
 trait PackageHasCommandsLegacyTest
 {
@@ -14,7 +14,8 @@ trait PackageHasCommandsLegacyTest
     {
         $package
             ->name('laravel-package-tools')
-            ->hasCommand(TestCommand::class)
+            ->hasRoute('web')
+            ->hasCommand(commandClassName: TestCommand::class)
             ->hasCommands([OtherTestCommand::class])
             ->hasCommands(ThirdTestCommand::class, FourthTestCommand::class);
     }
@@ -22,12 +23,21 @@ trait PackageHasCommandsLegacyTest
 
 uses(PackageHasCommandsLegacyTest::class);
 
-it('can execute a registered commands', function () {
+it("can register and execute Commands loaded by hasCommands", function () {
     $this
-        ->artisan('test-command')
-        ->assertExitCode(0);
+        ->artisan('package-tools:test-command')
+        ->assertSuccessful()
+        ->expectsOutput('output of test command');
 
     $this
-        ->artisan('other-test-command')
-        ->assertExitCode(0);
-});
+        ->artisan('package-tools:other-test-command')
+        ->assertSuccessful()
+        ->expectsOutput('output of other test command');
+})->group('commands', 'legacy');
+
+it("can register & execute a legacy Command loaded by class name as part of a web transaction", function () {
+    $response = $this->get('execute-command');
+
+    expect($response->baseResponse->getStatusCode())->toBe(200);
+    expect($response->baseResponse->getContent())->toContain('output of test command');
+})->group('commands', 'legacy');
