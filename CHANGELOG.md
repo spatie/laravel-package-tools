@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.92.4 - 2025-04-11
+
+### What's Changed
+
+* Implement Pest and fix testing setup & cleanup by @Sophist-UK in https://github.com/spatie/laravel-package-tools/pull/166
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.92.3...1.92.4
+
 ## 1.92.3 - 2025-04-10
 
 **Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.92.1...1.92.3
