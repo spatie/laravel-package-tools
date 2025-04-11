@@ -10,9 +10,7 @@ trait PackageHasConfigFileLegacyMultipleTest
     {
         $package
             ->name('laravel-package-tools')
-            ->hasConfigFile(configFileName: 'package-tools')
-            ->hasConfigFile(configFileName: 'alternative-config')
-            ->hasConfigFile(configFileName: 'config-stub');
+            ->hasConfigFile(['package-tools', 'alternative-config', 'config-stub']);
     }
 }
 

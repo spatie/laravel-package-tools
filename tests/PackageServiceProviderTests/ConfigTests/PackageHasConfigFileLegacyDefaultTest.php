@@ -27,6 +27,8 @@ it("publishes only the default config file by legacy", function () {
     $nonPublishedFiles = [
         config_path('alternative-config.php'),
         config_path('config-stub.php'),
+        config_path('unpublished-config.php'),
+        config_path('unpublished-stub.php'),
     ];
     expect($publishedFiles)->each->not->toBeFileOrDirectory();
     expect($nonPublishedFiles)->each->not->toBeFileOrDirectory();
