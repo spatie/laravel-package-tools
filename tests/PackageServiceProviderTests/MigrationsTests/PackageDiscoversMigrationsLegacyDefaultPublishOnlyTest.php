@@ -5,7 +5,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\Migration
 use Spatie\LaravelPackageTools\Package;
 use function Spatie\PestPluginTestTime\testTime;
 
-trait PackageDiscoversMigrationsLegacyDefaultTest
+trait PackageDiscoversMigrationsLegacyDefaultPublishOnlyTest
 {
     public function configurePackage(Package $package)
     {
@@ -13,22 +13,20 @@ trait PackageDiscoversMigrationsLegacyDefaultTest
 
         $package
             ->name('laravel-package-tools')
-            ->discoversMigrations()
-            ->runsMigrations();
+            ->discoversMigrations();
     }
 }
 
-uses(PackageDiscoversMigrationsLegacyDefaultTest::class);
+uses(PackageDiscoversMigrationsLegacyDefaultPublishOnlyTest::class);
 
 $expectPublished = [
     'create_table_discover_normal',
     'create_table_discover_stub',
     'create_table_explicit_normal',
     'create_table_explicit_stub',
+    'non_migration_text_file.txt',
 ];
 $expectLoaded = [
-    'create_table_discover_normal',
-    'create_table_explicit_normal',
 ];
 
 it("publishes only all migrations by discoversMigrations", function () use ($expectPublished) {

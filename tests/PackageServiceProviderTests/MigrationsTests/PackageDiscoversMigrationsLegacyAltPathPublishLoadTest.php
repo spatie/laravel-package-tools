@@ -5,7 +5,7 @@ namespace Spatie\LaravelPackageTools\Tests\PackageServiceProviderTests\Migration
 use Spatie\LaravelPackageTools\Package;
 use function Spatie\PestPluginTestTime\testTime;
 
-trait PackageDiscoversMigrationsLegacyAltPathTest
+trait PackageDiscoversMigrationsLegacyAltPathPublishLoadTest
 {
     public function configurePackage(Package $package)
     {
@@ -18,17 +18,20 @@ trait PackageDiscoversMigrationsLegacyAltPathTest
     }
 }
 
-uses(PackageDiscoversMigrationsLegacyAltPathTest::class);
+uses(PackageDiscoversMigrationsLegacyAltPathPublishLoadTest::class);
 
 $expectPublished = [
     'create_table_alt_discover_normal',
     'create_table_alt_discover_stub',
     'create_table_alt_explicit_normal',
     'create_table_alt_explicit_stub',
+    'alt_non_migration_text_file.txt',
 ];
 $expectLoaded = [
     'create_table_alt_discover_normal',
+    'create_table_alt_discover_stub',
     'create_table_alt_explicit_normal',
+    'create_table_alt_explicit_stub',
 ];
 
 it("publishes only migrations by discoversMigrations", function () use ($expectPublished) {

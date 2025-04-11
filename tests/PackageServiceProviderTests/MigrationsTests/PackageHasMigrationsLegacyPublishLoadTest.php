@@ -34,8 +34,12 @@ $expectPublished = [
     'create_laravel_package_tools_table_stub',
 ];
 $expectLoaded = [
+    '2025_03_14_011123_create_laravel_package_tools_table_stub',
     'create_table_explicit_normal',
+    'create_table_explicit_stub',
     'folder/create_table_subfolder_explicit_normal',
+    'folder/create_table_subfolder_explicit_stub',
+    'create_laravel_package_tools_table_stub',
 ];
 
 it("publishes only the explicitly listed migrations", function () use ($expectPublished) {

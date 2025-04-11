@@ -53,7 +53,12 @@ trait ProcessMigrations
             $filePath = $file->getPathname();
             $migrationFileName = Str::replace(['.stub', '.php'], '', $file->getFilename());
 
-            $appMigration = $this->generateMigrationName($migrationFileName, $now->addSecond());
+            // Publish but do not add timestamp to non migration files
+            if (Str::endsWith($filePath, [".php", ".php.stub"])) {
+                $appMigration = $this->generateMigrationName($migrationFileName, $now->addSecond());
+            } else {
+                $appMigration = database_path("migrations/{$file->getFilename()}");
+            }
 
             if ($this->app->runningInConsole()) {
                 $this->publishes(
@@ -62,7 +67,8 @@ trait ProcessMigrations
                 );
             }
 
-            if ($this->package->runsMigrations) {
+            // Do not load non migration files
+            if ($this->package->runsMigrations && Str::endsWith($filePath, [".php", ".php.stub"])) {
                 $this->loadMigrationsFrom($filePath);
             }
         }

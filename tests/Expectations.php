@@ -54,7 +54,7 @@ expect()->extend('toHaveExpectedMigrationsLoaded', function (...$expectedFiles) 
     $failures = [];
 
     foreach ($expectedFiles as $expectedFile) {
-        if (! isFileListed($loadedFiles, $expectedFile . '.php', endsWith: true)) {
+        if (! isFileListed($loadedFiles, $expectedFile, endsWith: false)) {
             $failures[] = $expectedFile;
         }
     }
@@ -118,7 +118,7 @@ expect()->extend('toHaveExpectedMigrationsPublished', function (...$expectedFile
     $failures = [];
 
     foreach ($expectedFiles as $expectedFile) {
-        if (! isFileListed($publishedFiles, $expectedFile . '.php', endsWith: true)) {
+        if (! isFileListed($publishedFiles, $expectedFile, endsWith: false)) {
             $failures[] = $expectedFile;
         }
     }
