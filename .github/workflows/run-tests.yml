@@ -44,7 +44,7 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
+    name: L${{ matrix.laravel }} - ${{ matrix.stability }} - P${{ matrix.php }} - ${{ matrix.os }}
 
     env:
       php-extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo, pcov
