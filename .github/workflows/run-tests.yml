@@ -8,7 +8,6 @@ concurrency:
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
@@ -26,8 +25,14 @@ jobs:
           - laravel: 12.*
             testbench: 10.*
         exclude:
+          - laravel: 9.*
+            php: 8.3
+          - laravel: 9.*
+            php: 8.4
           - laravel: 10.*
             php: 8.0
+          - laravel: 10.*
+            php: 8.4
           - laravel: 11.*
             php: 8.0
           - laravel: 11.*
@@ -36,6 +41,8 @@ jobs:
             php: 8.0
           - laravel: 12.*
             php: 8.1
+
+    runs-on: ${{ matrix.os }}
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
