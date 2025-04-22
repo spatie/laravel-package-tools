@@ -2,7 +2,7 @@
     <a href="https://spatie.be/open-source?utm_source=github&utm_medium=banner&utm_campaign=laravel-package-tools">
       <picture>
         <source media="(prefers-color-scheme: dark)" srcset="https://spatie.be/packages/header/laravel-package-tools/html/dark.webp">
-        <img alt="Logo for laravel-package-tools" src=" https://spatie.be/packages/header/laravel-package-tools/html/light.webp" height="190">
+        <img alt="Logo for laravel-package-tools" src="https://spatie.be/packages/header/laravel-package-tools/html/light.webp" height="190">
       </picture>
     </a>
 
