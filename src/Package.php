@@ -17,6 +17,7 @@ use Spatie\LaravelPackageTools\Concerns\Package\HasViewComponents;
 use Spatie\LaravelPackageTools\Concerns\Package\HasViewComposers;
 use Spatie\LaravelPackageTools\Concerns\Package\HasViews;
 use Spatie\LaravelPackageTools\Concerns\Package\HasViewSharedData;
+use Spatie\LaravelPackageTools\Concerns\Package\HasResources;
 
 class Package
 {
@@ -34,6 +35,7 @@ class Package
     use HasViewComponents;
     use HasViewComposers;
     use HasViewSharedData;
+    use HasResources;
 
     public string $name;
 

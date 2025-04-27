@@ -7,6 +7,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Laravel\Nova\Nova;
 use ReflectionClass;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
@@ -76,7 +77,8 @@ abstract class PackageServiceProvider extends ServiceProvider
             ->bootPackageViews()
             ->bootPackageViewComponents()
             ->bootPackageViewComposers()
-            ->bootPackageViewSharedData();
+            ->bootPackageViewSharedData()
+            ->bootPackageResources();
 
         $this->packageBooted();
 
@@ -325,6 +327,17 @@ abstract class PackageServiceProvider extends ServiceProvider
         foreach ($this->package->sharedViewData as $name => $value) {
             View::share($name, $value);
         }
+
+        return $this;
+    }
+
+    protected function bootPackageResources(): self
+    {
+        if (empty($this->package->resources)) {
+            return $this;
+        }
+
+        Nova::resources($this->package->resources);
 
         return $this;
     }
