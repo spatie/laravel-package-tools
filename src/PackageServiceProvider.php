@@ -2,17 +2,39 @@
 
 namespace Spatie\LaravelPackageTools;
 
-use Carbon\Carbon;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Nova\Nova;
 use ReflectionClass;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessAssets;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessBladeComponents;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessCommands;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessConfigs;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessInertia;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessMigrations;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessRoutes;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessServiceProviders;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessTranslations;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewComposers;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViews;
+use Spatie\LaravelPackageTools\Concerns\PackageServiceProvider\ProcessViewSharedData;
 use Spatie\LaravelPackageTools\Exceptions\InvalidPackage;
 
 abstract class PackageServiceProvider extends ServiceProvider
 {
+    use ProcessAssets;
+    use ProcessBladeComponents;
+    use ProcessCommands;
+    use ProcessConfigs;
+    use ProcessInertia;
+    use ProcessMigrations;
+    use ProcessRoutes;
+    use ProcessServiceProviders;
+    use ProcessTranslations;
+    use ProcessViewComposers;
+    use ProcessViews;
+    use ProcessViewSharedData;
+
     protected Package $package;
 
     abstract public function configurePackage(Package $package): void;
@@ -30,7 +52,8 @@ abstract class PackageServiceProvider extends ServiceProvider
             throw InvalidPackage::nameIsRequired();
         }
 
-        $this->registerConfigs();
+        $this->registerPackageConfigs();
+
         $this->packageRegistered();
 
         return $this;
@@ -45,17 +68,6 @@ abstract class PackageServiceProvider extends ServiceProvider
         return new Package();
     }
 
-    public function registerConfigs()
-    {
-        if (empty($this->package->configFileNames)) {
-            return;
-        }
-
-        foreach ($this->package->configFileNames as $configFileName) {
-            $this->mergeConfigFrom($this->package->basePath("/../config/{$configFileName}.php"), $configFileName);
-        }
-    }
-
     public function packageRegistered()
     {
     }
@@ -66,16 +78,16 @@ abstract class PackageServiceProvider extends ServiceProvider
 
         $this
             ->bootPackageAssets()
+            ->bootPackageBladeComponents()
             ->bootPackageCommands()
             ->bootPackageConsoleCommands()
             ->bootPackageConfigs()
             ->bootPackageInertia()
             ->bootPackageMigrations()
-            ->bootPackageProviders()
             ->bootPackageRoutes()
+            ->bootPackageServiceProviders()
             ->bootPackageTranslations()
             ->bootPackageViews()
-            ->bootPackageViewComponents()
             ->bootPackageViewComposers()
             ->bootPackageViewSharedData()
             ->bootPackageResources();
@@ -97,7 +109,16 @@ abstract class PackageServiceProvider extends ServiceProvider
     {
         $reflector = new ReflectionClass(get_class($this));
 
-        return dirname($reflector->getFileName());
+        $packageBaseDir = dirname($reflector->getFileName());
+
+        // Some packages like to keep Laravels directory structure and place
+        // the service providers in a Providers folder.
+        // move up a level when this is the case.
+        if (str_ends_with($packageBaseDir, DIRECTORY_SEPARATOR.'Providers')) {
+            $packageBaseDir = dirname($packageBaseDir);
+        }
+
+        return $packageBaseDir;
     }
 
     public function packageView(?string $namespace): ?string
