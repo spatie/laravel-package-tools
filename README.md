@@ -112,7 +112,7 @@ and to get started easily you should consider using this to start your package.
 The structure for a package expected by default looks like this:
 
 ```
-<root
+<root>
 <package root>/src/                       Default location for PackageServiceProvider extended class
 <package root>/src/Commands/              Commands (callable and console-only)
 <package root>/src/Components/            Blade components
