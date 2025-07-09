@@ -11,7 +11,8 @@ trait ProcessViews
         }
 
         $namespace = $this->package->viewNamespace;
-        $vendorViews = $this->package->basePath('/../resources/views');
+        $viewPath = $this->package->basePath('/../resources/views');
+        $vendorViews = realpath($viewPath) ?: $viewPath;
         $appViews = base_path("resources/views/vendor/{$this->packageView($namespace)}");
 
         $this->loadViewsFrom($vendorViews, $this->package->viewNamespace());
