@@ -89,7 +89,6 @@ To avoid needing to scroll through to find the right usage section, here is a Ta
 * [Commands - Callable and Console](#commands-callable-and-console)
 * [Optimize Commands (Laravel v11+)](#optimize-commands)
 * [Config Files](#config-files)
-* [Events & Listeners](#events-and-listeners)
 * [Inertia Components](#inertia-components)
 * [Livewire Views and Components](#livewire-views-and-components)
 * [Database Migrations](#database-migrations)
