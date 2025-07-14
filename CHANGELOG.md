@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.92.5 - 2025-07-14
+
+### What's Changed
+
+* Update README.md by @iamfarhad in https://github.com/spatie/laravel-package-tools/pull/171
+* Fix: Accept both Carbon and CarbonImmutable types by @nabilhassen in https://github.com/spatie/laravel-package-tools/pull/174
+
+### New Contributors
+
+* @iamfarhad made their first contribution in https://github.com/spatie/laravel-package-tools/pull/171
+* @nabilhassen made their first contribution in https://github.com/spatie/laravel-package-tools/pull/174
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.92.4...1.92.5
+
 ## 1.92.4 - 2025-04-11
 
 ### What's Changed
