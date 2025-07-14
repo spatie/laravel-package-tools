@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.92.6 - 2025-07-14
+
+### What's Changed
+
+* Normalize view paths to prevent cache duplication by @binaryfire in https://github.com/spatie/laravel-package-tools/pull/172
+
+### New Contributors
+
+* @binaryfire made their first contribution in https://github.com/spatie/laravel-package-tools/pull/172
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.92.5...1.92.6
+
 ## 1.92.5 - 2025-07-14
 
 ### What's Changed
