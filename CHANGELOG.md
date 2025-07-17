@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.92.7 - 2025-07-17
+
+### What's Changed
+
+* Performance: ProcessMigrations - only generate migration name when needed by @ClaraLeigh in https://github.com/spatie/laravel-package-tools/pull/176
+
+### New Contributors
+
+* @ClaraLeigh made their first contribution in https://github.com/spatie/laravel-package-tools/pull/176
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.92.6...1.92.7
+
 ## 1.92.6 - 2025-07-14
 
 ### What's Changed
