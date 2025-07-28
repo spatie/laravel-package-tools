@@ -6,7 +6,7 @@ trait AskToStarRepoOnGitHub
 {
     protected ?string $starRepo = null;
 
-    protected bool $defaultStarAnswer = false;
+    protected bool $defaultStarAnswer = true;
 
     public function askToStarRepoOnGitHub($vendorSlashRepoName, bool $defaultAnswer = false): self
     {
