@@ -148,7 +148,7 @@ and the remainder of the name used as a short-name instead when publishing files
 
 And now let's look at all the different Laravel functions this supports...
 
-assing the package name to `name` is mandatory.
+assigning the package name to `name` is mandatory.
 
 ### Assets
 
