@@ -18,7 +18,7 @@ trait ProcessConfigs
                 continue;
             }
 
-            $this->mergeConfigFrom($vendorConfig, $configFileName);
+            $this->mergeConfigFrom($vendorConfig, str_replace(['/', '\\'], '.', $configFileName));
         }
 
         return $this;
