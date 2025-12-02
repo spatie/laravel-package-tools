@@ -41,7 +41,6 @@ trait ProcessConfigs
                 continue;
             }
 
-            $normalizedConfigKey = $this->normalizeConfigKey($configFileName);
             $publishPath = $this->normalizePathForPublish($configFileName);
             $this->publishes(
                 [$vendorConfig => config_path("{$publishPath}.php")],
