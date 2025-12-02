@@ -11,7 +11,8 @@ trait ProcessConfigs
         }
 
         foreach ($this->package->configFileNames as $configFileName) {
-            $vendorConfig = $this->package->basePath("/../config/{$configFileName}.php");
+            $configFilePath = $this->normalizeConfigPath($configFileName);
+            $vendorConfig = $this->package->basePath("/../config/{$configFilePath}.php");
 
             // Only mergeConfigFile if a .php file and not if a stub file
             if (! is_file($vendorConfig)) {
@@ -32,18 +33,19 @@ trait ProcessConfigs
         }
 
         foreach ($this->package->configFileNames as $configFileName) {
+            $configFilePath = $this->normalizeConfigPath($configFileName);
+
             $vendorConfig ;
             if (
-                ! is_file($vendorConfig = $this->package->basePath("/../config/{$configFileName}.php"))
+                ! is_file($vendorConfig = $this->package->basePath("/../config/{$configFilePath}.php"))
                 &&
-                ! is_file($vendorConfig = $this->package->basePath("/../config/{$configFileName}.php.stub"))
+                ! is_file($vendorConfig = $this->package->basePath("/../config/{$configFilePath}.php.stub"))
             ) {
                 continue;
             }
 
-            $publishPath = $this->normalizePathForPublish($configFileName);
             $this->publishes(
-                [$vendorConfig => config_path("{$publishPath}.php")],
+                [$vendorConfig => config_path("{$configFilePath}.php")],
                 "{$this->package->shortName()}-config"
             );
         }
@@ -56,7 +58,7 @@ trait ProcessConfigs
         return str_replace(['/', '\\'], '.', $configFileName);
     }
 
-    protected function normalizePathForPublish(string $configFileName): string
+    protected function normalizeConfigPath(string $configFileName): string
     {
         return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $configFileName);
     }
