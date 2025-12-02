@@ -18,7 +18,8 @@ trait ProcessConfigs
                 continue;
             }
 
-            $this->mergeConfigFrom($vendorConfig, str_replace(['/', '\\'], '.', $configFileName));
+            $normalizedConfigKey = $this->normalizeConfigKey($configFileName);
+            $this->mergeConfigFrom($vendorConfig, $normalizedConfigKey);
         }
 
         return $this;
@@ -40,12 +41,24 @@ trait ProcessConfigs
                 continue;
             }
 
+            $normalizedConfigKey = $this->normalizeConfigKey($configFileName);
+            $publishPath = $this->normalizePathForPublish($configFileName);
             $this->publishes(
-                [$vendorConfig => config_path("{$configFileName}.php")],
+                [$vendorConfig => config_path("{$publishPath}.php")],
                 "{$this->package->shortName()}-config"
             );
         }
 
         return $this;
+    }
+
+    protected function normalizeConfigKey(string $configFileName): string
+    {
+        return str_replace(['/', '\\'], '.', $configFileName);
+    }
+
+    protected function normalizePathForPublish(string $configFileName): string
+    {
+        return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $configFileName);
     }
 }
