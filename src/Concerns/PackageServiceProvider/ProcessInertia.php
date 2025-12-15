@@ -8,13 +8,13 @@ trait ProcessInertia
 {
     protected function bootPackageInertia(): self
     {
-        if (! $this->package->hasInertiaComponents) {
+        if (!$this->package->hasInertiaComponents) {
             return $this;
         }
 
         $namespace = $this->package->viewNamespace;
         $directoryName = Str::of($this->packageView($namespace))->studly()->remove('-')->value();
-        $vendorComponents = $this->package->basePath('/../resources/js/Pages');
+        $vendorComponents = $this->package->basePath(DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'Pages');
         $appComponents = base_path("resources/js/Pages/{$directoryName}");
 
         if ($this->app->runningInConsole()) {

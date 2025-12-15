@@ -18,5 +18,5 @@ uses(PackageBasePathAltLocationTest::class);
 
 it('will set the base path to the Src dir when the PackageServiceProvider is in an alternate location', function () {
     $provider = new AltLocationServiceProvider(app());
-    expect($provider->getPackageBaseDir())->toEndWith(DIRECTORY_SEPARATOR.'TestPackage'.DIRECTORY_SEPARATOR.'Src');
+    expect($provider->getPackageBaseDir())->toEndWith(DIRECTORY_SEPARATOR . 'TestPackage' . DIRECTORY_SEPARATOR . 'Src');
 })->group('base', 'legacy');

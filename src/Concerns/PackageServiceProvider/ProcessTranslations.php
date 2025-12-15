@@ -6,11 +6,11 @@ trait ProcessTranslations
 {
     protected function bootPackageTranslations(): self
     {
-        if (! $this->package->hasTranslations) {
+        if (!$this->package->hasTranslations) {
             return $this;
         }
 
-        $vendorTranslations = $this->package->basePath('/../resources/lang');
+        $vendorTranslations = $this->package->basePath(DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'lang');
         $appTranslations = (function_exists('lang_path'))
             ? lang_path("vendor/{$this->package->shortName()}")
             : resource_path("lang/vendor/{$this->package->shortName()}");

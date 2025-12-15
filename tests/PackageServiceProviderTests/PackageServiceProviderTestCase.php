@@ -13,6 +13,8 @@ use Symfony\Component\Finder\SplFileInfo;
 
 abstract class PackageServiceProviderTestCase extends TestCase
 {
+    public static $latestResponse = null;
+
     protected array $cleanPathsFull = [
         'app/Livewire/',
         'app/View/Components/vendor/',
@@ -95,12 +97,12 @@ abstract class PackageServiceProviderTestCase extends TestCase
         $basePath = base_path() . '/';
         foreach ($this->cleanPathsPartial as $dir) {
             $dir = $basePath . $dir;
-            if (! is_dir($dir)) {
+            if (!is_dir($dir)) {
                 continue;
             }
             collect(File::allFiles($dir))->each(function (SplFileInfo $file) use ($basePath) {
-                if (! in_array(Str::replace('\\', '/', Str::after($file->getPathname(), $basePath)), $this->cleanExclusions)) {
-                    if (! unlink($file->getPathname())) {
+                if (!in_array(Str::replace('\\', '/', Str::after($file->getPathname(), $basePath)), $this->cleanExclusions)) {
+                    if (!unlink($file->getPathname())) {
                         fwrite(STDERR, "Failed to delete: " . $file->getPathname() . PHP_EOL);
                     }
                 }

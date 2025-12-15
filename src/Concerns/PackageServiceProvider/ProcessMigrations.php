@@ -20,10 +20,10 @@ trait ProcessMigrations
         $now = Carbon::now();
 
         foreach ($this->package->migrationFileNames as $migrationFileName) {
-            $vendorMigration = $this->package->basePath("/../database/migrations/{$migrationFileName}.php");
+            $vendorMigration = $this->package->basePath(DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'migrations' . DIRECTORY_SEPARATOR . "{$migrationFileName}.php");
 
             // Support for the .stub file extension
-            if (! file_exists($vendorMigration)) {
+            if (!file_exists($vendorMigration)) {
                 $vendorMigration .= '.stub';
             }
 
@@ -49,7 +49,7 @@ trait ProcessMigrations
         $now = Carbon::now();
         $migrationsPath = trim($this->package->migrationsPath, '/');
 
-        $files = (new Filesystem())->files($this->package->basePath("/../{$migrationsPath}"));
+        $files = (new Filesystem())->files($this->package->basePath(DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . "{$migrationsPath}"));
 
         foreach ($files as $file) {
             $filePath = $file->getPathname();

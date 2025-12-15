@@ -6,12 +6,12 @@ trait ProcessViews
 {
     protected function bootPackageViews(): self
     {
-        if (! $this->package->hasViews) {
+        if (!$this->package->hasViews) {
             return $this;
         }
 
         $namespace = $this->package->viewNamespace;
-        $viewsPath = $this->package->basePath('/../resources/views');
+        $viewsPath = $this->package->basePath(DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'views');
         $vendorViews = realpath($viewsPath) ?: $viewsPath;
         $appViews = base_path("resources/views/vendor/{$this->packageView($namespace)}");
 

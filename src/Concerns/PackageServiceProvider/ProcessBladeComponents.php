@@ -15,7 +15,7 @@ trait ProcessBladeComponents
         }
 
         if ($this->app->runningInConsole()) {
-            $vendorComponents = $this->package->basePath('/Components');
+            $vendorComponents = $this->package->basePath(DIRECTORY_SEPARATOR . 'Components');
             $appComponents = base_path("app/View/Components/vendor/{$this->package->shortName()}");
 
             $this->publishes([$vendorComponents => $appComponents], "{$this->package->name}-components");
