@@ -12,10 +12,10 @@ trait ProcessConfigs
 
         foreach ($this->package->configFileNames as $configFileName) {
             $configFilePath = $this->normalizeConfigPath($configFileName);
-            $vendorConfig = $this->package->basePath("/../config/{$configFilePath}.php");
+            $vendorConfig = $this->package->basePath(DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . "{$configFilePath}.php");
 
             // Only mergeConfigFile if a .php file and not if a stub file
-            if (! is_file($vendorConfig)) {
+            if (!is_file($vendorConfig)) {
                 continue;
             }
 
@@ -28,18 +28,18 @@ trait ProcessConfigs
 
     protected function bootPackageConfigs(): self
     {
-        if (empty($this->package->configFileNames) || ! $this->app->runningInConsole()) {
+        if (empty($this->package->configFileNames) || !$this->app->runningInConsole()) {
             return $this;
         }
 
         foreach ($this->package->configFileNames as $configFileName) {
             $configFilePath = $this->normalizeConfigPath($configFileName);
 
-            $vendorConfig ;
+            $vendorConfig;
             if (
-                ! is_file($vendorConfig = $this->package->basePath("/../config/{$configFilePath}.php"))
+                !is_file($vendorConfig = $this->package->basePath(DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . "{$configFilePath}.php"))
                 &&
-                ! is_file($vendorConfig = $this->package->basePath("/../config/{$configFilePath}.php.stub"))
+                !is_file($vendorConfig = $this->package->basePath(DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . "{$configFilePath}.php.stub"))
             ) {
                 continue;
             }
