@@ -6,7 +6,7 @@ trait ProcessTranslations
 {
     protected function bootPackageTranslations(): self
     {
-        if (!$this->package->hasTranslations) {
+        if (! $this->package->hasTranslations) {
             return $this;
         }
 

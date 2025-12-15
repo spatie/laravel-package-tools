@@ -23,7 +23,7 @@ trait ProcessMigrations
             $vendorMigration = $this->package->basePath(DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'migrations' . DIRECTORY_SEPARATOR . "{$migrationFileName}.php");
 
             // Support for the .stub file extension
-            if (!file_exists($vendorMigration)) {
+            if (! file_exists($vendorMigration)) {
                 $vendorMigration .= '.stub';
             }
 

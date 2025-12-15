@@ -8,7 +8,7 @@ trait ProcessInertia
 {
     protected function bootPackageInertia(): self
     {
-        if (!$this->package->hasInertiaComponents) {
+        if (! $this->package->hasInertiaComponents) {
             return $this;
         }
 

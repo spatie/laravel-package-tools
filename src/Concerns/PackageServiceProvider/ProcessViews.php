@@ -6,7 +6,7 @@ trait ProcessViews
 {
     protected function bootPackageViews(): self
     {
-        if (!$this->package->hasViews) {
+        if (! $this->package->hasViews) {
             return $this;
         }
 

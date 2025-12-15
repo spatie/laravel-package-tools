@@ -6,7 +6,7 @@ trait ProcessAssets
 {
     protected function bootPackageAssets(): static
     {
-        if (!$this->package->hasAssets || !$this->app->runningInConsole()) {
+        if (! $this->package->hasAssets || ! $this->app->runningInConsole()) {
             return $this;
         }
 

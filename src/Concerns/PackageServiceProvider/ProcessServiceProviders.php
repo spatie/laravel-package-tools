@@ -6,7 +6,7 @@ trait ProcessServiceProviders
 {
     protected function bootPackageServiceProviders(): self
     {
-        if (!$this->package->publishableProviderName || !$this->app->runningInConsole()) {
+        if (! $this->package->publishableProviderName || ! $this->app->runningInConsole()) {
             return $this;
         }
 
