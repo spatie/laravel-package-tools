@@ -10,9 +10,16 @@ trait ProcessBladeComponents
             return $this;
         }
 
+        $componentsByPrefix = [];
+
         foreach ($this->package->viewComponents as $componentClass => $prefix) {
-            $this->loadViewComponentsAs($prefix, [$componentClass]);
+            $componentsByPrefix[$prefix][] = $componentClass;
         }
+
+        foreach ($componentsByPrefix as $prefix => $components) {
+            $this->loadViewComponentsAs($prefix, $components);
+        }
+
 
         if ($this->app->runningInConsole()) {
             $vendorComponents = $this->package->basePath(DIRECTORY_SEPARATOR . 'Components');
