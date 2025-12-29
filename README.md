@@ -24,6 +24,7 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\LaravelPackageTools\Package;
 use MyPackage\ViewComponents\Alert;
 use Spatie\LaravelPackageTools\Commands\Concerns;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 
 class YourPackageServiceProvider extends PackageServiceProvider
 {
