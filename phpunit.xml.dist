@@ -26,15 +26,6 @@
       <directory>tests</directory>
     </exclude>
   </source>
-  <coverage>
-    <report>
-      <clover outputFile=".phpunit.cache/clover.xml"/>
-      <text outputFile=".phpunit.cache/coverage.txt" showUncoveredFiles="true"/>
-    </report>
-  </coverage>
-  <logging>
-    <junit outputFile="build/report.junit.xml"/>
-  </logging>
   <php>
     <server name="APP_DEBUG" value="true" />
   </php>
