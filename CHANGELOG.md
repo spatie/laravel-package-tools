@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.93.0 - 2026-02-21
+
+### What's Changed
+
+- Add Laravel 13 support
+- Drop Laravel 9 and PHP 8.0 support (both EOL)
+- Fix Windows CI caret escaping issue
+- Exclude L10 + PHP 8.1 from CI (Pest 2.x incompatible with latest PHPUnit 10.5.x)
+
 ## 1.92.7 - 2025-07-17
 
 ### What's Changed
