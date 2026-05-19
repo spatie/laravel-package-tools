@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.93.1 - 2026-05-19
+
+### What's Changed
+
+* fix: strip timestamp prefix before checking for existing migrations by @YoussefMansour9 in https://github.com/spatie/laravel-package-tools/pull/186
+
+### New Contributors
+
+* @YoussefMansour9 made their first contribution in https://github.com/spatie/laravel-package-tools/pull/186
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.93.0...1.93.1
+
 ## 1.93.0 - 2026-02-21
 
 ### What's Changed
