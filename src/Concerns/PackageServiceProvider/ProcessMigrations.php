@@ -53,16 +53,19 @@ trait ProcessMigrations
 
         foreach ($files as $file) {
             $filePath = $file->getPathname();
-            $migrationFileName = Str::replace(['.stub', '.php'], '', $file->getFilename());
+            $isMigration = Str::endsWith($filePath, [".php", ".php.stub"]);
 
-            // Publish but do not add timestamp to non migration files
-            if (Str::endsWith($filePath, [".php", ".php.stub"])) {
-                $appMigration = $this->generateMigrationName($migrationFileName, $now->addSecond());
-            } else {
-                $appMigration = database_path("migrations/{$file->getFilename()}");
-            }
-
+            // The publish destination is only needed when publishing, which happens
+            // in the console. Generating it eagerly globs the application's migration
+            // directory for every discovered file, so keep it out of the request path.
             if ($this->app->runningInConsole()) {
+                $migrationFileName = Str::replace(['.stub', '.php'], '', $file->getFilename());
+
+                // Publish but do not add timestamp to non migration files
+                $appMigration = $isMigration
+                    ? $this->generateMigrationName($migrationFileName, $now->addSecond())
+                    : database_path("migrations/{$file->getFilename()}");
+
                 $this->publishes(
                     [$filePath => $appMigration],
                     "{$this->package->shortName()}-migrations"
@@ -70,7 +73,7 @@ trait ProcessMigrations
             }
 
             // Do not load non migration files
-            if ($this->package->runsMigrations && Str::endsWith($filePath, [".php", ".php.stub"])) {
+            if ($this->package->runsMigrations && $isMigration) {
                 $this->loadMigrationsFrom($filePath);
             }
         }
