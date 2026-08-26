@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.93.2 - 2026-08-26
+
+### What's Changed
+
+* Memoize migration directory scan by @marickvantuil in https://github.com/spatie/laravel-package-tools/pull/188
+
+### New Contributors
+
+* @marickvantuil made their first contribution in https://github.com/spatie/laravel-package-tools/pull/188
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.93.1...1.93.2
+
 ## 1.93.1 - 2026-05-19
 
 ### What's Changed
