@@ -2,11 +2,16 @@
 
 namespace Spatie\LaravelPackageTools\Concerns\PackageServiceProvider;
 
+use Illuminate\Contracts\Foundation\CachesConfiguration;
+
 trait ProcessConfigs
 {
     public function registerPackageConfigs(): self
     {
-        if (empty($this->package->configFileNames)) {
+        if (
+            empty($this->package->configFileNames)
+            || ($this->app instanceof CachesConfiguration && $this->app->configurationIsCached())
+        ) {
             return $this;
         }
 
