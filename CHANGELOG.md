@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-package-tools` will be documented in this file.
 
+## 1.93.3 - 2026-09-28
+
+### What's Changed
+
+* Skip config file checks when configuration is cached by @ezequiel-safirsztein-momentum in https://github.com/spatie/laravel-package-tools/pull/189
+
+### New Contributors
+
+* @ezequiel-safirsztein-momentum made their first contribution in https://github.com/spatie/laravel-package-tools/pull/189
+
+**Full Changelog**: https://github.com/spatie/laravel-package-tools/compare/1.93.2...1.93.3
+
 ## 1.93.2 - 2026-08-26
 
 ### What's Changed
